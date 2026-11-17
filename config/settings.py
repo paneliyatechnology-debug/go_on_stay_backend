@@ -122,6 +122,8 @@ REST_FRAMEWORK = {
         'register': '5/minute',
         'otp_verify': '5/minute',
         'password_reset': '5/minute',
+        'support_ticket_create': '10/hour',
+        'support_ticket_message': '30/hour',
     }
 }
 

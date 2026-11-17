@@ -34,6 +34,9 @@ from .serializers import (
 )
 from bookings.models import Booking
 
+from .validators import validate_support_attachment, sanitize_text_input
+from .throttling import SupportTicketCreateThrottle, SupportTicketMessageThrottle
+
 logger = logging.getLogger(__name__)
 
 def get_platform_razorpay_client():
@@ -2975,14 +2978,86 @@ class SupportTicketListCreateView(generics.ListCreateAPIView):
     serializer_class = SupportTicketSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_throttles(self):
+        if self.request.method == 'POST':
+            return [SupportTicketCreateThrottle()]
+        return super().get_throttles()
+
     def get_queryset(self):
         user = self.request.user
-        if user.is_staff or user.role in ['ADMIN', 'SUPER_ADMIN', 'SUPPORT_AGENT']:
-            return SupportTicket.objects.all().order_by('-created_at')
-        return SupportTicket.objects.filter(user=user).order_by('-created_at')
+        role = str(getattr(user, 'role', '')).upper()
+        if user.is_staff or getattr(user, 'is_superuser', False) or role in ['ADMIN', 'SUPER_ADMIN', 'SUPPORT_AGENT']:
+            qs = SupportTicket.objects.all().order_by('-created_at')
+        elif role in ['HOTEL_OWNER', 'HOST', 'OWNER'] or (hasattr(user, 'hotels') and user.hotels.exists()):
+            qs = SupportTicket.objects.filter(
+                Q(user=user) | Q(assigned_agent=user) | Q(hotel__owner=user)
+            ).distinct().order_by('-created_at')
+        else:
+            qs = SupportTicket.objects.filter(user=user).order_by('-created_at')
+
+        # Admin & Owner Query Parameter Filtering
+        status_param = self.request.query_params.get('status')
+        if status_param:
+            qs = qs.filter(status__iexact=status_param.strip())
+
+        category_param = self.request.query_params.get('category')
+        if category_param:
+            qs = qs.filter(category__iexact=category_param.strip())
+
+        priority_param = self.request.query_params.get('priority')
+        if priority_param:
+            qs = qs.filter(priority__iexact=priority_param.strip())
+
+        hotel_id_param = self.request.query_params.get('hotel_id') or self.request.query_params.get('hotel')
+        if hotel_id_param and str(hotel_id_param).isdigit():
+            qs = qs.filter(hotel_id=int(hotel_id_param))
+
+        booking_id_param = self.request.query_params.get('booking_id') or self.request.query_params.get('booking')
+        if booking_id_param:
+            b_val = str(booking_id_param).strip()
+            if b_val.isdigit():
+                qs = qs.filter(Q(booking_id=int(b_val)) | Q(booking__booking_id__iexact=b_val))
+            else:
+                qs = qs.filter(booking__booking_id__iexact=b_val)
+
+        assigned_agent_param = self.request.query_params.get('assigned_agent')
+        if assigned_agent_param and str(assigned_agent_param).isdigit():
+            qs = qs.filter(assigned_agent_id=int(assigned_agent_param))
+
+        assigned_to_me = self.request.query_params.get('assigned_to_me')
+        if assigned_to_me and assigned_to_me.lower() == 'true':
+            qs = qs.filter(assigned_agent=user)
+
+        # Search Query across ticket number, subject, description, customer info, booking ID, hotel
+        search_query = self.request.query_params.get('search') or self.request.query_params.get('q')
+        if search_query:
+            q_clean = search_query.strip()
+            qs = qs.filter(
+                Q(ticket_number__icontains=q_clean) |
+                Q(subject__icontains=q_clean) |
+                Q(description__icontains=q_clean) |
+                Q(user__username__icontains=q_clean) |
+                Q(user__email__icontains=q_clean) |
+                Q(user__first_name__icontains=q_clean) |
+                Q(user__last_name__icontains=q_clean) |
+                Q(booking__booking_id__icontains=q_clean) |
+                Q(hotel__name__icontains=q_clean)
+            )
+
+        return qs
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        attachment = self.request.FILES.get('attachment')
+        attachment_url = self.request.data.get('attachment_url', '')
+        if attachment:
+            validate_support_attachment(attachment)
+        instance = serializer.save(user=self.request.user)
+        if attachment:
+            instance.attachment = attachment
+            instance.save(update_fields=['attachment'])
+        if attachment_url and not instance.attachment_url:
+            instance.attachment_url = attachment_url
+            instance.save(update_fields=['attachment_url'])
 
 
 class SupportTicketDetailView(generics.RetrieveUpdateAPIView):
@@ -2991,32 +3066,60 @@ class SupportTicketDetailView(generics.RetrieveUpdateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_staff or user.role in ['ADMIN', 'SUPER_ADMIN', 'SUPPORT_AGENT']:
+        role = str(getattr(user, 'role', '')).upper()
+        if user.is_staff or getattr(user, 'is_superuser', False) or role in ['ADMIN', 'SUPER_ADMIN', 'SUPPORT_AGENT']:
             return SupportTicket.objects.all()
+        elif role in ['HOTEL_OWNER', 'HOST', 'OWNER'] or (hasattr(user, 'hotels') and user.hotels.exists()):
+            return SupportTicket.objects.filter(
+                Q(user=user) | Q(assigned_agent=user) | Q(hotel__owner=user)
+            ).distinct()
         return SupportTicket.objects.filter(user=user)
 
 
 class TicketMessageCreateView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+    throttle_classes = [SupportTicketMessageThrottle]
 
     def post(self, request, pk):
         try:
             ticket = SupportTicket.objects.get(pk=pk)
             user = request.user
-            if ticket.user != user and not user.is_staff and user.role not in ['ADMIN', 'SUPER_ADMIN', 'SUPPORT_AGENT']:
+            role = str(getattr(user, 'role', '')).upper()
+            is_admin_or_agent = (
+                user.is_staff or getattr(user, 'is_superuser', False) or
+                role in ['ADMIN', 'SUPER_ADMIN', 'SUPPORT_AGENT']
+            )
+            is_hotel_owner = bool(
+                ticket.hotel and (
+                    ticket.hotel.owner == user or
+                    (hasattr(user, 'hotels') and user.hotels.filter(id=ticket.hotel.id).exists())
+                )
+            )
+            is_assigned = (ticket.assigned_agent == user)
+            is_ticket_owner = (ticket.user == user)
+
+            if not (is_ticket_owner or is_admin_or_agent or is_hotel_owner or is_assigned):
                 return Response({"error": "Permission denied."}, status=status.HTTP_403_FORBIDDEN)
 
             msg_text = request.data.get('message')
             if not msg_text:
                 return Response({"error": "Message content is required."}, status=status.HTTP_400_BAD_REQUEST)
 
+            msg_text = sanitize_text_input(msg_text)
+
+            attachment = request.FILES.get('attachment')
+            attachment_url = request.data.get('attachment_url')
+            if attachment:
+                validate_support_attachment(attachment)
+
             msg = TicketMessage.objects.create(
                 ticket=ticket,
                 sender=user,
                 message=msg_text,
-                attachment_url=request.data.get('attachment_url')
+                attachment=attachment,
+                attachment_url=attachment_url
             )
-            return Response(TicketMessageSerializer(msg).data, status=status.HTTP_201_CREATED)
+            return Response(TicketMessageSerializer(msg, context={'request': request}).data, status=status.HTTP_201_CREATED)
 
         except SupportTicket.DoesNotExist:
             return Response({"error": "Support ticket not found."}, status=status.HTTP_404_NOT_FOUND)

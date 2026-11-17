@@ -8,6 +8,11 @@ from hotels.serializers import HotelSerializer
 from rooms.serializers import RoomSerializer
 
 class BookingSerializer(serializers.ModelSerializer):
+    hotel_id = serializers.IntegerField(source='hotel.id', read_only=True)
+    hotel_name = serializers.CharField(source='hotel.name', read_only=True)
+    room_id = serializers.IntegerField(source='room.id', read_only=True)
+    room_name = serializers.CharField(source='room.title', read_only=True)
+    room_title = serializers.CharField(source='room.title', read_only=True)
     hotel_details = HotelSerializer(source='hotel', read_only=True)
     room_details = RoomSerializer(source='room', read_only=True)
     customer_name = serializers.CharField(source='customer.get_full_name', read_only=True)
@@ -21,8 +26,8 @@ class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
         fields = (
-            'id', 'booking_id', 'customer', 'customer_name', 'hotel', 'hotel_details',
-            'room', 'room_details', 'room_number', 'room_allocation_status', 'room_allocation_message',
+            'id', 'booking_id', 'customer', 'customer_name', 'hotel', 'hotel_id', 'hotel_name', 'hotel_details',
+            'room', 'room_id', 'room_name', 'room_title', 'room_details', 'room_number', 'room_allocation_status', 'room_allocation_message',
             'check_in', 'check_out', 'number_of_guests',
             'number_of_rooms', 'price_per_night', 'number_of_nights', 'subtotal',
             'cleaning_fee', 'service_fee', 'taxes', 'discount', 'total_amount', 'currency',

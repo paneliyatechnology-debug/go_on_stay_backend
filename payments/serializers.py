@@ -333,29 +333,350 @@ class ToggleDisputeHoldSerializer(serializers.Serializer):
     dispute_reason = serializers.CharField(required=False, allow_blank=True, default='')
 
 
+from rest_framework.exceptions import PermissionDenied
+from django.contrib.auth import get_user_model
+from hotels.models import Hotel
+from rooms.models import Room
+from .validators import validate_support_attachment, sanitize_text_input
+
+User = get_user_model()
+
+
 class TicketMessageSerializer(serializers.ModelSerializer):
     sender_name = serializers.CharField(source='sender.get_full_name', read_only=True)
     sender_role = serializers.CharField(source='sender.role', read_only=True)
+    sender_email = serializers.CharField(source='sender.email', read_only=True)
 
     class Meta:
         model = TicketMessage
-        fields = ['id', 'ticket', 'sender', 'sender_name', 'sender_role', 'message', 'attachment_url', 'created_at']
+        fields = [
+            'id', 'ticket', 'sender', 'sender_name', 'sender_role', 'sender_email',
+            'message', 'attachment', 'attachment_url', 'created_at'
+        ]
         read_only_fields = ['id', 'sender', 'created_at']
+
+    def validate_message(self, value):
+        if value:
+            return sanitize_text_input(value)
+        return value
+
+    def validate_attachment(self, value):
+        if value:
+            validate_support_attachment(value)
+        return value
 
 
 class SupportTicketSerializer(serializers.ModelSerializer):
     user_name = serializers.CharField(source='user.get_full_name', read_only=True)
+    user_email = serializers.CharField(source='user.email', read_only=True)
+    customer_id = serializers.IntegerField(source='user.id', read_only=True)
+    customer_name = serializers.CharField(source='user.get_full_name', read_only=True)
+    customer_email = serializers.CharField(source='user.email', read_only=True)
+    customer_phone = serializers.SerializerMethodField()
+    assigned_agent_id = serializers.IntegerField(source='assigned_agent.id', read_only=True, allow_null=True)
     assigned_agent_name = serializers.CharField(source='assigned_agent.get_full_name', read_only=True)
+    booking_id = serializers.CharField(source='booking.booking_id', read_only=True)
+    check_in = serializers.DateField(source='booking.check_in', read_only=True, allow_null=True)
+    check_out = serializers.DateField(source='booking.check_out', read_only=True, allow_null=True)
+    hotel_id = serializers.IntegerField(source='hotel.id', read_only=True)
+    hotel_name = serializers.CharField(source='hotel.name', read_only=True)
+    room_id = serializers.IntegerField(source='room.id', read_only=True)
+    room_number = serializers.SerializerMethodField()
+    room_title = serializers.CharField(source='room.title', read_only=True)
     messages = TicketMessageSerializer(many=True, read_only=True)
+
+    hotel = serializers.PrimaryKeyRelatedField(queryset=Hotel.objects.all(), required=False, allow_null=True)
+    room = serializers.PrimaryKeyRelatedField(queryset=Room.objects.all(), required=False, allow_null=True)
+    booking = serializers.PrimaryKeyRelatedField(queryset=Booking.objects.all(), required=False, allow_null=True)
+    assigned_agent = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False, allow_null=True)
 
     class Meta:
         model = SupportTicket
         fields = [
-            'id', 'ticket_number', 'user', 'user_name', 'booking', 'category',
-            'priority', 'status', 'subject', 'description', 'assigned_agent',
+            'id', 'ticket_number', 'user', 'user_name', 'user_email',
+            'customer_id', 'customer_name', 'customer_email', 'customer_phone',
+            'booking', 'booking_id', 'check_in', 'check_out',
+            'hotel', 'hotel_id', 'hotel_name',
+            'room', 'room_id', 'room_number', 'room_title',
+            'category', 'priority', 'status', 'subject', 'description',
+            'attachment', 'attachment_url', 'assigned_agent', 'assigned_agent_id',
             'assigned_agent_name', 'messages', 'created_at', 'updated_at'
         ]
-        read_only_fields = ['id', 'ticket_number', 'user', 'created_at', 'updated_at']
+        read_only_fields = [
+            'id', 'ticket_number', 'user', 'user_name', 'user_email',
+            'customer_id', 'customer_name', 'customer_email', 'customer_phone',
+            'booking_id', 'check_in', 'check_out', 'hotel_id', 'hotel_name', 'room_id',
+            'room_number', 'room_title', 'assigned_agent_id', 'assigned_agent_name',
+            'created_at', 'updated_at'
+        ]
+
+    def get_room_number(self, obj):
+        if obj.booking and obj.booking.room_number:
+            return obj.booking.room_number
+        if obj.room:
+            all_nums = obj.room.get_all_room_numbers()
+            return all_nums[0] if all_nums else None
+        return None
+
+    def get_customer_phone(self, obj):
+        request = self.context.get('request')
+        req_user = getattr(request, 'user', None)
+        if not req_user or not req_user.is_authenticated:
+            return None
+        req_role = str(getattr(req_user, 'role', '')).upper()
+        is_staff_or_admin = (
+            req_user.is_staff or
+            getattr(req_user, 'is_superuser', False) or
+            req_role in ['ADMIN', 'SUPER_ADMIN', 'SUPPORT_AGENT']
+        )
+        is_ticket_owner = (obj.user == req_user)
+        is_hotel_owner = bool(
+            obj.hotel and (
+                obj.hotel.owner == req_user or
+                (hasattr(req_user, 'hotels') and req_user.hotels.filter(id=obj.hotel.id).exists())
+            )
+        )
+        is_assigned = (obj.assigned_agent == req_user)
+
+        if is_staff_or_admin or is_ticket_owner or is_hotel_owner or is_assigned:
+            return getattr(obj.user, 'phone_number', '') if obj.user else ''
+        return None
+
+    def validate_attachment(self, value):
+        if value:
+            validate_support_attachment(value)
+        return value
+
+    def to_internal_value(self, data):
+        # Support QueryDict (multipart/form-data) and plain dict without deepcopying open file descriptors
+        if hasattr(data, 'dict'):
+            data = data.dict()
+        else:
+            data = dict(data)
+
+        # Allow assigned_agent_id alias
+        if 'assigned_agent_id' in data and 'assigned_agent' not in data:
+            data['assigned_agent'] = data['assigned_agent_id']
+
+        # Handle booking / booking_id passed as ID or alphanumeric code
+        booking_raw = data.get('booking') or data.get('booking_id')
+        if booking_raw not in [None, '', 'null', 'undefined']:
+            if isinstance(booking_raw, str) and not booking_raw.isdigit():
+                booking_obj = Booking.objects.filter(booking_id=booking_raw).first()
+                if booking_obj:
+                    data['booking'] = booking_obj.id
+                else:
+                    self._invalid_booking_ref = booking_raw
+                    data['booking'] = None
+            else:
+                try:
+                    booking_pk = int(booking_raw)
+                    if not Booking.objects.filter(pk=booking_pk).exists():
+                        self._invalid_booking_ref = booking_raw
+                        data['booking'] = None
+                    else:
+                        data['booking'] = booking_pk
+                except (ValueError, TypeError):
+                    self._invalid_booking_ref = booking_raw
+                    data['booking'] = None
+        elif 'booking' in data and data['booking'] in ['', 'null', 'undefined']:
+            data['booking'] = None
+
+        return super().to_internal_value(data)
+
+    def validate(self, attrs):
+        request = self.context.get('request')
+        user = getattr(request, 'user', None)
+        user_role = str(getattr(user, 'role', '')).upper() if user else ''
+        is_admin_or_agent = (
+            user and (
+                user.is_staff or
+                getattr(user, 'is_superuser', False) or
+                user_role in ['ADMIN', 'SUPER_ADMIN', 'SUPPORT_AGENT']
+            )
+        )
+
+        # 1. Update Restrictions for Non-Admin / Customer
+        if self.instance:
+            if not is_admin_or_agent:
+                if 'status' in self.initial_data and self.initial_data.get('status') != self.instance.status:
+                    raise PermissionDenied("Only authorized Admins and Support Agents can modify ticket status.")
+                if 'assigned_agent' in self.initial_data or 'assigned_agent_id' in self.initial_data:
+                    raise PermissionDenied("Only authorized Admins and Support Agents can assign tickets.")
+                if 'user' in self.initial_data or 'customer' in self.initial_data or 'customer_id' in self.initial_data:
+                    raise PermissionDenied("Ticket customer cannot be modified.")
+                if 'booking' in self.initial_data or 'booking_id' in self.initial_data or 'hotel' in self.initial_data or 'room' in self.initial_data:
+                    raise PermissionDenied("Ticket booking and hotel associations cannot be modified after creation.")
+
+        if getattr(self, '_invalid_booking_ref', None) is not None:
+            raise serializers.ValidationError({
+                "booking": f"Invalid booking ID '{self._invalid_booking_ref}'. Booking does not exist.",
+                "error": "Invalid booking ID or booking does not exist."
+            })
+
+        # Category validation
+        valid_categories = ['BOOKING', 'PAYMENT', 'CANCELLATION', 'REFUND', 'HOTEL', 'ACCOUNT', 'TECHNICAL']
+        category = attrs.get('category') or getattr(self.instance, 'category', 'BOOKING')
+        if category:
+            category_norm = str(category).upper()
+            if category_norm not in valid_categories:
+                raise serializers.ValidationError({
+                    "category": f"Invalid category '{category}'. Supported categories are: {', '.join(valid_categories)}"
+                })
+            attrs['category'] = category_norm
+
+        # Priority validation
+        valid_priorities = ['LOW', 'MEDIUM', 'HIGH', 'URGENT']
+        priority = attrs.get('priority') or getattr(self.instance, 'priority', 'MEDIUM')
+        if priority:
+            priority_norm = str(priority).upper()
+            if priority_norm not in valid_priorities:
+                raise serializers.ValidationError({
+                    "priority": f"Invalid priority '{priority}'. Supported priorities are: {', '.join(valid_priorities)}"
+                })
+            attrs['priority'] = priority_norm
+
+        # Status validation (for updates by Admin/Agent)
+        if 'status' in attrs:
+            valid_statuses = ['OPEN', 'IN_PROGRESS', 'WAITING_FOR_USER', 'RESOLVED', 'CLOSED']
+            status_norm = str(attrs['status']).upper()
+            if status_norm not in valid_statuses:
+                raise serializers.ValidationError({
+                    "status": f"Invalid status '{attrs['status']}'. Supported statuses are: {', '.join(valid_statuses)}"
+                })
+            attrs['status'] = status_norm
+
+        # Booking ownership & server-side association validation on creation
+        if not self.instance:
+            booking = attrs.get('booking')
+            if booking:
+                if user and user.is_authenticated:
+                    if booking.customer != user and not is_admin_or_agent:
+                        raise PermissionDenied("You do not have permission to create a support ticket for another customer's booking.")
+                attrs['hotel'] = booking.hotel
+                attrs['room'] = booking.room
+            else:
+                attrs['booking'] = None
+                attrs['room'] = None
+
+            # On creation: Enforce default status and clear assigned_agent
+            attrs['status'] = 'OPEN'
+            attrs['assigned_agent'] = None
+            if user and user.is_authenticated:
+                attrs['user'] = user
+
+        # Admin Ticket Assignment Validation
+        if 'assigned_agent' in attrs:
+            agent_user = attrs.get('assigned_agent')
+            if agent_user is not None:
+                agent_role = str(getattr(agent_user, 'role', '')).upper()
+                is_hotel_owner = agent_role in ['HOTEL_OWNER', 'HOST', 'OWNER'] or (hasattr(agent_user, 'hotels') and agent_user.hotels.exists())
+                is_support_staff = agent_user.is_staff or getattr(agent_user, 'is_superuser', False) or agent_role in ['ADMIN', 'SUPER_ADMIN', 'SUPPORT_AGENT']
+
+                if not (is_hotel_owner or is_support_staff):
+                    raise serializers.ValidationError({
+                        "assigned_agent": f"User '{agent_user.username}' is not a registered Hotel Owner or Support Agent.",
+                        "error": "The selected user is not a valid Hotel Owner or Support Agent."
+                    })
+
+                if is_hotel_owner and not is_support_staff:
+                    target_hotel = self.instance.hotel if self.instance else attrs.get('hotel')
+                    if not target_hotel:
+                        raise serializers.ValidationError({
+                            "assigned_agent": "Cannot assign a Hotel Owner to a general ticket with no associated hotel.",
+                            "error": "Cannot assign a Hotel Owner to a ticket with no associated hotel."
+                        })
+                    owns_hotel = (target_hotel.owner == agent_user or (hasattr(agent_user, 'hotels') and agent_user.hotels.filter(id=target_hotel.id).exists()))
+                    if not owns_hotel:
+                        raise serializers.ValidationError({
+                            "assigned_agent": f"Hotel Owner '{agent_user.username}' does not own '{target_hotel.name}'. Unrelated hotel owners cannot be assigned.",
+                            "error": "Hotel Owner does not own the hotel associated with this ticket."
+                        })
+
+        # XSS Sanitization
+        if 'subject' in attrs and attrs['subject']:
+            attrs['subject'] = sanitize_text_input(attrs['subject'])
+        if 'description' in attrs and attrs['description']:
+            attrs['description'] = sanitize_text_input(attrs['description'])
+
+        # Attachment Validation
+        if 'attachment' in attrs and attrs['attachment']:
+            validate_support_attachment(attrs['attachment'])
+
+        return attrs
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        
+        # Privacy-protected customer details
+        ret['customer_phone'] = self.get_customer_phone(instance)
+        ret['check_in'] = instance.booking.check_in if instance.booking else None
+        ret['check_out'] = instance.booking.check_out if instance.booking else None
+        ret['assigned_agent_id'] = instance.assigned_agent.id if instance.assigned_agent else None
+
+        if instance.user:
+            ret['customer'] = {
+                'id': instance.user.id,
+                'name': instance.user.get_full_name() or instance.user.username,
+                'email': instance.user.email,
+                'phone': self.get_customer_phone(instance),
+                'phone_number': self.get_customer_phone(instance),
+                'username': instance.user.username
+            }
+        else:
+            ret['customer'] = None
+
+        if instance.hotel:
+            ret['hotel_details'] = {
+                'id': instance.hotel.id,
+                'name': instance.hotel.name,
+                'city': getattr(instance.hotel, 'city', '')
+            }
+        else:
+            ret['hotel_details'] = None
+
+        if instance.room:
+            ret['room_details'] = {
+                'id': instance.room.id,
+                'title': instance.room.title,
+                'room_type': instance.room.room_type
+            }
+        else:
+            ret['room_details'] = None
+
+        if instance.booking:
+            ret['booking_details'] = {
+                'id': instance.booking.id,
+                'booking_id': instance.booking.booking_id,
+                'check_in': str(instance.booking.check_in),
+                'check_out': str(instance.booking.check_out),
+                'booking_status': instance.booking.booking_status,
+                'payment_status': instance.booking.payment_status,
+                'room_number': instance.booking.room_number,
+                'total_amount': str(instance.booking.total_amount)
+            }
+        else:
+            ret['booking_details'] = None
+
+        if instance.assigned_agent:
+            ret['assigned_agent_details'] = {
+                'id': instance.assigned_agent.id,
+                'name': instance.assigned_agent.get_full_name() or instance.assigned_agent.username,
+                'email': instance.assigned_agent.email,
+                'role': instance.assigned_agent.role
+            }
+        else:
+            ret['assigned_agent_details'] = None
+
+        # Build absolute URL for attachment if present
+        request = self.context.get('request')
+        if instance.attachment and hasattr(instance.attachment, 'url'):
+            if request:
+                ret['attachment_url'] = request.build_absolute_uri(instance.attachment.url)
+            else:
+                ret['attachment_url'] = instance.attachment.url
+
+        return ret
 
 
 class CustomerHotelMessageSerializer(serializers.ModelSerializer):

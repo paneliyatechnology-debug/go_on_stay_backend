@@ -483,6 +483,8 @@ class SupportTicket(models.Model):
     ticket_number = models.CharField(max_length=50, unique=True, db_index=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='support_tickets')
     booking = models.ForeignKey(Booking, on_delete=models.SET_NULL, blank=True, null=True, related_name='support_tickets')
+    hotel = models.ForeignKey('hotels.Hotel', on_delete=models.SET_NULL, blank=True, null=True, related_name='support_tickets')
+    room = models.ForeignKey('rooms.Room', on_delete=models.SET_NULL, blank=True, null=True, related_name='support_tickets')
     
     category = models.CharField(max_length=30, choices=CATEGORY_CHOICES, default='BOOKING')
     priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES, default='MEDIUM')
@@ -490,11 +492,21 @@ class SupportTicket(models.Model):
     
     subject = models.CharField(max_length=255)
     description = models.TextField()
+    attachment = models.FileField(upload_to='support_tickets/attachments/', blank=True, null=True)
+    attachment_url = models.URLField(max_length=500, blank=True, null=True)
     
     assigned_agent = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True, related_name='assigned_tickets')
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def customer(self):
+        return self.user
+
+    @customer.setter
+    def customer(self, val):
+        self.user = val
 
     def save(self, *args, **kwargs):
         if not self.ticket_number:
@@ -509,6 +521,7 @@ class TicketMessage(models.Model):
     ticket = models.ForeignKey(SupportTicket, on_delete=models.CASCADE, related_name='messages')
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     message = models.TextField()
+    attachment = models.FileField(upload_to='support_tickets/messages/', blank=True, null=True)
     attachment_url = models.URLField(max_length=500, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
