@@ -1,0 +1,1457 @@
+{
+  "info": {
+    "_postman_id": "goonstay-staff-management-api-v1",
+    "name": "GoOnStay - Staff Management System API",
+    "description": "Complete Postman collection for GoOnStay Staff Management System.\nCovers Authentication, Admin Management, RBAC, Reservation, Refund, Payout, Customer Support, Hotel Verification, Notifications, and Dashboard.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8000",
+      "type": "string"
+    },
+    {
+      "key": "adminToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "staffToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "staffRefreshToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000",
+      "type": "string"
+    },
+    {
+      "key": "staff_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "staff_refresh_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "admin_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "admin_refresh",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "guest_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "guestToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "customer_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "guest_refresh",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "host_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "hostToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "host_refresh",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "staff_refresh",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "hotel_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "room_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "booking_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "review_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "coupon_code",
+      "value": "WELCOME100",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Staff Authentication",
+      "item": [
+        {
+          "name": "Staff Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"identifier\": \"amit.reservation001\",\n    \"password\": \"TempPass#987123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/login/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "login",
+                ""
+              ]
+            },
+            "description": "Login with Login ID or Email. Returns JWT tokens and must_change_password flag."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200 OK', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Access token returned', function () {",
+                  "    var data = pm.response.json();",
+                  "    var token = data.access || data.token || (data.tokens && data.tokens.access);",
+                  "    pm.expect(token).to.be.a('string');",
+                  "});",
+                  "pm.test('User role is STAFF or ADMIN', function () {",
+                  "    var data = pm.response.json();",
+                  "    var role = data.role || (data.user && data.user.role);",
+                  "    pm.expect(['STAFF', 'ADMIN']).to.include(role);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    var data = pm.response.json();",
+                  "    var token = data.access || data.token || (data.tokens && data.tokens.access);",
+                  "    var refresh = data.refresh || (data.tokens && data.tokens.refresh);",
+                  "    if (token) {",
+                  "        pm.collectionVariables.set('staff_token', token);",
+                  "        pm.collectionVariables.set('staffToken', token);",
+                  "        try { pm.environment.set('staff_token', token); } catch(e){}",
+                  "        try { pm.environment.set('staffToken', token); } catch(e){}",
+                  "    }",
+                  "    if (refresh) {",
+                  "        pm.collectionVariables.set('staff_refresh', refresh);",
+                  "        pm.collectionVariables.set('staff_refresh_token', refresh);",
+                  "        pm.collectionVariables.set('staffRefreshToken', refresh);",
+                  "        try { pm.environment.set('staff_refresh', refresh); } catch(e){}",
+                  "        try { pm.environment.set('staff_refresh_token', refresh); } catch(e){}",
+                  "        try { pm.environment.set('staffRefreshToken', refresh); } catch(e){}",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Staff Me (Profile)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/me/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "me",
+                ""
+              ]
+            },
+            "description": "Retrieves the logged-in staff member's profile, department, and granted permissions."
+          }
+        },
+        {
+          "name": "Staff Change Password (First Login / Self-Service)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"old_password\": \"TempPass#987123\",\n    \"new_password\": \"NewSecurePass@2026\",\n    \"confirm_password\": \"NewSecurePass@2026\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/change-password/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "change-password",
+                ""
+              ]
+            },
+            "description": "Mandatory on first login. Changes password, sets must_change_password=False, and logs audit entry."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200 OK', function () { pm.response.to.have.status(200); });",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    var data = pm.response.json();",
+                  "    var token = data.access || data.token;",
+                  "    var refresh = data.refresh;",
+                  "    if (token) {",
+                  "        pm.collectionVariables.set('staff_token', token);",
+                  "        pm.collectionVariables.set('staffToken', token);",
+                  "        try { pm.environment.set('staff_token', token); } catch(e){}",
+                  "        try { pm.environment.set('staffToken', token); } catch(e){}",
+                  "    }",
+                  "    if (refresh) {",
+                  "        pm.collectionVariables.set('staff_refresh', refresh);",
+                  "        pm.collectionVariables.set('staff_refresh_token', refresh);",
+                  "        pm.collectionVariables.set('staffRefreshToken', refresh);",
+                  "        try { pm.environment.set('staff_refresh', refresh); } catch(e){}",
+                  "        try { pm.environment.set('staff_refresh_token', refresh); } catch(e){}",
+                  "        try { pm.environment.set('staffRefreshToken', refresh); } catch(e){}",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Staff Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"identifier\": \"amit.reservation001\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/forgot-password/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "forgot-password",
+                ""
+              ]
+            },
+            "description": "Sends secure single-use password reset link. Token is hashed in DB with expiration."
+          }
+        },
+        {
+          "name": "Staff Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"token\": \"<raw_token_from_email>\",\n    \"new_password\": \"BrandNewSecret@2026\",\n    \"confirm_password\": \"BrandNewSecret@2026\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/reset-password/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "reset-password",
+                ""
+              ]
+            },
+            "description": "Completes reset with token hash match. Marks token used."
+          }
+        },
+        {
+          "name": "Staff Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"refresh\": \"{{staffRefreshToken}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/logout/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "logout",
+                ""
+              ]
+            },
+            "description": "Blacklists JWT refresh token and terminates staff session."
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Admin Staff Management",
+      "item": [
+        {
+          "name": "0. Admin Login (Populate {{adminToken}})",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@bookmyroom.com\",\n  \"password\": \"AdminPassword123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/login/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "login",
+                ""
+              ]
+            },
+            "description": "Authenticate as Administrator to automatically set {{adminToken}} and {{admin_token}} for managing staff."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200 OK', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Access token returned', function () { pm.expect(pm.response.json().access).to.be.a('string'); });",
+                  "pm.test('User is Admin', function () {",
+                  "    var data = pm.response.json();",
+                  "    var role = data.role || (data.user && data.user.role);",
+                  "    pm.expect(role).to.eql('ADMIN');",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    var data = pm.response.json();",
+                  "    var token = data.access || data.token;",
+                  "    var refresh = data.refresh || (data.tokens && data.tokens.refresh);",
+                  "    if (token) {",
+                  "        pm.collectionVariables.set('admin_token', token);",
+                  "        pm.collectionVariables.set('adminToken', token);",
+                  "        pm.collectionVariables.set('token', token);",
+                  "        try { pm.environment.set('admin_token', token); } catch(e){}",
+                  "        try { pm.environment.set('adminToken', token); } catch(e){}",
+                  "        try { pm.environment.set('token', token); } catch(e){}",
+                  "    }",
+                  "    if (refresh) {",
+                  "        pm.collectionVariables.set('admin_refresh', refresh);",
+                  "        try { pm.environment.set('admin_refresh', refresh); } catch(e){}",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Staff Member",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"first_name\": \"Amit\",\n    \"last_name\": \"Kumar\",\n    \"email\": \"amit.kumar@goonstay.com\",\n    \"phone_number\": \"9811223344\",\n    \"department\": \"RESERVATION\",\n    \"designation\": \"Senior Reservation Officer\",\n    \"permissions\": [\"VIEW_BOOKINGS\", \"CREATE_BOOKINGS\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/create/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "create",
+                ""
+              ]
+            },
+            "description": "Admin creates staff member. Returns sequential GOS-EMP-XXX, Login ID, and one-time plain temporary password."
+          }
+        },
+        {
+          "name": "List Staff Members",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/?department=RESERVATION&status=ACTIVE",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "department",
+                  "value": "RESERVATION"
+                },
+                {
+                  "key": "status",
+                  "value": "ACTIVE"
+                }
+              ]
+            },
+            "description": "Admin queries staff list with department, status, and search filters."
+          }
+        },
+        {
+          "name": "Staff Member Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/1/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "1",
+                ""
+              ]
+            },
+            "description": "Inspects complete employee profile, department, and granular permissions."
+          }
+        },
+        {
+          "name": "Update Staff Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"designation\": \"Lead Reservation Officer\",\n    \"phone_number\": \"9876543210\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/1/update/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "1",
+                "update",
+                ""
+              ]
+            },
+            "description": "Admin updates designation, phone number, and metadata."
+          }
+        },
+        {
+          "name": "Update Staff Status (Activate / Suspend)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"status\": \"SUSPENDED\",\n    \"reason\": \"Compliance audit in progress\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/1/status/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "1",
+                "status",
+                ""
+              ]
+            },
+            "description": "Admin activates, deactivates, or suspends account. Takes immediate effect."
+          }
+        },
+        {
+          "name": "List Departments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/departments/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "departments",
+                ""
+              ]
+            },
+            "description": "Returns all 5 pre-configured departments: Reservation, Customer Support, Refund, Payout, Hotel Verification."
+          }
+        },
+        {
+          "name": "Get Staff Permissions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/1/permissions/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "1",
+                "permissions",
+                ""
+              ]
+            },
+            "description": "Admin views employee's assigned granular permissions."
+          }
+        },
+        {
+          "name": "Update Staff Permissions",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"permissions\": [\"VIEW_BOOKINGS\", \"CREATE_BOOKINGS\", \"EDIT_BOOKINGS\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/1/permissions/update/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "1",
+                "permissions",
+                "update",
+                ""
+              ]
+            },
+            "description": "Admin modifies individual granular permissions. Changes take immediate effect."
+          }
+        },
+        {
+          "name": "Admin Reset Staff Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/1/reset-password/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "1",
+                "reset-password",
+                ""
+              ]
+            },
+            "description": "Admin forces password reset. Returns a new one-time temporary password."
+          }
+        },
+        {
+          "name": "Staff Activity Logs (Audit Trail)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/activities/?employee_id=GOS-EMP-001&action=LOGIN",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "activities",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "employee_id",
+                  "value": "GOS-EMP-001"
+                },
+                {
+                  "key": "action",
+                  "value": "LOGIN"
+                }
+              ]
+            },
+            "description": "Immutable audit trail of staff logins, edits, refund disbursements, and verifications."
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Reservation Department",
+      "item": [
+        {
+          "name": "List Bookings",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/bookings/?q=Jane&status=CONFIRMED",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "bookings",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "Jane"
+                },
+                {
+                  "key": "status",
+                  "value": "CONFIRMED"
+                }
+              ]
+            },
+            "description": "Reservation Staff searches bookings by guest name, phone, email, booking reference, or hotel."
+          }
+        },
+        {
+          "name": "Booking Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/bookings/1/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "bookings",
+                "1",
+                ""
+              ]
+            },
+            "description": "Complete booking details with guest info, stay dates, and pricing breakdown. (Manual calling only, no click-to-call)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Refund Department",
+      "item": [
+        {
+          "name": "List Refund Requests",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/refunds/?status=PENDING",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "refunds",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "PENDING"
+                }
+              ]
+            },
+            "description": "Refund Staff views pending cancellation refunds with eligibility details."
+          }
+        },
+        {
+          "name": "Refund Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/refunds/1/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "refunds",
+                "1",
+                ""
+              ]
+            },
+            "description": "Inspects refund amount, payment transaction reference, and bank/UPI details."
+          }
+        },
+        {
+          "name": "Process Gateway Refund",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"notes\": \"Approved cancellation within free refund window.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/refunds/1/process/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "refunds",
+                "1",
+                "process",
+                ""
+              ]
+            },
+            "description": "Executes live Razorpay gateway refund. Requires PROCESS_REFUND permission."
+          }
+        },
+        {
+          "name": "Refund History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/refunds/history/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "refunds",
+                "history",
+                ""
+              ]
+            },
+            "description": "Audit history of processed and settled refunds."
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Payout Department",
+      "item": [
+        {
+          "name": "List Host Payouts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/payouts/?status=PENDING",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "payouts",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "PENDING"
+                }
+              ]
+            },
+            "description": "Payout Staff queries host payout requests."
+          }
+        },
+        {
+          "name": "Payout Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/payouts/1/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "payouts",
+                "1",
+                ""
+              ]
+            },
+            "description": "Inspects payout earnings, platform commission, and 7-day maturity status."
+          }
+        },
+        {
+          "name": "Process Host Payout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"notes\": \"Processed weekly disbursement via bank NEFT.\",\n    \"transaction_id\": \"NEFT_ICICI_987654321\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/payouts/1/process/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "payouts",
+                "1",
+                "process",
+                ""
+              ]
+            },
+            "description": "Disburses host payout. Strictly validates 7-day holding period before executing."
+          }
+        },
+        {
+          "name": "Payout History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/payouts/history/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "payouts",
+                "history",
+                ""
+              ]
+            },
+            "description": "Historical record of settled partner disbursements."
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Customer Support Department",
+      "item": [
+        {
+          "name": "List Support Tickets",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/support/?status=OPEN&priority=HIGH",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "support",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "OPEN"
+                },
+                {
+                  "key": "priority",
+                  "value": "HIGH"
+                }
+              ]
+            },
+            "description": "Customer Support Staff lists tickets with status, priority, and date filters."
+          }
+        },
+        {
+          "name": "Support Ticket Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/support/1/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "support",
+                "1",
+                ""
+              ]
+            },
+            "description": "Inspects ticket details, customer messages, and internal notes."
+          }
+        },
+        {
+          "name": "Update Ticket Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"status\": \"IN_PROGRESS\",\n    \"priority\": \"URGENT\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/support/1/update/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "support",
+                "1",
+                "update",
+                ""
+              ]
+            },
+            "description": "Updates ticket status (OPEN, IN_PROGRESS, RESOLVED, CLOSED) and priority."
+          }
+        },
+        {
+          "name": "Add Internal Note (Staff Only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"note\": \"Contacted hotel duty manager; guest shifted to superior room.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/support/1/notes/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "support",
+                "1",
+                "notes",
+                ""
+              ]
+            },
+            "description": "Adds internal coordination note. Strictly hidden from customer view."
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Hotel Verification Department",
+      "item": [
+        {
+          "name": "List Verification Queue",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/verifications/?status=SUBMITTED",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "verifications",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "SUBMITTED"
+                }
+              ]
+            },
+            "description": "Hotel Verification Staff lists newly submitted hotel listings."
+          }
+        },
+        {
+          "name": "Hotel Verification Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/verifications/1/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "verifications",
+                "1",
+                ""
+              ]
+            },
+            "description": "Inspects hotel metadata, owner identity, and government business documents."
+          }
+        },
+        {
+          "name": "Approve Hotel Listing",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"notes\": \"All legal documents verified; property passed compliance audit.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/verifications/1/approve/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "verifications",
+                "1",
+                "approve",
+                ""
+              ]
+            },
+            "description": "Approves hotel listing (sets is_approved=True, status=APPROVED), notifies hotel owner."
+          }
+        },
+        {
+          "name": "Reject Hotel Listing",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"reason\": \"Trade license certificate has expired. Please re-upload current valid certificate.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/verifications/1/reject/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "verifications",
+                "1",
+                "reject",
+                ""
+              ]
+            },
+            "description": "Rejects hotel with mandatory reason. Updates status and notifies owner."
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Staff Notifications",
+      "item": [
+        {
+          "name": "List Staff Notifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/notifications/?unread_only=true",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "notifications",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "unread_only",
+                  "value": "true"
+                }
+              ]
+            },
+            "description": "Lists notifications for employee and their department with unread counts."
+          }
+        },
+        {
+          "name": "Mark Notification Read",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/notifications/1/read/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "notifications",
+                "1",
+                "read",
+                ""
+              ]
+            },
+            "description": "Marks single notification as read."
+          }
+        },
+        {
+          "name": "Mark All Notifications Read",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/notifications/read-all/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "notifications",
+                "read-all",
+                ""
+              ]
+            },
+            "description": "Marks all notifications for the logged-in staff member as read."
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. Staff Dashboard",
+      "item": [
+        {
+          "name": "Get Department Dashboard Metrics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/staff/dashboard/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "dashboard",
+                ""
+              ]
+            },
+            "description": "Dynamic real statistics tailored to employee's assigned department and permissions. Never hardcoded."
+          }
+        }
+      ]
+    }
+  ]
+}

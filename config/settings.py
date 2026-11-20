@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'wishlist',
     'coupons',
     'notifications',
+    'staff',
 ]
 
 MIDDLEWARE = [
@@ -86,8 +87,23 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
+            'OPTIONS': {
+                'timeout': 60,
+            },
         }
     }
+
+# Ensure SQLite connections use 60s timeout and NORMAL synchronous mode for high concurrent read/write stability
+from django.db.backends.signals import connection_created
+def _configure_sqlite_connection(sender, connection, **kwargs):
+    if connection.vendor == 'sqlite':
+        try:
+            cursor = connection.cursor()
+            cursor.execute('PRAGMA busy_timeout = 60000;')
+            cursor.execute('PRAGMA synchronous = NORMAL;')
+        except Exception:
+            pass
+connection_created.connect(_configure_sqlite_connection)
 
 # Custom User Model
 AUTH_USER_MODEL = 'users.User'
@@ -103,7 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # REST Framework Configuration
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'core.authentication.FlexibleJWTAuthentication',
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
@@ -122,6 +138,9 @@ REST_FRAMEWORK = {
         'register': '5/minute',
         'otp_verify': '5/minute',
         'password_reset': '5/minute',
+        'check_phone': '15/minute',
+        'check_email': '15/minute',
+        'email_resend': '5/minute',
         'support_ticket_create': '10/hour',
         'support_ticket_message': '30/hour',
     }
@@ -189,3 +208,9 @@ PAYMENT_MODE = os.getenv('PAYMENT_MODE', 'test')
 RAZORPAY_KEY_ID = os.getenv('RAZORPAY_KEY_ID', 'rzp_test_bookmyroom_key_2026')
 RAZORPAY_KEY_SECRET = os.getenv('RAZORPAY_KEY_SECRET', 'rzp_test_bookmyroom_secret_2026')
 RAZORPAY_WEBHOOK_SECRET = os.getenv('RAZORPAY_WEBHOOK_SECRET', 'rzp_whsec_bookmyroom_2026')
+
+# Payment Hold Configuration (Immediate unlock & fallback duration)
+PAYMENT_HOLD_DURATION_MINUTES = int(os.getenv('PAYMENT_HOLD_DURATION_MINUTES', 15))
+
+# Payment Hold Configuration (Immediate unlock & fallback duration)
+PAYMENT_HOLD_DURATION_MINUTES = int(os.getenv('PAYMENT_HOLD_DURATION_MINUTES', 15))

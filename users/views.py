@@ -691,20 +691,22 @@ class CheckEmailView(APIView):
 
 class CheckPhoneView(APIView):
     permission_classes = [permissions.AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'check_phone'
 
     def _check(self, phone_input):
         from util.validators import clean_indian_phone
         from django.db.models import Q
         phone = str(phone_input or '').strip()
         if not phone:
-            return Response({"valid": False, "exists": False, "error": "Phone number is required."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"valid": False, "exists": False, "available": False, "error": "Phone number is required."}, status=status.HTTP_400_BAD_REQUEST)
         try:
             clean_val = clean_indian_phone(phone)
         except Exception as e:
             msg = getattr(e, 'detail', str(e))
             if isinstance(msg, list):
                 msg = msg[0]
-            return Response({"valid": False, "exists": False, "error": str(msg)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"valid": False, "exists": False, "available": False, "error": str(msg)}, status=status.HTTP_400_BAD_REQUEST)
 
         last10 = clean_val[-10:]
         exists = User.objects.filter(
@@ -715,8 +717,9 @@ class CheckPhoneView(APIView):
         return Response({
             "valid": True,
             "exists": exists,
+            "available": not exists,
             "phone_number": clean_val,
-            "message": "An account with this mobile number is already registered (as Admin, Hotel Owner, or Guest). The same mobile number cannot be used for multiple roles." if exists else "Mobile number is valid and available for registration."
+            "message": "Mobile number is valid and available for registration." if not exists else "An account with this mobile number is already registered (as Admin, Hotel Owner, or Guest). The same mobile number cannot be used for multiple roles."
         }, status=status.HTTP_200_OK)
 
     def get(self, request):

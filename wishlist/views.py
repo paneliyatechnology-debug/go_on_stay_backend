@@ -7,10 +7,13 @@ from hotels.models import Hotel
 
 class WishlistListView(generics.ListAPIView):
     serializer_class = WishlistSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
-        return Wishlist.objects.filter(user=self.request.user).order_by('-created_at')
+        user = self.request.user
+        if not user or not user.is_authenticated:
+            return Wishlist.objects.none()
+        return Wishlist.objects.filter(user=user).order_by('-created_at')
 
 class WishlistToggleView(APIView):
     permission_classes = [permissions.IsAuthenticated]

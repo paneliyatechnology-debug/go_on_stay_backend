@@ -27,7 +27,8 @@ class ReviewListCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        hotel_id = self.request.query_params.get('hotel_id')
+        hotel_param = self.request.query_params.get('hotel_id') or self.request.query_params.get('hotel')
+        hotel_id = int(hotel_param) if (hotel_param and str(hotel_param).isdigit()) else None
 
         # If requested by a Hotel Owner, return reviews for their hotels
         if user.is_authenticated and (getattr(user, 'role', '') == 'HOTEL_OWNER' or self.request.query_params.get('owner') == 'true'):
@@ -39,13 +40,23 @@ class ReviewListCreateView(generics.ListCreateAPIView):
                 qs = qs.filter(hotel_id=hotel_id)
             return qs.order_by('-created_at')
 
-        # Public guest listing
-        if hotel_id:
-            return Review.objects.filter(hotel_id=hotel_id, status=Review.STATUS_VISIBLE).order_by('-created_at')
-        return Review.objects.filter(status=Review.STATUS_VISIBLE).order_by('-created_at')
+        # Public guest listing: MUST be strictly scoped to a valid, specified hotel!
+        # Missing, empty, 'undefined', 'null', or invalid hotel IDs must never leak unrelated hotels' reviews.
+        if not hotel_param or not str(hotel_param).isdigit():
+            return Review.objects.none()
+
+        hotel_id = int(hotel_param)
+        return Review.objects.filter(hotel_id=hotel_id, status=Review.STATUS_VISIBLE).order_by('-created_at')
 
     def perform_create(self, serializer):
-        booking_lookup = self.request.data.get('booking')
+        booking_lookup = (
+            self.request.data.get('booking') or
+            self.request.data.get('booking_id') or
+            self.request.data.get('bookingId')
+        )
+        if isinstance(booking_lookup, dict):
+            booking_lookup = booking_lookup.get('booking_id') or booking_lookup.get('id')
+
         if not booking_lookup:
             raise serializers.ValidationError({"booking": "Reservation booking identifier is required."})
 

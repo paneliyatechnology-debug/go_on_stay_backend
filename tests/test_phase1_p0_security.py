@@ -1,6 +1,7 @@
 import inspect
 from concurrent.futures import ThreadPoolExecutor
 from datetime import timedelta
+from decimal import Decimal
 from unittest.mock import patch
 from django.test import TestCase, override_settings
 from django.core.cache import cache
@@ -279,6 +280,355 @@ class Phase1SecurityP0Tests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Review.objects.filter(id=review_a.id).exists())
+
+    def test_p0_02_rating_mandatory_and_integer_1_to_5(self):
+        """Requirement 1: Verifies that rating is strictly mandatory and must be an integer between 1 and 5."""
+        today = timezone.now().date()
+        booking = Booking.objects.create(
+            booking_id="BK-RATING-REQ-001",
+            customer=self.user_a,
+            hotel=self.hotel_a,
+            room=self.room_a,
+            check_in=today - timedelta(days=3),
+            check_out=today - timedelta(days=1),
+            number_of_guests=2,
+            number_of_rooms=1,
+            price_per_night=3000.00,
+            subtotal=6000.00,
+            total_amount=7080.00,
+            payment_status=Booking.PAYMENT_PAID,
+            booking_status=Booking.STATUS_COMPLETED,
+            guest_name="Guest User A",
+            guest_email=self.user_a.email,
+            guest_phone="9876543210"
+        )
+        self.client.force_authenticate(user=self.user_a)
+
+        # 1a. Missing rating entirely -> 400 Bad Request
+        res_missing = self.client.post("/api/reviews/", {"booking": booking.id})
+        self.assertEqual(res_missing.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("rating", str(res_missing.data))
+
+        # 1b. Rating = 0 (< 1) -> 400 Bad Request
+        res_zero = self.client.post("/api/reviews/", {"booking": booking.id, "rating": 0})
+        self.assertEqual(res_zero.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("rating", str(res_zero.data))
+
+        # 1c. Rating = 6 (> 5) -> 400 Bad Request
+        res_six = self.client.post("/api/reviews/", {"booking": booking.id, "rating": 6})
+        self.assertEqual(res_six.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("rating", str(res_six.data))
+
+        # 1d. Rating = non-integer string -> 400 Bad Request
+        res_str = self.client.post("/api/reviews/", {"booking": booking.id, "rating": "invalid_val"})
+        self.assertEqual(res_str.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("rating", str(res_str.data))
+
+    def test_p0_02_review_comment_is_optional_null_empty_omitted(self):
+        """Requirement 2: Verifies that review comment is fully optional (omitted, empty string, or null)."""
+        today = timezone.now().date()
+        booking_empty = Booking.objects.create(
+            booking_id="BK-COMMENT-OPT-001",
+            customer=self.user_a,
+            hotel=self.hotel_a,
+            room=self.room_a,
+            check_in=today - timedelta(days=3),
+            check_out=today - timedelta(days=1),
+            number_of_guests=2,
+            number_of_rooms=1,
+            price_per_night=3000.00,
+            subtotal=6000.00,
+            total_amount=7080.00,
+            payment_status=Booking.PAYMENT_PAID,
+            booking_status=Booking.STATUS_COMPLETED,
+            guest_name="Guest User A",
+            guest_email=self.user_a.email,
+            guest_phone="9876543210"
+        )
+        self.client.force_authenticate(user=self.user_a)
+
+        # Empty string comment
+        res = self.client.post("/api/reviews/", {
+            "booking": booking_empty.id,
+            "rating": 5,
+            "comment": ""
+        })
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        review = Review.objects.get(booking=booking_empty)
+        self.assertEqual(review.comment, "")
+
+    def test_p0_02_rating_only_submission_for_completed_booking_succeeds(self):
+        """Requirement 3: Verifies that rating-only submission for a genuinely COMPLETED booking succeeds."""
+        today = timezone.now().date()
+        booking_completed = Booking.objects.create(
+            booking_id="BK-RATING-ONLY-003",
+            customer=self.user_a,
+            hotel=self.hotel_a,
+            room=self.room_a,
+            check_in=today - timedelta(days=4),
+            check_out=today - timedelta(days=2),
+            number_of_guests=2,
+            number_of_rooms=1,
+            price_per_night=3000.00,
+            subtotal=6000.00,
+            total_amount=7080.00,
+            payment_status=Booking.PAYMENT_PAID,
+            booking_status=Booking.STATUS_COMPLETED,
+            guest_name="Guest User A",
+            guest_email=self.user_a.email,
+            guest_phone="9876543210"
+        )
+        self.client.force_authenticate(user=self.user_a)
+
+        # Submit without comment field
+        response = self.client.post("/api/reviews/", {
+            "booking": booking_completed.id,
+            "rating": 4
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        review = Review.objects.get(booking=booking_completed)
+        self.assertEqual(review.rating, 4)
+        self.assertEqual(review.comment, "")
+        self.assertEqual(review.user, self.user_a)
+        self.assertEqual(review.hotel, self.hotel_a)
+
+    def test_p0_02_rating_plus_comment_submission_for_completed_booking_succeeds(self):
+        """Requirement 4: Verifies that rating + comment submission for a genuinely COMPLETED booking succeeds."""
+        today = timezone.now().date()
+        booking_completed = Booking.objects.create(
+            booking_id="BK-RATING-COMMENT-004",
+            customer=self.user_a,
+            hotel=self.hotel_a,
+            room=self.room_a,
+            check_in=today - timedelta(days=5),
+            check_out=today - timedelta(days=2),
+            number_of_guests=2,
+            number_of_rooms=1,
+            price_per_night=3000.00,
+            subtotal=6000.00,
+            total_amount=7080.00,
+            payment_status=Booking.PAYMENT_PAID,
+            booking_status=Booking.STATUS_COMPLETED,
+            guest_name="Guest User A",
+            guest_email=self.user_a.email,
+            guest_phone="9876543210"
+        )
+        self.client.force_authenticate(user=self.user_a)
+
+        response = self.client.post("/api/reviews/", {
+            "booking": booking_completed.id,
+            "rating": 5,
+            "comment": "Outstanding hospitality and very clean rooms!"
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        review = Review.objects.get(booking=booking_completed)
+        self.assertEqual(review.rating, 5)
+        self.assertEqual(review.comment, "Outstanding hospitality and very clean rooms!")
+
+    def test_p0_02_incomplete_booking_rejected_with_completed_stay_error(self):
+        """Requirement 5: Verifies that an incomplete/upcoming booking is rejected with completed-stay validation error."""
+        today = timezone.now().date()
+        # Upcoming booking: check_in in future, check_out in future
+        booking_upcoming = Booking.objects.create(
+            booking_id="BK-UPCOMING-005",
+            customer=self.user_a,
+            hotel=self.hotel_a,
+            room=self.room_a,
+            check_in=today + timedelta(days=2),
+            check_out=today + timedelta(days=4),
+            number_of_guests=2,
+            number_of_rooms=1,
+            price_per_night=3000.00,
+            subtotal=6000.00,
+            total_amount=7080.00,
+            payment_status=Booking.PAYMENT_PAID,
+            booking_status=Booking.STATUS_CONFIRMED,
+            guest_name="Guest User A",
+            guest_email=self.user_a.email,
+            guest_phone="9876543210"
+        )
+        self.client.force_authenticate(user=self.user_a)
+
+        res_upcoming = self.client.post("/api/reviews/", {
+            "booking": booking_upcoming.id,
+            "rating": 5
+        })
+        self.assertEqual(res_upcoming.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("You can only review a hotel after completing your stay", str(res_upcoming.data))
+
+        # Cancelled booking -> also rejected
+        booking_cancelled = Booking.objects.create(
+            booking_id="BK-CANCELLED-005",
+            customer=self.user_a,
+            hotel=self.hotel_a,
+            room=self.room_a,
+            check_in=today - timedelta(days=3),
+            check_out=today - timedelta(days=1),
+            number_of_guests=2,
+            number_of_rooms=1,
+            price_per_night=3000.00,
+            subtotal=6000.00,
+            total_amount=7080.00,
+            payment_status=Booking.PAYMENT_REFUNDED,
+            booking_status=Booking.STATUS_CANCELLED,
+            guest_name="Guest User A",
+            guest_email=self.user_a.email,
+            guest_phone="9876543210"
+        )
+        res_cancelled = self.client.post("/api/reviews/", {
+            "booking": booking_cancelled.id,
+            "rating": 5
+        })
+        self.assertEqual(res_cancelled.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("You can only review a hotel after completing your stay", str(res_cancelled.data))
+
+    def test_p0_02_another_customers_booking_rejected(self):
+        """Requirement 6: Verifies that attempting to review another customer's booking is strictly rejected."""
+        today = timezone.now().date()
+        # Booking belongs to User A
+        booking_user_a = Booking.objects.create(
+            booking_id="BK-USER-A-006",
+            customer=self.user_a,
+            hotel=self.hotel_a,
+            room=self.room_a,
+            check_in=today - timedelta(days=3),
+            check_out=today - timedelta(days=1),
+            number_of_guests=2,
+            number_of_rooms=1,
+            price_per_night=3000.00,
+            subtotal=6000.00,
+            total_amount=7080.00,
+            payment_status=Booking.PAYMENT_PAID,
+            booking_status=Booking.STATUS_COMPLETED,
+            guest_name="Guest User A",
+            guest_email=self.user_a.email,
+            guest_phone="9876543210"
+        )
+
+        # Authenticate as User B (attacker)
+        self.client.force_authenticate(user=self.user_b)
+        response = self.client.post("/api/reviews/", {
+            "booking": booking_user_a.id,
+            "rating": 1,
+            "comment": "Malicious fake review"
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("You can only review hotels where you have a valid reservation under your account", str(response.data))
+        self.assertFalse(Review.objects.filter(booking=booking_user_a).exists())
+
+    def test_p0_02_duplicate_review_rejected_one_review_per_booking(self):
+        """Requirement 7: Verifies that duplicate reviews for the same booking are rejected."""
+        today = timezone.now().date()
+        booking = Booking.objects.create(
+            booking_id="BK-DUP-REVIEW-007",
+            customer=self.user_a,
+            hotel=self.hotel_a,
+            room=self.room_a,
+            check_in=today - timedelta(days=3),
+            check_out=today - timedelta(days=1),
+            number_of_guests=2,
+            number_of_rooms=1,
+            price_per_night=3000.00,
+            subtotal=6000.00,
+            total_amount=7080.00,
+            payment_status=Booking.PAYMENT_PAID,
+            booking_status=Booking.STATUS_COMPLETED,
+            guest_name="Guest User A",
+            guest_email=self.user_a.email,
+            guest_phone="9876543210"
+        )
+        self.client.force_authenticate(user=self.user_a)
+
+        # First review submission -> Success
+        res_first = self.client.post("/api/reviews/", {
+            "booking": booking.id,
+            "rating": 4
+        })
+        self.assertEqual(res_first.status_code, status.HTTP_201_CREATED)
+
+        # Second review submission for same booking -> Rejected
+        res_second = self.client.post("/api/reviews/", {
+            "booking": booking.id,
+            "rating": 5,
+            "comment": "Trying to review again"
+        })
+        self.assertEqual(res_second.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("You have already submitted a rating for this stay reservation", str(res_second.data))
+        self.assertEqual(Review.objects.filter(booking=booking).count(), 1)
+
+    def test_p0_02_hotel_aggregate_rating_updates_correctly(self):
+        """Requirement 8: Verifies that hotel aggregate rating updates correctly when reviews are created."""
+        today = timezone.now().date()
+        # Fresh hotel with no prior reviews
+        hotel_test = Hotel.objects.create(
+            owner=self.owner_a,
+            name="Rating Test Hotel",
+            city="Goa",
+            address="Candolim Beach",
+            star_rating=4,
+            guest_rating=Decimal("5.0"),
+            status=Hotel.STATUS_APPROVED
+        )
+        room_test = Room.objects.create(
+            hotel=hotel_test,
+            title="Deluxe Room",
+            price_per_night=2000.00,
+            total_rooms=5
+        )
+
+        booking_1 = Booking.objects.create(
+            booking_id="BK-RATING-AGG-001",
+            customer=self.user_a,
+            hotel=hotel_test,
+            room=room_test,
+            check_in=today - timedelta(days=4),
+            check_out=today - timedelta(days=2),
+            number_of_guests=2,
+            number_of_rooms=1,
+            price_per_night=2000.00,
+            subtotal=4000.00,
+            total_amount=4720.00,
+            payment_status=Booking.PAYMENT_PAID,
+            booking_status=Booking.STATUS_COMPLETED,
+            guest_name="Guest User A",
+            guest_email=self.user_a.email,
+            guest_phone="9876543210"
+        )
+        booking_2 = Booking.objects.create(
+            booking_id="BK-RATING-AGG-002",
+            customer=self.user_b,
+            hotel=hotel_test,
+            room=room_test,
+            check_in=today - timedelta(days=4),
+            check_out=today - timedelta(days=2),
+            number_of_guests=2,
+            number_of_rooms=1,
+            price_per_night=2000.00,
+            subtotal=4000.00,
+            total_amount=4720.00,
+            payment_status=Booking.PAYMENT_PAID,
+            booking_status=Booking.STATUS_COMPLETED,
+            guest_name="Guest User B",
+            guest_email=self.user_b.email,
+            guest_phone="9876543211"
+        )
+
+        # 1. User A rates 4 stars
+        self.client.force_authenticate(user=self.user_a)
+        res1 = self.client.post("/api/reviews/", {"booking": booking_1.id, "rating": 4})
+        self.assertEqual(res1.status_code, status.HTTP_201_CREATED)
+        hotel_test.refresh_from_db()
+        self.assertEqual(hotel_test.guest_rating, Decimal("4.0"))
+
+        # 2. User B rates 5 stars -> Average should be (4 + 5) / 2 = 4.5
+        self.client.force_authenticate(user=self.user_b)
+        res2 = self.client.post("/api/reviews/", {"booking": booking_2.id, "rating": 5, "comment": "Loved it!"})
+        self.assertEqual(res2.status_code, status.HTTP_201_CREATED)
+        hotel_test.refresh_from_db()
+        self.assertEqual(hotel_test.guest_rating, Decimal("4.5"))
 
     # =========================================================================
     # TASK P0-03: Fix Cross-Hotel Staff Privilege Escalation

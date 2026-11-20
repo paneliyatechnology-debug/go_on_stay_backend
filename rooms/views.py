@@ -84,7 +84,11 @@ class RoomsByHotelView(generics.ListAPIView):
 
         check_in = self.request.query_params.get('check_in')
         check_out = self.request.query_params.get('check_out')
-        requested_rooms = int(self.request.query_params.get('rooms', 1))
+        try:
+            rooms_raw = self.request.query_params.get('rooms', 1)
+            requested_rooms = int(rooms_raw) if str(rooms_raw).isdigit() else 1
+        except (ValueError, TypeError):
+            requested_rooms = 1
         available_only = self.request.query_params.get('available_only', 'false').lower() in ['true', '1']
 
         # Only filter out rooms if available_only=true is explicitly requested.

@@ -124,10 +124,10 @@ class BookingCreateSerializer(serializers.ModelSerializer):
             })
 
         # Real-time Date Overlap Concurrency Check
-        available_count = get_available_room_count(room, check_in, check_out)
+        available_count = get_available_room_count(room, check_in, check_out, include_holds=True)
         if available_count < requested_rooms:
             raise serializers.ValidationError({
-                "room": f"Sorry! Only {available_count} room(s) available for the requested dates. Please select alternative dates."
+                "room": "All rooms are booked for your selected dates. Please select different dates or another room category."
             })
 
         # Specific Room Preference (Physical room allocation is deferred until successful payment)

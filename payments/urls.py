@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import (
     CreateOrderView, VerifyPaymentView, WebhookView,
+    CancelPaymentView, PaymentFailureNotificationView,
     RetryPaymentView, RefundView, RefundProcessView, RefundDetailView,
     RefundStatusView, RefundRetryView, AdminPaymentListView, AdminRefundListView,
     CustomerPayoutDisburseView,
@@ -15,6 +16,10 @@ from .views import (
 urlpatterns = [
     path('create-order/', CreateOrderView.as_view(), name='payment-create-order'),
     path('verify/', VerifyPaymentView.as_view(), name='payment-verify'),
+    path('cancel-payment/', CancelPaymentView.as_view(), name='payment-cancel'),
+    path('cancel/', CancelPaymentView.as_view(), name='payment-cancel-alias'),
+    path('payment-failed/', PaymentFailureNotificationView.as_view(), name='payment-failed'),
+    path('failed/', PaymentFailureNotificationView.as_view(), name='payment-failed-alias'),
     path('create-host-subscription-order/', CreateHostSubscriptionOrderView.as_view(), name='host-subscription-create-order'),
     path('verify-host-subscription/', VerifyHostSubscriptionPaymentView.as_view(), name='host-subscription-verify'),
     path('webhook/', WebhookView.as_view(), name='payment-webhook'),

@@ -11,6 +11,7 @@ class User(AbstractUser):
     ROLE_ADMIN = 'ADMIN'
     ROLE_SUPER_ADMIN = 'SUPER_ADMIN'
     ROLE_SUPPORT_AGENT = 'SUPPORT_AGENT'
+    ROLE_STAFF = 'STAFF'
 
     ROLE_CHOICES = (
         (ROLE_CUSTOMER, 'Customer / Guest'),
@@ -19,6 +20,7 @@ class User(AbstractUser):
         (ROLE_ADMIN, 'Admin'),
         (ROLE_SUPER_ADMIN, 'Super Admin'),
         (ROLE_SUPPORT_AGENT, 'Support Agent'),
+        (ROLE_STAFF, 'GoOnStay Staff'),
     )
 
     LANG_EN = 'en'

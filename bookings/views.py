@@ -2,6 +2,7 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.throttling import ScopedRateThrottle
 from django.db import transaction
 from django.utils import timezone
 from datetime import timedelta
@@ -44,103 +45,90 @@ class BookingListCreateView(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN
             )
 
-        # Concurrency & Overselling Prevention (select_for_update lock)
+        # Concurrency & Overselling Prevention (select_for_update lock & global mutex)
         room_id = request.data.get('room') or request.data.get('room_id')
         check_in = request.data.get('check_in')
         check_out = request.data.get('check_out')
         requested_rooms = int(request.data.get('number_of_rooms') or 1)
 
         from rooms.models import Room
-        from django.db.models import Sum
-        from datetime import date
+        from rooms.utils import auto_update_past_checkout_bookings, get_available_room_count, _ROOM_ALLOCATION_LOCK
+        from util.validators import parse_flexible_date
 
-        if room_id:
-            try:
-                # Lock the room inventory row during reservation
-                room_locked = Room.objects.select_for_update().get(id=room_id)
-            except Room.DoesNotExist:
-                return Response({"error": "Room not found."}, status=status.HTTP_404_NOT_FOUND)
+        with _ROOM_ALLOCATION_LOCK:
+            if room_id:
+                try:
+                    # Lock the room inventory row during reservation
+                    room_locked = Room.objects.select_for_update().get(id=room_id)
+                except Room.DoesNotExist:
+                    return Response({"error": "Room not found."}, status=status.HTTP_404_NOT_FOUND)
 
-            if check_in and check_out:
-                from util.validators import parse_flexible_date
-                cin = parse_flexible_date(check_in)
-                cout = parse_flexible_date(check_out)
+                if check_in and check_out:
+                    cin = parse_flexible_date(check_in)
+                    cout = parse_flexible_date(check_out)
 
-                if cin and cout and cout > cin:
-                    from rooms.utils import auto_update_past_checkout_bookings, get_room_numbers_availability
-                    auto_update_past_checkout_bookings()
+                    if cin and cout and cout > cin:
+                        auto_update_past_checkout_bookings()
+                        # Escalate write lock in SQLite/PostgreSQL to prevent race condition during reservation
+                        Room.objects.filter(id=room_locked.id).update(updated_at=timezone.now())
 
-                    from django.db.models import Q
-                    overlapping_bookings = Booking.objects.filter(
-                        room=room_locked,
-                        check_in__lt=cout,
-                        check_out__gt=cin
-                    ).filter(
-                        Q(booking_status__in=[
-                            Booking.STATUS_CONFIRMED,
-                            Booking.STATUS_CHECKED_IN,
-                            Booking.STATUS_COMPLETED,
-                        ]) |
-                        Q(payment_status=Booking.PAYMENT_PAID)
-                    ).exclude(
-                        booking_status__in=[
-                            Booking.STATUS_CANCELLED,
-                            Booking.STATUS_CHECKED_OUT,
-                            Booking.STATUS_REFUNDED,
-                            Booking.STATUS_EXPIRED,
-                        ]
-                    )
-                    booked_count = overlapping_bookings.aggregate(Sum('number_of_rooms'))['number_of_rooms__sum'] or 0
-                    all_nums = room_locked.get_all_room_numbers() if hasattr(room_locked, 'get_all_room_numbers') else []
-                    total_units = max(getattr(room_locked, 'total_rooms', 1) or 1, len(all_nums))
+                        available_count = get_available_room_count(room_locked, cin, cout, include_holds=True)
+                        all_nums = room_locked.get_all_room_numbers() if hasattr(room_locked, 'get_all_room_numbers') else []
+                        total_units = len(all_nums) if all_nums else (getattr(room_locked, 'total_rooms', 1) or 1)
 
-                    if (booked_count + requested_rooms) > total_units:
-                        return Response(
-                            {
-                                "success": False,
-                                "error": "Room is no longer available for the selected dates.",
-                                "available_count": max(0, total_units - booked_count),
-                                "total_units": total_units
-                            },
-                            status=status.HTTP_409_CONFLICT
-                        )
+                        if requested_rooms > available_count:
+                            return Response(
+                                {
+                                    "success": False,
+                                    "code": "ROOMS_SOLD_OUT",
+                                    "message": "All rooms are booked for your selected dates. Please select different dates or another room category.",
+                                    "available_rooms": available_count,
+                                    "requested_rooms": requested_rooms,
+                                    # Backwards compatibility fields
+                                    "error": "All rooms are booked for your selected dates. Please select different dates or another room category.",
+                                    "available_count": available_count,
+                                    "total_units": total_units
+                                },
+                                status=status.HTTP_409_CONFLICT
+                            )
 
-        serializer = self.get_serializer(data=request.data, context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        booking = serializer.save()
+            serializer = self.get_serializer(data=request.data, context={'request': request})
+            serializer.is_valid(raise_exception=True)
+            booking = serializer.save()
 
-        # Save immutable price snapshot & set pending payment expiration timeout (15 mins)
-        preferred_room = request.data.get('room_number') or getattr(booking, 'preferred_room_number', None)
-        coupon_code_used = (
-            getattr(booking, 'applied_coupon_code', None)
-            or request.data.get('coupon_code')
-            or request.data.get('coupon')
-        )
-        if coupon_code_used:
-            coupon_code_used = str(coupon_code_used).strip().upper()
+            # Save immutable price snapshot & set pending payment expiration timeout (15 mins)
+            preferred_room = request.data.get('room_number') or getattr(booking, 'preferred_room_number', None)
+            coupon_code_used = (
+                getattr(booking, 'applied_coupon_code', None)
+                or request.data.get('coupon_code')
+                or request.data.get('coupon')
+            )
+            if coupon_code_used:
+                coupon_code_used = str(coupon_code_used).strip().upper()
 
-        booking.expires_at = timezone.now() + timedelta(minutes=15)
-        booking.price_snapshot = {
-            'price_per_night': float(booking.price_per_night),
-            'number_of_nights': booking.number_of_nights,
-            'number_of_rooms': booking.number_of_rooms,
-            'subtotal': float(booking.subtotal),
-            'cleaning_fee': float(booking.cleaning_fee),
-            'service_fee': float(booking.service_fee),
-            'taxes': float(booking.taxes),
-            'discount': float(booking.discount),
-            'coupon_code': coupon_code_used,
-            'preferred_room_number': str(preferred_room).strip() if preferred_room else None,
-            'allocated_room_number': None,
-            'room_number': None,
-            'meal_plan': booking.meal_plan,
-            'total_amount': float(booking.total_amount),
-            'currency': booking.currency,
-            'created_at_timestamp': timezone.now().isoformat()
-        }
-        booking.save(update_fields=['expires_at', 'price_snapshot'])
+            from rooms.utils import get_payment_hold_duration
+            booking.expires_at = timezone.now() + get_payment_hold_duration()
+            booking.price_snapshot = {
+                'price_per_night': float(booking.price_per_night),
+                'number_of_nights': booking.number_of_nights,
+                'number_of_rooms': booking.number_of_rooms,
+                'subtotal': float(booking.subtotal),
+                'cleaning_fee': float(booking.cleaning_fee),
+                'service_fee': float(booking.service_fee),
+                'taxes': float(booking.taxes),
+                'discount': float(booking.discount),
+                'coupon_code': coupon_code_used,
+                'preferred_room_number': str(preferred_room).strip() if preferred_room else None,
+                'allocated_room_number': None,
+                'room_number': None,
+                'meal_plan': booking.meal_plan,
+                'total_amount': float(booking.total_amount),
+                'currency': booking.currency,
+                'created_at_timestamp': timezone.now().isoformat()
+            }
+            booking.save(update_fields=['expires_at', 'price_snapshot'])
 
-        return Response(BookingSerializer(booking).data, status=status.HTTP_201_CREATED)
+            return Response(BookingSerializer(booking).data, status=status.HTTP_201_CREATED)
 
 
 class BookingDetailView(generics.RetrieveAPIView):
@@ -405,10 +393,14 @@ class BookingCancelView(APIView):
                 existing_refund.save()
         elif is_paid and Decimal(str(calc['refundable_amount'])) == Decimal('0.00'):
             booking.payment_status = Booking.PAYMENT_REFUNDED
+            booking.save()
         else:
             booking.payment_status = Booking.PAYMENT_FAILED
-
-        booking.save()
+            booking.room_number = None
+            booking.expires_at = timezone.now() - timedelta(seconds=1)
+            booking.save()
+            from rooms.utils import release_temporary_hold
+            release_temporary_hold(booking, reason=booking.cancellation_reason, new_status=Booking.STATUS_CANCELLED)
 
         # TASK: Immediately reverse HostEarning and safely handle any pending HostPayout
         from payments.models import HostEarning, HostPayout
@@ -605,6 +597,8 @@ class ResendBookingConfirmationEmailView(APIView):
     a safe retry or manual resend of the booking confirmation email with PDF voucher attached.
     """
     permission_classes = [permissions.IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'email_resend'
 
     def post(self, request, pk):
         lookup = str(pk)
@@ -616,11 +610,19 @@ class ResendBookingConfirmationEmailView(APIView):
         # Check permissions: Booking owner, hotel owner, or authorized staff/admin
         is_owner = request.user == booking.customer
         is_authorized_staff = is_authorized_hotel_staff_or_owner_or_admin(request.user, booking.hotel, permission_field='can_manage_bookings')
+        is_admin = request.user.is_staff or getattr(request.user, 'role', '') in ['ADMIN', 'SUPER_ADMIN']
 
-        if not (is_owner or is_authorized_staff):
+        if not (is_owner or is_authorized_staff or is_admin):
             return Response({"error": "You do not have permission to resend confirmation for this booking."}, status=status.HTTP_403_FORBIDDEN)
 
-        if booking.booking_status != Booking.STATUS_CONFIRMED:
+        # Duplicate-send cooldown protection: prevent repeated clicks within 60 seconds
+        cache_key = f"email_resend_cooldown_{booking.id}"
+        if cache.get(cache_key) and not is_admin:
+            return Response({
+                "error": "A confirmation email was recently dispatched. Please wait at least 60 seconds before requesting another email."
+            }, status=status.HTTP_429_TOO_MANY_REQUESTS)
+
+        if booking.booking_status not in [Booking.STATUS_CONFIRMED, Booking.STATUS_CHECKED_IN, Booking.STATUS_CHECKED_OUT, Booking.STATUS_COMPLETED]:
             return Response({
                 "error": f"Cannot send confirmation email for booking with status '{booking.booking_status}'. Only confirmed bookings can receive vouchers."
             }, status=status.HTTP_400_BAD_REQUEST)
@@ -629,6 +631,7 @@ class ResendBookingConfirmationEmailView(APIView):
         result = send_booking_confirmation_email(booking, force_retry=True)
 
         if result.get("success"):
+            cache.set(cache_key, True, timeout=60)
             return Response({
                 "status": "success",
                 "message": f"Booking confirmation email with PDF invoice dispatched successfully to {result.get('recipient')}.",

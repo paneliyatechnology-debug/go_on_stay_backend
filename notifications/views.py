@@ -38,11 +38,11 @@ class MarkAllNotificationsReadView(APIView):
         return Response({"message": "All notifications marked as read."}, status=status.HTTP_200_OK)
 
 class UnreadNotificationCountView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def get(self, request):
-        check_and_create_stay_reminders(request.user)
-        check_and_create_payout_notifications(request.user)
+        if not request.user or not request.user.is_authenticated:
+            return Response({"unread_count": 0}, status=status.HTTP_200_OK)
         count = Notification.objects.filter(recipient=request.user, is_read=False).count()
         return Response({"unread_count": count}, status=status.HTTP_200_OK)
 

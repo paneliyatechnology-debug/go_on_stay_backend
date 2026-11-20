@@ -72,6 +72,10 @@ def custom_exception_handler(exc, context):
     details = {}
 
     if isinstance(raw_data, dict):
+        if 'code' in raw_data and isinstance(raw_data['code'], str):
+            code = raw_data['code']
+        if 'message' in raw_data and isinstance(raw_data['message'], str):
+            message = raw_data['message']
         if 'detail' in raw_data and len(raw_data) == 1:
             message = str(raw_data['detail'])
             details = {"detail": raw_data['detail']}
@@ -84,6 +88,14 @@ def custom_exception_handler(exc, context):
                 message = raw_data['detail']
             elif 'non_field_errors' in raw_data and isinstance(raw_data['non_field_errors'], list) and raw_data['non_field_errors']:
                 message = str(raw_data['non_field_errors'][0])
+            elif details:
+                for k, v in details.items():
+                    if isinstance(v, list) and v:
+                        message = str(v[0])
+                        break
+                    elif isinstance(v, str) and v:
+                        message = v
+                        break
     elif isinstance(raw_data, list):
         details = {"errors": raw_data}
         if raw_data:
@@ -94,6 +106,7 @@ def custom_exception_handler(exc, context):
     # Construct standardized RFC 7807 error payload
     standardized = {
         "success": False,
+        "message": message,
         "error": {
             "code": code,
             "message": message,

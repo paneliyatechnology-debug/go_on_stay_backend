@@ -25,7 +25,7 @@ class Review(models.Model):
     rating_facilities = models.DecimalField(max_digits=3, decimal_places=1, default=5.0)
     rating_value = models.DecimalField(max_digits=3, decimal_places=1, default=5.0)
     
-    comment = models.TextField()
+    comment = models.TextField(blank=True, default='')
     photo_url = models.URLField(max_length=500, blank=True, null=True)
     
     owner_response = models.TextField(blank=True, null=True)

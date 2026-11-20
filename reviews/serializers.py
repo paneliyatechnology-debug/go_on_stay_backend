@@ -7,7 +7,36 @@ class ReviewSerializer(serializers.ModelSerializer):
     hotel_city = serializers.CharField(source='hotel.city', read_only=True)
     reviewer_name = serializers.SerializerMethodField()
     reviewer_username = serializers.CharField(source='user.username', read_only=True)
-    booking = serializers.CharField(required=False, write_only=False)
+    booking = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    rating = serializers.IntegerField(
+        required=True,
+        min_value=1,
+        max_value=5,
+        error_messages={
+            'required': 'Rating is required and must be an integer between 1 and 5.',
+            'null': 'Rating cannot be null.',
+            'min_value': 'Rating must be an integer between 1 and 5.',
+            'max_value': 'Rating must be an integer between 1 and 5.',
+            'invalid': 'Rating must be an integer between 1 and 5.'
+        }
+    )
+    comment = serializers.CharField(required=False, allow_blank=True, allow_null=True, default='')
+
+    def to_internal_value(self, data):
+        if isinstance(data, dict):
+            data = data.copy()
+            # If booking is passed as dict or int
+            if 'booking' in data:
+                b_val = data['booking']
+                if isinstance(b_val, dict):
+                    data['booking'] = str(b_val.get('booking_id') or b_val.get('id') or '')
+                elif isinstance(b_val, (int, float)):
+                    data['booking'] = str(b_val)
+            elif 'booking_id' in data:
+                data['booking'] = str(data['booking_id'])
+            elif 'bookingId' in data:
+                data['booking'] = str(data['bookingId'])
+        return super().to_internal_value(data)
 
     class Meta:
         model = Review
@@ -37,3 +66,8 @@ class ReviewSerializer(serializers.ModelSerializer):
         if val < 1 or val > 5:
             raise serializers.ValidationError("Rating must be an integer between 1 and 5.")
         return val
+
+    def validate_comment(self, value):
+        if value is None:
+            return ''
+        return str(value).strip()

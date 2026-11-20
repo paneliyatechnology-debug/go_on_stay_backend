@@ -157,10 +157,10 @@ def filter_hotels_queryset(queryset, params):
 
     if min_price or max_price:
         queryset = queryset.annotate(min_room_price=Min('rooms__price_per_night'))
-        if min_price and str(min_price).isdigit():
-            queryset = queryset.filter(Q(starting_price__gte=float(min_price)) | Q(min_room_price__gte=float(min_price)))
-        if max_price and str(max_price).isdigit():
-            queryset = queryset.filter(Q(starting_price__lte=float(max_price)) | Q(min_room_price__lte=float(max_price)))
+        if min_price and str(min_price).replace('.', '', 1).isdigit():
+            queryset = queryset.filter(min_room_price__gte=float(min_price))
+        if max_price and str(max_price).replace('.', '', 1).isdigit():
+            queryset = queryset.filter(min_room_price__lte=float(max_price))
 
     # 6. Booking Options (Free Cancellation, Breakfast)
     if params.get('free_cancellation') == 'true':
@@ -180,9 +180,9 @@ def filter_hotels_queryset(queryset, params):
     # 8. Sorting Logic
     sort_by = params.get('sort_by') or params.get('sort')
     if sort_by in ['price_low', 'price_low_high', 'price_asc']:
-        queryset = queryset.annotate(sort_price=Min('rooms__price_per_night')).order_by('sort_price', 'starting_price')
+        queryset = queryset.annotate(sort_price=Min('rooms__price_per_night')).order_by(F('sort_price').asc(nulls_last=True))
     elif sort_by in ['price_high', 'price_high_low', 'price_desc']:
-        queryset = queryset.annotate(sort_price=Min('rooms__price_per_night')).order_by('-sort_price', '-starting_price')
+        queryset = queryset.annotate(sort_price=Min('rooms__price_per_night')).order_by(F('sort_price').desc(nulls_last=True))
     elif sort_by in ['rating', 'rating_desc']:
         queryset = queryset.annotate(
             avg_rating=Avg('reviews__rating', filter=Q(reviews__status='VISIBLE')),
@@ -267,6 +267,15 @@ class HotelSearchAPIView(generics.ListAPIView):
 class HotelDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Hotel.objects.all()
     permission_classes = [IsOwnerOrAdminOrReadOnly]
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        hotel = Hotel.objects.filter(pk=pk).first()
+        if not hotel:
+            from rest_framework.exceptions import NotFound
+            raise NotFound("Hotel not found.")
+        self.check_object_permissions(self.request, hotel)
+        return hotel
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -590,7 +599,10 @@ class HotelCitiesView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request):
-        cities_qs = Hotel.objects.exclude(city__isnull=True).exclude(city__exact='').values_list('city', flat=True)
-        unique_cities = sorted(list(set(c.strip().title() for c in cities_qs if c and c.strip())))
-        return Response(unique_cities)
+        try:
+            cities_qs = Hotel.objects.exclude(city__isnull=True).exclude(city__exact='').values_list('city', flat=True)
+            unique_cities = sorted(list(set(str(c).strip().title() for c in cities_qs if c and str(c).strip())))
+            return Response(unique_cities, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response([], status=status.HTTP_200_OK)
 

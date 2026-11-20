@@ -71,27 +71,32 @@ class HotelSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ('id', 'owner', 'created_at', 'updated_at')
 
-    def get_is_available(self, obj):
+    def _get_hotel_room_availabilities(self, obj):
         check_in = self.context.get('check_in')
         check_out = self.context.get('check_out')
-        if not check_in or not check_out:
-            return True
-        from rooms.utils import get_available_room_count
-        rooms = obj.rooms.all()
-        if not rooms.exists():
-            return True
-        return any(get_available_room_count(r, check_in, check_out) > 0 for r in rooms)
+        cache_attr = f"_hotel_room_avails_{check_in}_{check_out}"
+        if not hasattr(obj, cache_attr):
+            from rooms.utils import get_available_room_count
+            rooms = list(obj.rooms.all())
+            if not rooms:
+                setattr(obj, cache_attr, (True, 0))
+            elif not check_in or not check_out:
+                total_units = sum(getattr(r, 'total_rooms', getattr(r, 'total_units', 1)) for r in rooms)
+                setattr(obj, cache_attr, (total_units > 0, total_units))
+            else:
+                counts = [get_available_room_count(r, check_in, check_out) for r in rooms]
+                total_avail = sum(counts)
+                is_avail = any(c > 0 for c in counts)
+                setattr(obj, cache_attr, (is_avail, total_avail))
+        return getattr(obj, cache_attr)
+
+    def get_is_available(self, obj):
+        is_avail, _ = self._get_hotel_room_availabilities(obj)
+        return is_avail
 
     def get_available_rooms_count(self, obj):
-        check_in = self.context.get('check_in')
-        check_out = self.context.get('check_out')
-        from rooms.utils import get_available_room_count
-        rooms = obj.rooms.all()
-        if not rooms.exists():
-            return 0
-        if not check_in or not check_out:
-            return sum(getattr(r, 'total_rooms', getattr(r, 'total_units', 1)) for r in rooms)
-        return sum(get_available_room_count(r, check_in, check_out) for r in rooms)
+        _, total_avail = self._get_hotel_room_availabilities(obj)
+        return total_avail
 
     def get_owner_is_blocked(self, obj):
         return bool(obj.owner and obj.owner.is_blocked)

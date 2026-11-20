@@ -18,6 +18,7 @@ urlpatterns = [
     path('api/wishlist/', include('wishlist.urls')),
     path('api/coupons/', include('coupons.urls')),
     path('api/notifications/', include('notifications.urls')),
+    path('api/staff/', include('staff.urls')),
 ]
 
 if settings.DEBUG:

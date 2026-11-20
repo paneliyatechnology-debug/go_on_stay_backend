@@ -51,19 +51,25 @@ class RoomSerializer(serializers.ModelSerializer):
             return primary.get_image_display()
         return "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=800&q=80"
 
-    def get_available_count(self, obj):
+    def _get_avail(self, obj):
         check_in = self.context.get('check_in')
         check_out = self.context.get('check_out')
-        return get_available_room_count(obj, check_in, check_out)
+        cache_attr = f"_avail_{check_in}_{check_out}"
+        if not hasattr(obj, cache_attr):
+            setattr(obj, cache_attr, get_available_room_count(obj, check_in, check_out))
+        return getattr(obj, cache_attr)
+
+    def get_available_count(self, obj):
+        return self._get_avail(obj)
 
     def get_remaining(self, obj):
-        return self.get_available_count(obj)
+        return self._get_avail(obj)
 
     def get_is_available(self, obj):
         check_in = self.context.get('check_in')
         check_out = self.context.get('check_out')
         if check_in and check_out:
-            return get_available_room_count(obj, check_in, check_out) > 0
+            return self._get_avail(obj) > 0
         total = getattr(obj, 'total_rooms', getattr(obj, 'total_units', 1))
         return total > 0
 

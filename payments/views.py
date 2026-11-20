@@ -62,8 +62,8 @@ class CreateOrderView(APIView):
         raw_b_id = str(serializer.validated_data['booking_id']).strip()
 
         booking = (
-            Booking.objects.filter(booking_id=raw_b_id).first()
-            or (Booking.objects.filter(pk=int(raw_b_id)).first() if raw_b_id.isdigit() else None)
+            Booking.objects.select_related('room', 'hotel', 'customer').filter(booking_id=raw_b_id).first()
+            or (Booking.objects.select_related('room', 'hotel', 'customer').filter(pk=int(raw_b_id)).first() if raw_b_id.isdigit() else None)
         )
         if not booking:
             return Response({"error": "Booking not found."}, status=status.HTTP_404_NOT_FOUND)
@@ -76,6 +76,69 @@ class CreateOrderView(APIView):
                 {"error": f"Booking is not in pending payment state. Current status: {booking.booking_status}"},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+        # Pre-payment physical room availability validation & inventory gate
+        from rooms.utils import get_available_room_count, _ROOM_ALLOCATION_LOCK, get_payment_hold_duration
+        with _ROOM_ALLOCATION_LOCK:
+            if booking.room:
+                needed_rooms = int(booking.number_of_rooms or 1)
+                try:
+                    with transaction.atomic():
+                        # Escalate write lock in SQLite/PostgreSQL to serialize concurrent checkout attempts
+                        from rooms.models import Room
+                        Room.objects.filter(id=booking.room.id).update(updated_at=timezone.now())
+
+                        avail_count = get_available_room_count(
+                            booking.room,
+                            booking.check_in,
+                            booking.check_out,
+                            exclude_booking_id=booking.id,
+                            include_holds=True
+                        )
+                        if avail_count < needed_rooms:
+                            logger.warning(
+                                f"[CreateOrderView] Rejected payment order creation for booking {booking.booking_id}: "
+                                f"only {avail_count} room(s) available, but {needed_rooms} requested."
+                            )
+                            return Response({
+                                "success": False,
+                                "code": "ROOMS_SOLD_OUT",
+                                "message": "All rooms are booked for your selected dates. Please select different dates or another room category.",
+                                "available_rooms": avail_count,
+                                "requested_rooms": needed_rooms,
+                                # Backwards-compatibility fields
+                                "error": "All rooms are booked for your selected dates. Please select different dates or another room category.",
+                                "available_count": avail_count,
+                                "booking_id": booking.booking_id
+                            }, status=status.HTTP_409_CONFLICT)
+
+                        # Atomically extend the active temporary hold for this booking (configurable duration)
+                        booking.expires_at = timezone.now() + get_payment_hold_duration()
+                        booking.save(update_fields=['expires_at'])
+                except Exception as db_err:
+                    if 'locked' in str(db_err).lower():
+                        import time
+                        time.sleep(0.1)
+                        avail_count = get_available_room_count(
+                            booking.room,
+                            booking.check_in,
+                            booking.check_out,
+                            exclude_booking_id=booking.id,
+                            include_holds=True
+                        )
+                        if avail_count < needed_rooms:
+                            return Response({
+                                "success": False,
+                                "code": "ROOMS_SOLD_OUT",
+                                "message": "All rooms are booked for your selected dates. Please select different dates or another room category.",
+                                "available_rooms": avail_count,
+                                "requested_rooms": needed_rooms,
+                                "error": "All rooms are booked for your selected dates. Please select different dates or another room category.",
+                                "available_count": avail_count,
+                                "booking_id": booking.booking_id
+                            }, status=status.HTTP_409_CONFLICT)
+                    else:
+                        raise
 
         # Server-side total calculation verification to prevent frontend price tampering
         MEAL_PRICES = {
@@ -404,14 +467,93 @@ class VerifyPaymentView(APIView):
                 status=Payment.STATUS_CREATED
             ).exclude(id=payment_obj.id).delete()
 
+            # Mandatory Fix 5 & 7: Revalidate physical room availability & allocate BEFORE confirming!
+            from rooms.utils import allocate_room_number_for_booking
+            allocated_room = allocate_room_number_for_booking(booking_to_update)
+
+            if not allocated_room:
+                # OVERBOOKING RACE CONDITION:
+                # Payment succeeded on Razorpay, but 0 physical rooms are available for these stay dates.
+                # Never silently confirm an unavailable room. Cancel booking and trigger automatic refund!
+                logger.error(
+                    f"[VerifyPaymentView] CRITICAL OVERBOOKING: Booking {booking_to_update.booking_id} paid via "
+                    f"payment {razorpay_payment_id}, but no physical rooms remain available. Initiating automatic full refund."
+                )
+
+                booking_to_update.booking_status = Booking.STATUS_CANCELLED
+                booking_to_update.payment_status = Booking.PAYMENT_REFUND_PENDING
+                booking_to_update.cancellation_reason = "Room inventory unavailable due to simultaneous overbooking. Automatic 100% full refund initiated."
+                booking_to_update.refundable_amount = booking_to_update.total_amount
+                booking_to_update.room_number = None
+                booking_to_update.save(update_fields=['booking_status', 'payment_status', 'cancellation_reason', 'refundable_amount', 'room_number'])
+
+                # Automatic refund dispatch
+                auto_refund_success = False
+                try:
+                    from payments.models import Refund
+                    refund_record, _ = Refund.objects.get_or_create(
+                        booking=booking_to_update,
+                        payment=payment_obj,
+                        defaults={
+                            'razorpay_payment_id': razorpay_payment_id,
+                            'amount': booking_to_update.total_amount,
+                            'currency': 'INR',
+                            'reason': 'Automatic refund: room overbooked during payment race condition',
+                            'refund_mode': Refund.REFUND_MODE_ORIGINAL,
+                            'status': Refund.STATUS_REFUND_PROCESSING,
+                            'idempotency_key': f"ref_overbook_{booking_to_update.booking_id}"
+                        }
+                    )
+                    execute_refund_with_provider(
+                        refund_record=refund_record,
+                        booking_locked=booking_to_update,
+                        captured_payment=payment_obj,
+                        refund_amount=booking_to_update.total_amount,
+                        reason="Automatic refund: room overbooked during payment race condition",
+                        refund_mode=Refund.REFUND_MODE_ORIGINAL,
+                        user=request.user,
+                        admin_notes="System automatic refund due to overbooking race condition"
+                    )
+                    auto_refund_success = True
+                except Exception as ref_exc:
+                    logger.error(f"[VerifyPaymentView] Overbooking automatic refund failed: {ref_exc}")
+
+                # Notify customer
+                try:
+                    from notifications.utils import create_notification
+                    from notifications.models import Notification
+                    create_notification(
+                        recipient=booking_to_update.customer,
+                        title="⚠️ Booking Overbooked — Full Refund Initiated",
+                        message=(
+                            f"We apologize, but your selected room at {booking_to_update.hotel.name} was booked simultaneously "
+                            f"by another guest. Your payment of ₹{booking_to_update.total_amount} is being refunded in full "
+                            f"to your original payment method."
+                        ),
+                        notification_type=Notification.TYPE_BOOKING_CANCELLED,
+                        booking=booking_to_update
+                    )
+                except Exception as notif_err:
+                    logger.warning(f"Could not send overbooking notification: {notif_err}")
+
+                return Response({
+                    "success": False,
+                    "status": "overbooked_refund_initiated",
+                    "error": (
+                        "We apologize, but this room was booked by another customer in a simultaneous transaction. "
+                        "A full 100% refund has been automatically initiated to your original payment method."
+                    ),
+                    "booking_id": booking_to_update.booking_id,
+                    "payment_id": razorpay_payment_id,
+                    "refund_amount": float(booking_to_update.total_amount),
+                    "refund_status": "REFUNDED" if auto_refund_success else "REFUND_PENDING"
+                }, status=status.HTTP_409_CONFLICT)
+
+            # ALLOCATION SUCCEEDED: Confirm booking and mark payment paid
             booking_to_update.booking_status = Booking.STATUS_CONFIRMED
             booking_to_update.payment_status = Booking.PAYMENT_PAID
             booking_to_update.confirmed_at = timezone.now()
             booking_to_update.save()
-
-            # Automatic Room Allocation strictly upon confirmed payment
-            from rooms.utils import allocate_room_number_for_booking
-            allocate_room_number_for_booking(booking_to_update)
 
             # Record CouponUsage and increment times_used only upon confirmed payment (TASK-13)
             try:
@@ -552,6 +694,156 @@ class VerifyPaymentView(APIView):
         }, status=status.HTTP_200_OK)
 
 
+class CancelPaymentView(APIView):
+    """
+    POST /api/payments/cancel-payment/ (and /api/payments/cancel/)
+    Immediately releases the temporary room hold when a customer cancels or exits
+    the Razorpay payment gateway modal.
+    - Idempotent and thread-safe.
+    - Restores physical room availability immediately.
+    - Preserves booking and payment history with STATUS_EXPIRED / PAYMENT_FAILED.
+    - Rejects cancellation if booking is already confirmed or paid.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        raw_b_id = str(request.data.get('booking_id') or request.data.get('id') or '').strip()
+        reason = str(request.data.get('reason') or 'Customer cancelled payment / exited payment gateway').strip()
+
+        if not raw_b_id:
+            return Response({
+                "success": False,
+                "error": "booking_id is required."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        booking = (
+            Booking.objects.filter(booking_id=raw_b_id).first()
+            or (Booking.objects.filter(pk=int(raw_b_id)).first() if raw_b_id.isdigit() else None)
+        )
+        if not booking:
+            return Response({
+                "success": False,
+                "error": "Booking not found."
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        is_admin = request.user.is_staff or request.user.is_superuser or str(getattr(request.user, 'role', '')).upper() in ['ADMIN', 'SUPER_ADMIN']
+        if booking.customer != request.user and not is_admin:
+            return Response({
+                "success": False,
+                "error": "You do not have permission to cancel this payment."
+            }, status=status.HTTP_403_FORBIDDEN)
+
+        # Safety Guard: Never cancel or unlock an already paid or confirmed booking!
+        if (
+            booking.booking_status in [
+                Booking.STATUS_CONFIRMED,
+                Booking.STATUS_CHECKED_IN,
+                Booking.STATUS_CHECKED_OUT,
+                Booking.STATUS_COMPLETED
+            ] or booking.payment_status == Booking.PAYMENT_PAID
+        ):
+            return Response({
+                "success": False,
+                "error": "Booking is already paid and confirmed. Payment hold cannot be cancelled.",
+                "booking_status": booking.booking_status,
+                "payment_status": booking.payment_status
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        from rooms.utils import release_temporary_hold
+        released = release_temporary_hold(
+            booking,
+            reason=reason,
+            new_status=Booking.STATUS_EXPIRED
+        )
+
+        booking.refresh_from_db()
+        return Response({
+            "success": True,
+            "released": released,
+            "booking_id": booking.booking_id,
+            "status": booking.booking_status,
+            "payment_status": booking.payment_status,
+            "message": "Temporary payment hold released successfully. Room inventory restored."
+        }, status=status.HTTP_200_OK)
+
+
+class PaymentFailureNotificationView(APIView):
+    """
+    POST /api/payments/payment-failed/ (and /api/payments/failed/)
+    Immediately releases the temporary room hold when the frontend receives
+    a payment failure event from Razorpay (e.g. card declined, timeout, modal dismissed).
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        raw_b_id = str(request.data.get('booking_id') or request.data.get('id') or '').strip()
+        error_code = str(request.data.get('error_code') or 'PAYMENT_FAILED').strip()
+        error_description = str(request.data.get('error_description') or request.data.get('reason') or 'Payment failed').strip()
+
+        if not raw_b_id:
+            return Response({
+                "success": False,
+                "error": "booking_id is required."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        booking = (
+            Booking.objects.filter(booking_id=raw_b_id).first()
+            or (Booking.objects.filter(pk=int(raw_b_id)).first() if raw_b_id.isdigit() else None)
+        )
+        if not booking:
+            return Response({
+                "success": False,
+                "error": "Booking not found."
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        is_admin = request.user.is_staff or request.user.is_superuser or str(getattr(request.user, 'role', '')).upper() in ['ADMIN', 'SUPER_ADMIN']
+        if booking.customer != request.user and not is_admin:
+            return Response({
+                "success": False,
+                "error": "You do not have permission to report failure for this payment."
+            }, status=status.HTTP_403_FORBIDDEN)
+
+        # Safety Guard: Never mark paid or confirmed bookings as failed
+        if (
+            booking.booking_status in [
+                Booking.STATUS_CONFIRMED,
+                Booking.STATUS_CHECKED_IN,
+                Booking.STATUS_CHECKED_OUT,
+                Booking.STATUS_COMPLETED
+            ] or booking.payment_status == Booking.PAYMENT_PAID
+        ):
+            return Response({
+                "success": False,
+                "error": "Booking is already paid and confirmed. Cannot mark payment as failed.",
+                "booking_status": booking.booking_status,
+                "payment_status": booking.payment_status
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        from rooms.utils import release_temporary_hold
+        released = release_temporary_hold(
+            booking,
+            reason=f"Payment Failed [{error_code}]: {error_description}",
+            new_status=Booking.STATUS_EXPIRED
+        )
+
+        # Also annotate uncaptured Payment records with the specific error code
+        Payment.objects.filter(booking=booking, status=Payment.STATUS_FAILED).update(
+            error_code=error_code,
+            failure_reason=error_description
+        )
+
+        booking.refresh_from_db()
+        return Response({
+            "success": True,
+            "released": released,
+            "booking_id": booking.booking_id,
+            "status": booking.booking_status,
+            "payment_status": booking.payment_status,
+            "error_code": error_code,
+            "message": "Payment marked as failed and temporary room hold released immediately."
+        }, status=status.HTTP_200_OK)
+
+
 class WebhookView(APIView):
     permission_classes = [permissions.AllowAny]
 
@@ -622,15 +914,54 @@ class WebhookView(APIView):
                         payment.is_duplicate_captured = False
                         payment.save()
 
-                        if booking.booking_status != Booking.STATUS_CONFIRMED:
-                            booking.booking_status = Booking.STATUS_CONFIRMED
-                            booking.payment_status = Booking.PAYMENT_PAID
-                            booking.confirmed_at = timezone.now()
-                            booking.save()
-
-                        # Allocate physical room number upon confirmed payment
+                        # Mandatory Fix: Revalidate & allocate BEFORE confirming booking
                         from rooms.utils import allocate_room_number_for_booking
-                        allocate_room_number_for_booking(booking)
+                        allocated_room = allocate_room_number_for_booking(booking)
+
+                        if not allocated_room:
+                            # Overbooking race condition on webhook
+                            logger.error(
+                                f"[Webhook] CRITICAL OVERBOOKING: Booking {booking.booking_id} paid via webhook "
+                                f"payment {payment_id}, but no physical rooms remain available. Initiating automatic full refund."
+                            )
+                            booking.booking_status = Booking.STATUS_CANCELLED
+                            booking.payment_status = Booking.PAYMENT_REFUND_PENDING
+                            booking.cancellation_reason = "Room inventory unavailable due to simultaneous overbooking. Automatic 100% full refund initiated."
+                            booking.refundable_amount = booking.total_amount
+                            booking.room_number = None
+                            booking.save(update_fields=['booking_status', 'payment_status', 'cancellation_reason', 'refundable_amount', 'room_number'])
+
+                            try:
+                                from payments.models import Refund
+                                refund_record, _ = Refund.objects.get_or_create(
+                                    booking=booking,
+                                    payment=payment,
+                                    defaults={
+                                        'razorpay_payment_id': payment_id,
+                                        'amount': booking.total_amount,
+                                        'currency': 'INR',
+                                        'reason': 'Automatic refund: room overbooked during payment race condition',
+                                        'refund_mode': Refund.REFUND_MODE_ORIGINAL,
+                                        'status': Refund.STATUS_REFUND_PROCESSING,
+                                        'idempotency_key': f"ref_wh_overbook_{booking.booking_id}"
+                                    }
+                                )
+                                execute_refund_with_provider(
+                                    refund_record=refund_record,
+                                    booking_locked=booking,
+                                    captured_payment=payment,
+                                    refund_amount=booking.total_amount,
+                                    reason="Automatic refund: room overbooked during payment race condition",
+                                    refund_mode=Refund.REFUND_MODE_ORIGINAL
+                                )
+                            except Exception as wh_ref_err:
+                                logger.error(f"[Webhook] Overbooking automatic refund failed: {wh_ref_err}")
+                        else:
+                            if booking.booking_status != Booking.STATUS_CONFIRMED:
+                                booking.booking_status = Booking.STATUS_CONFIRMED
+                                booking.payment_status = Booking.PAYMENT_PAID
+                                booking.confirmed_at = timezone.now()
+                                booking.save(update_fields=['booking_status', 'payment_status', 'confirmed_at'])
 
                         # Record CouponUsage and increment times_used if not already recorded (TASK-13)
                         try:
@@ -726,6 +1057,13 @@ class WebhookView(APIView):
                     payment.failure_reason = payload_entity.get('error_description', 'Payment failed')
                     payment.error_code = payload_entity.get('error_code', 'PAYMENT_FAILED')
                     payment.save()
+                    if payment.booking:
+                        from rooms.utils import release_temporary_hold
+                        release_temporary_hold(
+                            payment.booking,
+                            reason=payload_entity.get('error_description', 'Payment failed via Razorpay webhook'),
+                            new_status=Booking.STATUS_EXPIRED
+                        )
 
             # Handle RazorpayX Payout Webhook Events (Customer Bank Transfers & Host Disbursements)
             elif event_type and event_type.startswith('payout.'):
@@ -819,6 +1157,30 @@ class RetryPaymentView(APIView):
 
         if booking.booking_status == Booking.STATUS_CANCELLED:
             return Response({"error": "Cannot retry payment for a cancelled booking."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Inventory check & re-activate temporary hold for retry
+        from rooms.utils import get_available_room_count, _ROOM_ALLOCATION_LOCK, get_payment_hold_duration
+        with _ROOM_ALLOCATION_LOCK:
+            if booking.room:
+                needed_rooms = int(booking.number_of_rooms or 1)
+                avail_count = get_available_room_count(
+                    booking.room,
+                    booking.check_in,
+                    booking.check_out,
+                    exclude_booking_id=booking.id,
+                    include_holds=True
+                )
+                if avail_count < needed_rooms:
+                    return Response({
+                        "success": False,
+                        "code": "ROOMS_SOLD_OUT",
+                        "error": "All rooms are booked for your selected dates. Cannot retry payment.",
+                        "available_rooms": avail_count
+                    }, status=status.HTTP_409_CONFLICT)
+
+                booking.booking_status = Booking.STATUS_PENDING_PAYMENT
+                booking.expires_at = timezone.now() + get_payment_hold_duration()
+                booking.save(update_fields=['booking_status', 'expires_at'])
 
         client, active_key_id = get_platform_razorpay_client()
         amount_in_paise = int(round(booking.total_amount * 100))
@@ -959,7 +1321,15 @@ def execute_refund_with_provider(
     - Never treats the two methods as interchangeable.
     - Updates refund_record, booking, and captured_payment based on confirmed provider status.
     - Excludes Host from payout and marks HostEarning as REVERSED.
+    - Idempotent: checks if refund is already processed to prevent duplicate gateway refunds.
     """
+    if refund_record and (refund_record.status == Refund.STATUS_REFUNDED or refund_record.razorpay_refund_id):
+        logger.info(
+            f"[execute_refund_with_provider] Refund already executed for record #{refund_record.id} "
+            f"(Razorpay Refund ID: {refund_record.razorpay_refund_id}). Skipping duplicate call."
+        )
+        return refund_record
+
     client, _ = get_platform_razorpay_client()
     refund_paise = int(round(refund_amount * 100))
     provider_refund_id = None
