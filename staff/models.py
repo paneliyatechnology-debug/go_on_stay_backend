@@ -127,7 +127,63 @@ class StaffProfile(models.Model):
     def has_perm(self, perm_code):
         if not self.is_active_account:
             return False
-        return self.permissions.filter(code=perm_code).exists()
+        if not perm_code:
+            return True
+        target = str(perm_code).strip().upper()
+        assigned_perms = list(self.permissions.values_list('code', flat=True))
+        if assigned_perms:
+            if target in assigned_perms or '*' in assigned_perms:
+                return True
+            return self._matches_permission_alias(assigned_perms, target)
+        else:
+            # Default to all permissions configured for employee's assigned department
+            if self.department:
+                dept_perms = list(self.department.permissions.values_list('code', flat=True))
+                if target in dept_perms:
+                    return True
+                return self._matches_permission_alias(dept_perms, target)
+            return False
+
+    @staticmethod
+    def _matches_permission_alias(perm_set, target):
+        aliases = {
+            # Reservation
+            'VIEW_BOOKINGS': {'VIEW_BOOKINGS', 'MANAGE_RESERVATIONS'},
+            'MANAGE_RESERVATIONS': {'MANAGE_RESERVATIONS', 'EDIT_BOOKINGS', 'CREATE_BOOKINGS', 'ALLOCATE_ROOMS', 'CHECKIN_GUEST', 'CHECKOUT_GUEST'},
+            'CHECKIN_GUEST': {'CHECKIN_GUEST', 'MANAGE_RESERVATIONS', 'EDIT_BOOKINGS'},
+            'CHECKOUT_GUEST': {'CHECKOUT_GUEST', 'MANAGE_RESERVATIONS', 'EDIT_BOOKINGS'},
+            'ALLOCATE_ROOMS': {'ALLOCATE_ROOMS', 'MANAGE_RESERVATIONS', 'EDIT_BOOKINGS'},
+            # Customer Support
+            'VIEW_TICKETS': {'VIEW_TICKETS', 'VIEW_SUPPORT', 'MANAGE_SUPPORT'},
+            'VIEW_SUPPORT': {'VIEW_SUPPORT', 'VIEW_TICKETS', 'MANAGE_SUPPORT'},
+            'MANAGE_SUPPORT': {'MANAGE_SUPPORT', 'RESPOND_TICKET', 'ADD_INTERNAL_NOTE', 'ESCALATE_TICKET', 'EDIT_SUPPORT'},
+            'RESPOND_TICKET': {'RESPOND_TICKET', 'MANAGE_SUPPORT', 'EDIT_SUPPORT'},
+            'ADD_INTERNAL_NOTE': {'ADD_INTERNAL_NOTE', 'MANAGE_SUPPORT', 'EDIT_SUPPORT'},
+            'ESCALATE_TICKET': {'ESCALATE_TICKET', 'MANAGE_SUPPORT', 'EDIT_SUPPORT'},
+            # Refunds & Claims
+            'VIEW_REFUNDS': {'VIEW_REFUNDS', 'VERIFY_CLAIM', 'AUDIT_REFUND', 'PROCESS_REFUND', 'APPROVE_REFUND'},
+            'VERIFY_CLAIM': {'VERIFY_CLAIM', 'VIEW_REFUNDS', 'APPROVE_REFUND'},
+            'AUDIT_REFUND': {'AUDIT_REFUND', 'VIEW_REFUNDS'},
+            'PROCESS_REFUND': {'PROCESS_REFUND', 'APPROVE_REFUND'},
+            'APPROVE_REFUND': {'APPROVE_REFUND', 'PROCESS_REFUND'},
+            'REJECT_REFUND': {'REJECT_REFUND', 'PROCESS_REFUND'},
+            # Payout & Escrow
+            'VIEW_PAYOUTS': {'VIEW_PAYOUTS', 'MANAGE_ESCROW', 'AUDIT_SETTLEMENT', 'PROCESS_PAYOUT', 'APPROVE_PAYOUT'},
+            'MANAGE_ESCROW': {'MANAGE_ESCROW', 'VIEW_PAYOUTS', 'AUDIT_SETTLEMENT'},
+            'AUDIT_SETTLEMENT': {'AUDIT_SETTLEMENT', 'VIEW_PAYOUTS', 'MANAGE_ESCROW'},
+            'PROCESS_PAYOUT': {'PROCESS_PAYOUT', 'APPROVE_PAYOUT'},
+            'APPROVE_PAYOUT': {'APPROVE_PAYOUT', 'PROCESS_PAYOUT'},
+            'REJECT_PAYOUT': {'REJECT_PAYOUT', 'PROCESS_PAYOUT'},
+            # Hotel Verification
+            'VIEW_HOTELS': {'VIEW_HOTELS', 'VERIFY_HOTEL', 'VERIFY_HOTELS', 'REVIEW_DOCUMENTS', 'APPROVE_HOTEL'},
+            'REVIEW_DOCUMENTS': {'REVIEW_DOCUMENTS', 'VIEW_HOTELS', 'VERIFY_HOTEL', 'VERIFY_HOTELS'},
+            'VERIFY_HOTEL': {'VERIFY_HOTEL', 'VERIFY_HOTELS', 'APPROVE_HOTEL', 'REJECT_HOTEL'},
+            'VERIFY_HOTELS': {'VERIFY_HOTELS', 'VERIFY_HOTEL', 'APPROVE_HOTEL', 'REJECT_HOTEL'},
+            'APPROVE_HOTEL': {'APPROVE_HOTEL', 'VERIFY_HOTEL', 'VERIFY_HOTELS'},
+            'REJECT_HOTEL': {'REJECT_HOTEL', 'VERIFY_HOTEL', 'VERIFY_HOTELS'},
+        }
+        allowed_sources = aliases.get(target, {target})
+        return bool(set(perm_set).intersection(allowed_sources))
 
 
 class StaffPasswordResetToken(models.Model):

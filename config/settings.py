@@ -212,5 +212,21 @@ RAZORPAY_WEBHOOK_SECRET = os.getenv('RAZORPAY_WEBHOOK_SECRET', 'rzp_whsec_bookmy
 # Payment Hold Configuration (Immediate unlock & fallback duration)
 PAYMENT_HOLD_DURATION_MINUTES = int(os.getenv('PAYMENT_HOLD_DURATION_MINUTES', 15))
 
-# Payment Hold Configuration (Immediate unlock & fallback duration)
-PAYMENT_HOLD_DURATION_MINUTES = int(os.getenv('PAYMENT_HOLD_DURATION_MINUTES', 15))
+# Cloudinary Direct Upload Configuration
+CLOUDINARY_CLOUD_NAME = os.getenv('CLOUDINARY_CLOUD_NAME', 'bzb1bndw')
+CLOUDINARY_API_KEY = os.getenv('CLOUDINARY_API_KEY', '894358896518227')
+CLOUDINARY_API_SECRET = os.getenv('CLOUDINARY_API_SECRET', '')
+CLOUDINARY_URL = os.getenv('CLOUDINARY_URL', '')
+
+if CLOUDINARY_CLOUD_NAME and CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET:
+    try:
+        import cloudinary
+        cloudinary.config(
+            cloud_name=CLOUDINARY_CLOUD_NAME,
+            api_key=CLOUDINARY_API_KEY,
+            api_secret=CLOUDINARY_API_SECRET,
+            secure=True
+        )
+    except Exception:
+        pass
+

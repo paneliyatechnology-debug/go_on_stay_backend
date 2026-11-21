@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Hotel, HotelImage, Amenity, HotelVerificationDocument, HotelStaff
+from .models import Hotel, HotelImage, Amenity, HotelVerificationDocument, HotelStaff, DeletedHotelArchive
 from django.db.models import Min
 from users.serializers import UserSerializer
 from util.validators import (
@@ -245,3 +245,64 @@ class HotelCreateUpdateSerializer(serializers.ModelSerializer):
         if amenity_ids is not None:
             instance.amenities.set(amenity_ids)
         return instance
+
+
+class DeletedHotelArchiveListSerializer(serializers.ModelSerializer):
+    rooms_count = serializers.SerializerMethodField()
+    images_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = DeletedHotelArchive
+        fields = [
+            'id', 'hotel_id', 'hotel_name', 'city', 'address', 'property_type',
+            'owner_name', 'owner_email', 'owner_phone',
+            'deleted_by_name', 'deleted_by_role', 'deleted_at', 'deletion_reason',
+            'is_restored', 'restored_at', 'rooms_count', 'images_count'
+        ]
+
+    def get_rooms_count(self, obj):
+        snapshot_rooms = obj.snapshot_data.get('rooms', [])
+        if snapshot_rooms:
+            return len(snapshot_rooms)
+        if obj.hotel:
+            return obj.hotel.rooms.count()
+        return 0
+
+    def get_images_count(self, obj):
+        snapshot_images = obj.snapshot_data.get('images', [])
+        if snapshot_images:
+            return len(snapshot_images)
+        if obj.hotel:
+            return obj.hotel.images.count()
+        return 0
+
+
+class DeletedHotelArchiveDetailSerializer(serializers.ModelSerializer):
+    rooms_count = serializers.SerializerMethodField()
+    images_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = DeletedHotelArchive
+        fields = [
+            'id', 'hotel_id', 'hotel_name', 'city', 'address', 'property_type',
+            'owner_name', 'owner_email', 'owner_phone',
+            'deleted_by_name', 'deleted_by_role', 'deleted_at', 'deletion_reason',
+            'snapshot_data', 'is_restored', 'restored_at', 'rooms_count', 'images_count'
+        ]
+
+    def get_rooms_count(self, obj):
+        snapshot_rooms = obj.snapshot_data.get('rooms', [])
+        if snapshot_rooms:
+            return len(snapshot_rooms)
+        if obj.hotel:
+            return obj.hotel.rooms.count()
+        return 0
+
+    def get_images_count(self, obj):
+        snapshot_images = obj.snapshot_data.get('images', [])
+        if snapshot_images:
+            return len(snapshot_images)
+        if obj.hotel:
+            return obj.hotel.images.count()
+        return 0
+

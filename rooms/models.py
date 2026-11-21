@@ -108,9 +108,15 @@ class RoomImage(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def get_image_display(self):
+        if self.image_url:
+            return self.image_url
         if self.image:
-            return self.image.url
-        return self.image_url or ''
+            try:
+                url = str(self.image.url) if hasattr(self.image, 'url') else str(self.image)
+                return url
+            except Exception:
+                return ''
+        return ''
 
     def __str__(self):
         return f"Image for {self.room.title}"

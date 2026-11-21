@@ -212,6 +212,12 @@ class HasDepartmentPermission(permissions.BasePermission):
                     "message": "You must change your temporary password before accessing staff workflows."
                 })
 
+        if not profile.department:
+            raise PermissionDenied({
+                "code": "NO_DEPARTMENT_ASSIGNED",
+                "message": "Your staff account has no department assigned. Please contact Administrator."
+            })
+
         # 1. Strict Department Access Check
         user_dept = self._normalize(profile.department.code)
         if user_dept not in self.allowed_departments:

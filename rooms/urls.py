@@ -11,5 +11,6 @@ urlpatterns = [
     path('<int:pk>/', RoomDetailView.as_view(), name='room_detail'),
     path('<int:pk>/calendar/', RoomCalendarManageView.as_view(), name='room_calendar'),
     path('by-hotel/<int:hotel_id>/', RoomsByHotelView.as_view(), name='rooms_by_hotel'),
+    path('hotel/<int:hotel_id>/', RoomsByHotelView.as_view(), name='rooms_by_hotel_alt'),
     path('<int:pk>/upload-image/', RoomImageUploadView.as_view(), name='room_image_upload'),
 ]

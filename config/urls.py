@@ -3,11 +3,20 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from payments.views import SettlementLedgerListView, AdminAuditLogListView
+from staff.views import PortalNavigationDetailView, AdminDashboardView
+from hotels.views import AdminDeletedHotelListView, AdminDeletedHotelDetailView, AdminDeletedHotelRestoreView
+from core.cloudinary_views import CloudinarySignatureView, CloudinaryConfigCheckView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/portal/navigation/', PortalNavigationDetailView.as_view(), name='api-portal-navigation'),
+    path('api/admin/dashboard/', AdminDashboardView.as_view(), name='api-admin-dashboard'),
+    path('api/admin/deleted-hotels/', AdminDeletedHotelListView.as_view(), name='api-admin-deleted-hotels'),
+    path('api/admin/deleted-hotels/<int:pk>/', AdminDeletedHotelDetailView.as_view(), name='api-admin-deleted-hotels-detail'),
+    path('api/admin/deleted-hotels/<int:pk>/restore/', AdminDeletedHotelRestoreView.as_view(), name='api-admin-deleted-hotels-restore'),
     path('api/auth/', include('users.urls')),
     path('api/users/', include('users.urls')),
+    path('api/locations/', include('hotels.location_urls')),
     path('api/hotels/', include('hotels.urls')),
     path('api/rooms/', include('rooms.urls')),
     path('api/bookings/', include('bookings.urls')),
@@ -19,6 +28,9 @@ urlpatterns = [
     path('api/coupons/', include('coupons.urls')),
     path('api/notifications/', include('notifications.urls')),
     path('api/staff/', include('staff.urls')),
+    path('api/cloudinary/signature/', CloudinarySignatureView.as_view(), name='api-cloudinary-signature'),
+    path('api/cloudinary/status/', CloudinaryConfigCheckView.as_view(), name='api-cloudinary-status'),
+    path('api/media/cloudinary/signature/', CloudinarySignatureView.as_view(), name='api-media-cloudinary-signature'),
 ]
 
 if settings.DEBUG:

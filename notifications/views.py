@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from .models import Notification
 from .serializers import NotificationSerializer
 from .utils import check_and_create_stay_reminders, check_and_create_payout_notifications
+from staff.permissions import is_platform_admin
 
 class NotificationListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -15,20 +16,70 @@ class NotificationListView(generics.ListAPIView):
         check_and_create_payout_notifications(user)
         return Notification.objects.filter(recipient=user).order_by('-created_at')
 
+from .navigation import resolve_notification_navigation
+
 class MarkNotificationReadView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
         try:
             notification = Notification.objects.get(pk=pk, recipient=request.user)
-            notification.is_read = True
-            notification.save()
-            return Response({"message": "Notification marked as read.", "is_read": True}, status=status.HTTP_200_OK)
+            if not notification.is_read:
+                notification.is_read = True
+                notification.save(update_fields=['is_read'])
+            
+            nav = resolve_notification_navigation(notification, request.user)
+            return Response({
+                "message": "Notification marked as read.",
+                "is_read": True,
+                "target_url": nav.get('target_url', ''),
+                "target_entity_type": nav.get('target_entity_type', ''),
+                "target_entity_id": nav.get('target_entity_id', ''),
+                "fallback_url": nav.get('fallback_url', ''),
+                "action": nav.get('action', ''),
+                "record_exists": nav.get('record_exists', True),
+                "navigation": nav
+            }, status=status.HTTP_200_OK)
         except Notification.DoesNotExist:
             return Response({"error": "Notification not found."}, status=status.HTTP_404_NOT_FOUND)
 
     def patch(self, request, pk):
         return self.post(request, pk)
+
+class NotificationClickView(APIView):
+    """
+    POST /api/notifications/<id>/click/
+    Handles smart notification click-through:
+    - Marks the notification as read.
+    - Resolves role-aware destination, exact entity identifier, and record verification.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, pk):
+        try:
+            notification = Notification.objects.get(pk=pk, recipient=request.user)
+            if not notification.is_read:
+                notification.is_read = True
+                notification.save(update_fields=['is_read'])
+            
+            nav = resolve_notification_navigation(notification, request.user)
+            return Response({
+                "success": True,
+                "notification_id": notification.id,
+                "is_read": True,
+                "target_url": nav.get('target_url', ''),
+                "target_entity_type": nav.get('target_entity_type', ''),
+                "target_entity_id": nav.get('target_entity_id', ''),
+                "fallback_url": nav.get('fallback_url', ''),
+                "action": nav.get('action', ''),
+                "record_exists": nav.get('record_exists', True),
+                "navigation": nav
+            }, status=status.HTTP_200_OK)
+        except Notification.DoesNotExist:
+            return Response({
+                "error": "Notification not found.",
+                "fallback_url": "/customer/dashboard"
+            }, status=status.HTTP_404_NOT_FOUND)
 
 class MarkAllNotificationsReadView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -50,7 +101,7 @@ class SimulatePayoutDueView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
-        if not (request.user.is_staff or getattr(request.user, 'role', '') in ['ADMIN', 'SUPER_ADMIN']):
+        if not is_platform_admin(request.user):
             return Response({"error": "Admin permission required."}, status=status.HTTP_403_FORBIDDEN)
         
         from payments.models import HostEarning

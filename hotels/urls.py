@@ -2,14 +2,22 @@ from django.urls import path
 from .views import (
     HotelListView, HotelDetailView, OwnerHotelListView, OwnerHotelListCreateView,
     OwnerDashboardView,
-    HotelSearchAPIView, HotelSubmitApprovalView, AdminHotelApprovalView,
-    HotelDocumentUploadView, AmenityListView, HotelImageUploadView, HotelCitiesView
+    HotelSearchAPIView, HotelNearMeAPIView, HotelSubmitApprovalView, AdminHotelApprovalView,
+    HotelDocumentUploadView, AmenityListView, HotelImageUploadView, HotelCitiesView,
+    AdminDeletedHotelListView, AdminDeletedHotelDetailView, AdminDeletedHotelRestoreView
 )
 
 urlpatterns = [
     path('', HotelListView.as_view(), name='hotel_list'),
     path('cities/', HotelCitiesView.as_view(), name='hotel_cities'),
     path('search/', HotelSearchAPIView.as_view(), name='hotel_search'),
+    path('near-me/', HotelNearMeAPIView.as_view(), name='hotel_near_me'),
+    path('nearby/', HotelNearMeAPIView.as_view(), name='hotel_nearby'),
+
+    # Admin Deleted Hotels Section
+    path('deleted/', AdminDeletedHotelListView.as_view(), name='hotel_deleted_list'),
+    path('deleted/<int:pk>/', AdminDeletedHotelDetailView.as_view(), name='hotel_deleted_detail'),
+    path('deleted/<int:pk>/restore/', AdminDeletedHotelRestoreView.as_view(), name='hotel_deleted_restore'),
     
     # Hotel Owner Endpoints
     path('dashboard/', OwnerDashboardView.as_view(), name='hotel_owner_dashboard'),

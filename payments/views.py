@@ -33,6 +33,8 @@ from .serializers import (
     CustomerHotelMessageSerializer, AuditLogSerializer
 )
 from bookings.models import Booking
+from staff.permissions import is_platform_admin, IsAdminUserRole, check_staff_permission
+from staff.models import Department
 
 from .validators import validate_support_attachment, sanitize_text_input
 from .throttling import SupportTicketCreateThrottle, SupportTicketMessageThrottle
@@ -599,6 +601,22 @@ class VerifyPaymentView(APIView):
                 notification_type=Notification.TYPE_NEW_BOOKING_OWNER,
                 booking=booking_to_update
             )
+
+            # Smart notification for Reservation Staff
+            try:
+                from staff.models import Department
+                from staff.utils import create_staff_notification
+                res_dept = Department.objects.filter(code=Department.CODE_RESERVATION).first()
+                if res_dept:
+                    create_staff_notification(
+                        department=res_dept,
+                        title=f"New Reservation: {booking_to_update.booking_id}",
+                        message=f"Guest {booking_to_update.guest_name} booked Room {booking_to_update.room_number or 'Assigned'} at {booking_to_update.hotel.name}.",
+                        notification_type='BOOKING_CONFIRMED',
+                        metadata={'booking_id': booking_to_update.booking_id, 'hotel_id': booking_to_update.hotel_id}
+                    )
+            except Exception as notif_err:
+                pass
 
             # Record Platform Commission and Hotel Owner Payable Balance
             # Default 7-day holding period starts after guest check-out
@@ -1309,6 +1327,22 @@ def _dispatch_refund_notifications(booking_locked, refund_amount, provider_ref, 
         booking=booking_locked
     )
 
+    # Smart notification for Refunds & Claims Department
+    try:
+        from staff.models import Department
+        from staff.utils import create_staff_notification
+        ref_dept = Department.objects.filter(code=Department.CODE_REFUNDS_AND_CLAIMS).first()
+        if ref_dept:
+            create_staff_notification(
+                department=ref_dept,
+                title=f"Refund Executed: {booking_locked.booking_id}",
+                message=f"Refund of ₹{refund_amount} successfully processed (Gateway Ref: {provider_ref}).",
+                notification_type='REFUND_PROCESSED',
+                metadata={'booking_id': booking_locked.booking_id, 'refund_amount': str(refund_amount)}
+            )
+    except Exception as notif_err:
+        pass
+
 
 def execute_refund_with_provider(
     refund_record, booking_locked, captured_payment, refund_amount,
@@ -1513,9 +1547,16 @@ class RefundView(APIView):
         user_role = str(getattr(user, 'role', '')).upper()
         is_admin = user.is_staff or user.is_superuser or user_role in ['ADMIN', 'SUPER_ADMIN']
         is_hotel_owner = (booking.hotel.owner == user)
+        is_refund_staff = False
+        if user_role == 'STAFF':
+            profile = getattr(user, 'staff_profile', None)
+            if profile and profile.is_active_account:
+                dept_code = profile.department.code if profile.department else ''
+                if Department.normalize_code(dept_code) == Department.CODE_REFUNDS_AND_CLAIMS and profile.has_perm('PROCESS_REFUND'):
+                    is_refund_staff = True
 
-        if not (is_admin or is_hotel_owner):
-            return Response({"error": "Permission denied. Only Platform Admin or Hotel Owner can process refunds."}, status=status.HTTP_403_FORBIDDEN)
+        if not (is_admin or is_hotel_owner or is_refund_staff):
+            return Response({"error": "Permission denied. Only Platform Admin, Hotel Owner, or authorized Refunds Staff can process refunds."}, status=status.HTTP_403_FORBIDDEN)
 
         with transaction.atomic():
             booking_locked = Booking.objects.select_for_update().get(id=booking.id)
@@ -1994,8 +2035,15 @@ class RefundDetailView(APIView):
         is_admin = bool(user.is_staff or user.is_superuser or getattr(user, 'role', '') in ['ADMIN', 'SUPER_ADMIN'])
         is_customer = bool(refund.booking.customer == user)
         is_owner = bool(refund.booking.hotel.owner == user)
+        is_refund_staff = False
+        if getattr(user, 'role', '') == 'STAFF':
+            profile = getattr(user, 'staff_profile', None)
+            if profile and profile.is_active_account:
+                dept_code = profile.department.code if profile.department else ''
+                if Department.normalize_code(dept_code) == Department.CODE_REFUNDS_AND_CLAIMS and profile.has_perm('VIEW_REFUNDS'):
+                    is_refund_staff = True
 
-        if not (is_admin or is_customer or is_owner):
+        if not (is_admin or is_customer or is_owner or is_refund_staff):
             return Response({"error": "Permission denied. You cannot view refund details for another user's booking."}, status=status.HTTP_403_FORBIDDEN)
 
         serializer = RefundSerializer(refund, context={'request': request})
@@ -2027,8 +2075,15 @@ class RefundStatusView(APIView):
         is_admin = bool(user.is_staff or user.is_superuser or getattr(user, 'role', '') in ['ADMIN', 'SUPER_ADMIN'])
         is_customer = bool(refund.booking.customer == user)
         is_owner = bool(refund.booking.hotel.owner == user)
+        is_refund_staff = False
+        if getattr(user, 'role', '') == 'STAFF':
+            profile = getattr(user, 'staff_profile', None)
+            if profile and profile.is_active_account:
+                dept_code = profile.department.code if profile.department else ''
+                if Department.normalize_code(dept_code) == Department.CODE_REFUNDS_AND_CLAIMS and profile.has_perm('VIEW_REFUNDS'):
+                    is_refund_staff = True
 
-        if not (is_admin or is_customer or is_owner):
+        if not (is_admin or is_customer or is_owner or is_refund_staff):
             return Response({"error": "Permission denied."}, status=status.HTTP_403_FORBIDDEN)
 
         # Optional live sync with provider if Admin requests
@@ -2186,12 +2241,12 @@ class AdminPaymentPagination(PageNumberPagination):
 
 class AdminPaymentListView(generics.ListAPIView):
     serializer_class = PaymentSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAdminUserRole]
     pagination_class = AdminPaymentPagination
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_staff or user.is_superuser or user.role in ['ADMIN', 'SUPER_ADMIN']:
+        if is_platform_admin(user):
             # Exclude draft/abandoned CREATED records if booking has a confirmed or refunded payment
             confirmed_booking_ids = Payment.objects.filter(
                 status__in=[Payment.STATUS_CAPTURED, Payment.STATUS_REFUNDED, 'PARTIALLY_REFUNDED']
@@ -2211,12 +2266,12 @@ class AdminPaymentListView(generics.ListAPIView):
 
 class AdminRefundListView(generics.ListAPIView):
     serializer_class = RefundSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAdminUserRole]
     pagination_class = AdminPaymentPagination
 
     def get_queryset(self):
         user = self.request.user
-        if not (user.is_staff or user.is_superuser or getattr(user, 'role', '') in ['ADMIN', 'SUPER_ADMIN']):
+        if not is_platform_admin(user):
             return Refund.objects.none()
 
         qs = Refund.objects.all().order_by('-created_at')
@@ -2475,7 +2530,7 @@ class SettlementLedgerListView(APIView):
     def get(self, request):
         user = request.user
         user_role = str(getattr(user, 'role', '')).upper()
-        is_admin = user.is_staff or user_role in ['ADMIN', 'SUPER_ADMIN']
+        is_admin = is_platform_admin(user)
 
         if is_admin:
             try:
@@ -2484,6 +2539,13 @@ class SettlementLedgerListView(APIView):
             except Exception as e:
                 logger.warning(f"Failed to check payout notifications: {e}")
             qs = HostEarning.objects.all().select_related('host', 'booking', 'booking__hotel', 'payout')
+        elif user_role == 'STAFF':
+            profile = getattr(user, 'staff_profile', None)
+            dept_code = profile.department.code if (profile and profile.department) else ''
+            if Department.normalize_code(dept_code) == Department.CODE_PAYOUT_AND_ESCROW or check_staff_permission(user, 'VIEW_PAYOUTS'):
+                qs = HostEarning.objects.all().select_related('host', 'booking', 'booking__hotel', 'payout')
+            else:
+                return Response({"error": "Permission denied. Only Payout & Escrow department staff and platform administrators can view settlement ledgers."}, status=status.HTTP_403_FORBIDDEN)
         elif user_role in ['HOTEL_OWNER', 'HOTEL_STAFF', 'HOST', 'OWNER'] or (hasattr(user, 'hotels') and user.hotels.exists()):
             qs = HostEarning.objects.filter(host=user).select_related('host', 'booking', 'booking__hotel', 'payout')
         else:
@@ -2494,8 +2556,9 @@ class SettlementLedgerListView(APIView):
         hotel_id = request.query_params.get('hotel_id')
         search = request.query_params.get('search')
 
+        is_payout_staff = (user_role == 'STAFF' and Department.normalize_code(dept_code) == Department.CODE_PAYOUT_AND_ESCROW)
         if hotel_id:
-            if not is_admin:
+            if not (is_admin or is_payout_staff):
                 from hotels.models import Hotel
                 hotel_obj = Hotel.objects.filter(id=hotel_id, owner=user).first()
                 if not hotel_obj:
@@ -2762,10 +2825,10 @@ class SettlementStatementView(APIView):
 
 
 class InitiateHostPayoutView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAdminUserRole]
 
     def post(self, request):
-        if not (request.user.is_staff or request.user.is_superuser or getattr(request.user, 'role', '') in ['ADMIN', 'SUPER_ADMIN']):
+        if not is_platform_admin(request.user):
             return Response({"error": "Admin permission required to review and initiate hotel owner payouts."}, status=status.HTTP_403_FORBIDDEN)
 
         serializer = InitiatePayoutRequestSerializer(data=request.data)
@@ -3065,10 +3128,10 @@ class InitiateHostPayoutView(APIView):
 
 
 class VerifyPayoutStatusView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAdminUserRole]
 
     def post(self, request, payout_id):
-        if not (request.user.is_staff or getattr(request.user, 'role', '') in ['ADMIN', 'SUPER_ADMIN']):
+        if not is_platform_admin(request.user):
             return Response({"error": "Admin permission required."}, status=status.HTTP_403_FORBIDDEN)
 
         try:
@@ -3110,10 +3173,10 @@ class VerifyPayoutStatusView(APIView):
 
 
 class ToggleDisputeHoldView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAdminUserRole]
 
     def post(self, request):
-        if not (request.user.is_staff or getattr(request.user, 'role', '') in ['ADMIN', 'SUPER_ADMIN']):
+        if not is_platform_admin(request.user):
             return Response({"error": "Admin permission required to place dispute holds."}, status=status.HTTP_403_FORBIDDEN)
 
         serializer = ToggleDisputeHoldSerializer(data=request.data)
@@ -3195,10 +3258,10 @@ class ToggleDisputeHoldView(APIView):
 
 
 class ProviderSetupStatusView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAdminUserRole]
 
     def get(self, request):
-        if not (request.user.is_staff or getattr(request.user, 'role', '') in ['ADMIN', 'SUPER_ADMIN']):
+        if not is_platform_admin(request.user):
             return Response({"error": "Admin permission required."}, status=status.HTTP_403_FORBIDDEN)
 
         setting = PlatformSetting.objects.first()
@@ -3253,8 +3316,15 @@ class HostPayoutListCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_staff or getattr(user, 'role', '') in ['ADMIN', 'SUPER_ADMIN']:
+        role = str(getattr(user, 'role', '')).upper()
+        if is_platform_admin(user):
             return HostPayout.objects.all().order_by('-created_at')
+        if role == 'STAFF':
+            profile = getattr(user, 'staff_profile', None)
+            dept_code = profile.department.code if (profile and profile.department) else ''
+            if Department.normalize_code(dept_code) == Department.CODE_PAYOUT_AND_ESCROW or check_staff_permission(user, 'VIEW_PAYOUTS'):
+                return HostPayout.objects.all().order_by('-created_at')
+            return HostPayout.objects.none()
         return HostPayout.objects.filter(host=user).order_by('-created_at')
 
     def perform_create(self, serializer):
@@ -3276,8 +3346,7 @@ class PlatformSettingsView(APIView):
         return self.patch(request)
 
     def patch(self, request):
-        user_role = str(getattr(request.user, 'role', '')).upper()
-        if not (request.user.is_authenticated and (request.user.is_staff or user_role in ['ADMIN', 'SUPER_ADMIN'])):
+        if not (request.user.is_authenticated and is_platform_admin(request.user)):
             return Response({"error": "Admin permission required."}, status=status.HTTP_403_FORBIDDEN)
         
         setting = PlatformSetting.objects.first()
@@ -3356,8 +3425,15 @@ class SupportTicketListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         user = self.request.user
         role = str(getattr(user, 'role', '')).upper()
-        if user.is_staff or getattr(user, 'is_superuser', False) or role in ['ADMIN', 'SUPER_ADMIN', 'SUPPORT_AGENT']:
+        if is_platform_admin(user):
             qs = SupportTicket.objects.all().order_by('-created_at')
+        elif role == 'STAFF':
+            profile = getattr(user, 'staff_profile', None)
+            dept_code = profile.department.code if (profile and profile.department) else ''
+            if Department.normalize_code(dept_code) == Department.CODE_CUSTOMER_SUPPORT or check_staff_permission(user, 'VIEW_TICKETS'):
+                qs = SupportTicket.objects.all().order_by('-created_at')
+            else:
+                qs = SupportTicket.objects.none()
         elif role in ['HOTEL_OWNER', 'HOST', 'OWNER'] or (hasattr(user, 'hotels') and user.hotels.exists()):
             qs = SupportTicket.objects.filter(
                 Q(user=user) | Q(assigned_agent=user) | Q(hotel__owner=user)
@@ -3429,6 +3505,29 @@ class SupportTicketListCreateView(generics.ListCreateAPIView):
             instance.attachment_url = attachment_url
             instance.save(update_fields=['attachment_url'])
 
+        # Dispatch smart notifications to customer and customer support department
+        try:
+            from notifications.utils import create_notification
+            create_notification(
+                recipient=self.request.user,
+                title=f"🎧 Support Ticket Created (#{instance.ticket_number})",
+                message=f"Your ticket regarding '{instance.subject}' has been submitted. Our support team will review it shortly.",
+                notification_type='SUPPORT_TICKET'
+            )
+            from staff.models import Department
+            from staff.utils import create_staff_notification
+            cs_dept = Department.objects.filter(code=Department.CODE_CUSTOMER_SUPPORT).first()
+            if cs_dept:
+                create_staff_notification(
+                    department=cs_dept,
+                    title=f"New Ticket #{instance.ticket_number}: {instance.subject}",
+                    message=f"Customer {self.request.user.username} submitted ticket {instance.ticket_number} ({instance.category}).",
+                    notification_type='SUPPORT_TICKET_CREATED',
+                    metadata={'ticket_id': instance.ticket_number, 'category': instance.category, 'priority': instance.priority}
+                )
+        except Exception as notif_err:
+            logger.warning(f"Failed to dispatch ticket creation notifications: {notif_err}")
+
 
 class SupportTicketDetailView(generics.RetrieveUpdateAPIView):
     serializer_class = SupportTicketSerializer
@@ -3437,8 +3536,14 @@ class SupportTicketDetailView(generics.RetrieveUpdateAPIView):
     def get_queryset(self):
         user = self.request.user
         role = str(getattr(user, 'role', '')).upper()
-        if user.is_staff or getattr(user, 'is_superuser', False) or role in ['ADMIN', 'SUPER_ADMIN', 'SUPPORT_AGENT']:
+        if is_platform_admin(user):
             return SupportTicket.objects.all()
+        elif role == 'STAFF':
+            profile = getattr(user, 'staff_profile', None)
+            dept_code = profile.department.code if (profile and profile.department) else ''
+            if Department.normalize_code(dept_code) == Department.CODE_CUSTOMER_SUPPORT or check_staff_permission(user, 'VIEW_TICKETS'):
+                return SupportTicket.objects.all()
+            return SupportTicket.objects.none()
         elif role in ['HOTEL_OWNER', 'HOST', 'OWNER'] or (hasattr(user, 'hotels') and user.hotels.exists()):
             return SupportTicket.objects.filter(
                 Q(user=user) | Q(assigned_agent=user) | Q(hotel__owner=user)
@@ -3455,10 +3560,13 @@ class TicketMessageCreateView(APIView):
             ticket = SupportTicket.objects.get(pk=pk)
             user = request.user
             role = str(getattr(user, 'role', '')).upper()
-            is_admin_or_agent = (
-                user.is_staff or getattr(user, 'is_superuser', False) or
-                role in ['ADMIN', 'SUPER_ADMIN', 'SUPPORT_AGENT']
-            )
+            is_support_staff = False
+            if role == 'STAFF':
+                profile = getattr(user, 'staff_profile', None)
+                dept_code = profile.department.code if (profile and profile.department) else ''
+                is_support_staff = bool(Department.normalize_code(dept_code) == Department.CODE_CUSTOMER_SUPPORT or check_staff_permission(user, 'RESPOND_TICKET'))
+
+            is_admin_or_agent = is_platform_admin(user) or is_support_staff
             is_hotel_owner = bool(
                 ticket.hotel and (
                     ticket.hotel.owner == user or
@@ -3489,6 +3597,37 @@ class TicketMessageCreateView(APIView):
                 attachment=attachment,
                 attachment_url=attachment_url
             )
+
+            # Dispatch smart reply notifications
+            try:
+                from notifications.utils import create_notification
+                from staff.models import Department
+                from staff.utils import create_staff_notification
+                snippet = (msg_text[:90] + '...') if len(msg_text) > 90 else msg_text
+
+                if user != ticket.user:
+                    # Support agent / admin replied -> notify ticket creator
+                    create_notification(
+                        recipient=ticket.user,
+                        title=f"💬 New Support Message (#{ticket.ticket_number})",
+                        message=f"Support agent replied to '{ticket.subject}': \"{snippet}\"",
+                        notification_type='SUPPORT_MESSAGE'
+                    )
+                else:
+                    # Customer replied -> notify support staff / assigned agent
+                    cs_dept = Department.objects.filter(code=Department.CODE_CUSTOMER_SUPPORT).first()
+                    agent_profile = getattr(ticket.assigned_agent, 'staff_profile', None) if ticket.assigned_agent else None
+                    create_staff_notification(
+                        department=cs_dept,
+                        recipient=agent_profile,
+                        title=f"💬 Guest Reply on Ticket #{ticket.ticket_number}",
+                        message=f"{user.username} replied on ticket #{ticket.ticket_number}: \"{snippet}\"",
+                        notification_type='SUPPORT_MESSAGE',
+                        metadata={'ticket_id': ticket.ticket_number}
+                    )
+            except Exception as notif_err:
+                logger.warning(f"Failed to dispatch ticket message notification: {notif_err}")
+
             return Response(TicketMessageSerializer(msg, context={'request': request}).data, status=status.HTTP_201_CREATED)
 
         except SupportTicket.DoesNotExist:
@@ -3536,7 +3675,7 @@ class CustomerHotelChatView(APIView):
 class AdminAuditLogListView(generics.ListAPIView):
     queryset = AuditLog.objects.all().order_by('-created_at')
     serializer_class = AuditLogSerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsAdminUserRole]
 
 
 class CreateHostSubscriptionOrderView(APIView):

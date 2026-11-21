@@ -118,6 +118,29 @@ def check_and_create_payout_notifications(user):
             notification_type=Notification.TYPE_PAYOUT_DUE
         )
 
+    # Notify Payout & Escrow Staff Department
+    try:
+        from staff.models import Department
+        from staff.utils import create_staff_notification
+        payout_dept = Department.objects.filter(code=Department.CODE_PAYOUT_AND_ESCROW).first()
+        if payout_dept:
+            from staff.models import StaffNotification
+            already_staff_notified = StaffNotification.objects.filter(
+                department=payout_dept,
+                notification_type='PAYOUT_DUE',
+                created_at__gte=today_start
+            ).exists()
+            if not already_staff_notified:
+                create_staff_notification(
+                    department=payout_dept,
+                    title=f"💰 Escrow Payouts Matured ({count} Reservations)",
+                    message=f"{count} host settlements totaling ₹{total_amount:,.2f} completed their 7-day escrow hold and are ready for disbursement.",
+                    notification_type='PAYOUT_DUE',
+                    metadata={'count': count, 'total_amount': str(total_amount)}
+                )
+    except Exception as notif_err:
+        pass
+
     # Also notify hotel owners whose earnings matured today
     for e in due_earnings:
         host = e.host

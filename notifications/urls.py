@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (
-    NotificationListView, MarkNotificationReadView,
+    NotificationListView, MarkNotificationReadView, NotificationClickView,
     MarkAllNotificationsReadView, UnreadNotificationCountView,
     SendTestNotificationView, SimulatePayoutDueView
 )
@@ -13,4 +13,5 @@ urlpatterns = [
     path('send-test/', SendTestNotificationView.as_view(), name='notification_send_test'),
     path('simulate-payout-due/', SimulatePayoutDueView.as_view(), name='notification_simulate_payout_due'),
     path('<int:pk>/read/', MarkNotificationReadView.as_view(), name='notification_mark_read'),
+    path('<int:pk>/click/', NotificationClickView.as_view(), name='notification_click'),
 ]

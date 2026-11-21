@@ -17,6 +17,14 @@ class Notification(models.Model):
     TYPE_PAYOUT_DISBURSED = 'PAYOUT_DISBURSED'
     TYPE_PAYOUT_HOLD = 'PAYOUT_HOLD'
     TYPE_REFUND_PROCESSED = 'REFUND_PROCESSED'
+    TYPE_REFUND_REQUESTED = 'REFUND_REQUESTED'
+    TYPE_SUPPORT_TICKET = 'SUPPORT_TICKET'
+    TYPE_SUPPORT_MESSAGE = 'SUPPORT_MESSAGE'
+    TYPE_PAYMENT_SUCCESSFUL = 'PAYMENT_SUCCESSFUL'
+    TYPE_PAYMENT_FAILED = 'PAYMENT_FAILED'
+    TYPE_COUPON_OFFER = 'COUPON_OFFER'
+    TYPE_ACCOUNT_SECURITY = 'ACCOUNT_SECURITY'
+    TYPE_PROFILE_UPDATE = 'PROFILE_UPDATE'
     TYPE_GENERAL = 'GENERAL'
 
     NOTIFICATION_TYPE_CHOICES = (
@@ -34,6 +42,14 @@ class Notification(models.Model):
         (TYPE_PAYOUT_DISBURSED, 'Host Payout Disbursed'),
         (TYPE_PAYOUT_HOLD, 'Host Payout Dispute / Hold Notice'),
         (TYPE_REFUND_PROCESSED, 'Refund Processed'),
+        (TYPE_REFUND_REQUESTED, 'Refund Requested'),
+        (TYPE_SUPPORT_TICKET, 'Support Ticket Update'),
+        (TYPE_SUPPORT_MESSAGE, 'Support Message Received'),
+        (TYPE_PAYMENT_SUCCESSFUL, 'Payment Successful'),
+        (TYPE_PAYMENT_FAILED, 'Payment Failed'),
+        (TYPE_COUPON_OFFER, 'Coupon / Special Offer'),
+        (TYPE_ACCOUNT_SECURITY, 'Account & Security Notice'),
+        (TYPE_PROFILE_UPDATE, 'Profile Update Notice'),
         (TYPE_GENERAL, 'General Notification'),
     )
 

@@ -8,6 +8,8 @@ from django.utils import timezone
 from datetime import timedelta
 from .models import Booking
 from .serializers import BookingSerializer, BookingCreateSerializer
+from staff.permissions import is_platform_admin, check_staff_permission
+from staff.models import Department
 
 class BookingPagination(PageNumberPagination):
     page_size = 20
@@ -26,8 +28,14 @@ class BookingListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         user = self.request.user
         role = str(getattr(user, 'role', '')).upper()
-        if user.is_staff or user.is_superuser or role in ['ADMIN', 'SUPER_ADMIN', 'SUPPORT_AGENT']:
+        if is_platform_admin(user):
             return Booking.objects.all().order_by('-created_at')
+        elif role == 'STAFF':
+            profile = getattr(user, 'staff_profile', None)
+            dept_code = profile.department.code if (profile and profile.department) else ''
+            if Department.normalize_code(dept_code) == Department.CODE_RESERVATION or check_staff_permission(user, 'VIEW_BOOKINGS'):
+                return Booking.objects.all().order_by('-created_at')
+            return Booking.objects.none()
         elif role == 'HOTEL_STAFF':
             from hotels.models import HotelStaff
             staff_hotel_ids = HotelStaff.objects.filter(user=user).values_list('hotel_id', flat=True)
@@ -151,7 +159,13 @@ class BookingDetailView(generics.RetrieveAPIView):
 
         user = self.request.user
         role = str(getattr(user, 'role', '')).upper()
-        is_admin = user.is_staff or role in ['ADMIN', 'SUPER_ADMIN', 'SUPPORT_AGENT']
+        is_reservation_staff = False
+        if role == 'STAFF':
+            profile = getattr(user, 'staff_profile', None)
+            dept_code = profile.department.code if (profile and profile.department) else ''
+            is_reservation_staff = bool(Department.normalize_code(dept_code) == Department.CODE_RESERVATION or check_staff_permission(user, 'VIEW_BOOKINGS'))
+
+        is_admin = is_platform_admin(user) or is_reservation_staff
         is_owner = (booking.hotel.owner == user)
         is_customer = (booking.customer == user)
 
@@ -171,7 +185,7 @@ class BookingCancelView(APIView):
             return None, Response({"error": "Booking not found."}, status=status.HTTP_404_NOT_FOUND)
 
         role = str(getattr(user, 'role', '')).upper()
-        is_admin = user.is_staff or role in ['ADMIN', 'SUPER_ADMIN']
+        is_admin = is_platform_admin(user)
         is_owner = (booking.hotel.owner == user)
         is_customer = (booking.customer == user)
 
@@ -221,7 +235,7 @@ class BookingCancelView(APIView):
 
         user = request.user
         role = str(getattr(user, 'role', '')).upper()
-        is_admin = user.is_staff or role in ['ADMIN', 'SUPER_ADMIN']
+        is_admin = is_platform_admin(user)
         is_owner = (booking.hotel.owner == user)
 
         action = (request.data.get('action') or '').strip().upper()
@@ -451,6 +465,32 @@ class BookingCancelView(APIView):
             booking=booking
         )
 
+        # 3. Smart Notifications to Staff Departments (Reservation & Refunds)
+        try:
+            from staff.models import Department
+            from staff.utils import create_staff_notification
+            res_dept = Department.objects.filter(code=Department.CODE_RESERVATION).first()
+            if res_dept:
+                create_staff_notification(
+                    department=res_dept,
+                    title=f"Cancellation: Booking {booking.booking_id}",
+                    message=f"Booking {booking.booking_id} at {booking.hotel.name} was cancelled by guest {booking.guest_name}.",
+                    notification_type='BOOKING_CANCELLED',
+                    metadata={'booking_id': booking.booking_id, 'hotel_id': booking.hotel_id}
+                )
+            if calc.get('refundable_amount', 0) > 0:
+                ref_dept = Department.objects.filter(code=Department.CODE_REFUNDS_AND_CLAIMS).first()
+                if ref_dept:
+                    create_staff_notification(
+                        department=ref_dept,
+                        title=f"Refund Required: Booking {booking.booking_id}",
+                        message=f"Refund of ₹{calc['refundable_amount']} required for cancelled reservation {booking.booking_id}.",
+                        notification_type='REFUND_REQUESTED',
+                        metadata={'booking_id': booking.booking_id, 'refundable_amount': str(calc['refundable_amount'])}
+                    )
+        except Exception as notif_err:
+            pass
+
         return Response({
             "message": f"Booking {booking.booking_id} cancelled successfully. Refund request submitted to Hotel Owner.",
             "booking_id": booking.booking_id,
@@ -474,11 +514,17 @@ def is_authorized_hotel_staff_or_owner_or_admin(user, hotel, permission_field='c
     """
     if not (user and user.is_authenticated):
         return False
-    if user.is_superuser or user.is_staff:
+    if is_platform_admin(user):
         return True
     user_role = str(getattr(user, 'role', '')).upper()
-    if user_role in ['ADMIN', 'SUPER_ADMIN']:
-        return True
+    if user_role == 'STAFF':
+        profile = getattr(user, 'staff_profile', None)
+        if not (profile and profile.is_active_account):
+            return False
+        dept_code = profile.department.code if (profile and profile.department) else ''
+        if Department.normalize_code(dept_code) == Department.CODE_RESERVATION:
+            return bool(profile.has_perm('CHECKIN_GUEST') or profile.has_perm('CHECKOUT_GUEST') or profile.has_perm('MANAGE_RESERVATIONS') or profile.has_perm('EDIT_BOOKINGS'))
+        return False
     if hotel.owner == user:
         return True
     if user_role == 'HOTEL_STAFF':
@@ -610,7 +656,7 @@ class ResendBookingConfirmationEmailView(APIView):
         # Check permissions: Booking owner, hotel owner, or authorized staff/admin
         is_owner = request.user == booking.customer
         is_authorized_staff = is_authorized_hotel_staff_or_owner_or_admin(request.user, booking.hotel, permission_field='can_manage_bookings')
-        is_admin = request.user.is_staff or getattr(request.user, 'role', '') in ['ADMIN', 'SUPER_ADMIN']
+        is_admin = is_platform_admin(request.user)
 
         if not (is_owner or is_authorized_staff or is_admin):
             return Response({"error": "You do not have permission to resend confirmation for this booking."}, status=status.HTTP_403_FORBIDDEN)
@@ -662,7 +708,12 @@ class BookingInvoiceDownloadView(APIView):
         role = str(getattr(request.user, 'role', '')).upper()
         is_owner = (request.user == booking.customer)
         is_host = (request.user == booking.hotel.owner)
-        is_staff = request.user.is_staff or role in ['ADMIN', 'SUPER_ADMIN', 'HOTEL_STAFF']
+        is_res_staff = False
+        if role == 'STAFF':
+            profile = getattr(request.user, 'staff_profile', None)
+            dept_code = profile.department.code if (profile and profile.department) else ''
+            is_res_staff = bool(Department.normalize_code(dept_code) == Department.CODE_RESERVATION or check_staff_permission(request.user, 'VIEW_BOOKINGS'))
+        is_staff = is_platform_admin(request.user) or is_res_staff or role == 'HOTEL_STAFF'
 
         if not (is_owner or is_host or is_staff):
             return Response({"error": "You do not have permission to view or download this invoice."}, status=status.HTTP_403_FORBIDDEN)

@@ -123,6 +123,12 @@ class BookingCreateSerializer(serializers.ModelSerializer):
                 "room": "This property is temporarily unavailable for reservations because the hotel owner account has been blocked by Platform Administration."
             })
 
+        # Check if hotel is deleted
+        if room.hotel and (room.hotel.is_deleted or room.hotel.status == 'DELETED' or not room.hotel.is_active):
+            raise serializers.ValidationError({
+                "room": "This hotel is no longer available for reservations."
+            })
+
         # Real-time Date Overlap Concurrency Check
         available_count = get_available_room_count(room, check_in, check_out, include_holds=True)
         if available_count < requested_rooms:

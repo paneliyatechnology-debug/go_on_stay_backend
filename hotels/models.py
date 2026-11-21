@@ -1,6 +1,82 @@
 from django.db import models
 from django.conf import settings
 
+class Country(models.Model):
+    name = models.CharField(max_length=100, unique=True, db_index=True)
+    code = models.CharField(max_length=10, unique=True, db_index=True)  # e.g., "IN"
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['name']
+        verbose_name_plural = 'Countries'
+
+    def __str__(self):
+        return f"{self.name} ({self.code})"
+
+
+class State(models.Model):
+    country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='states')
+    name = models.CharField(max_length=100, db_index=True)
+    code = models.CharField(max_length=10, blank=True, default='')  # e.g., "GJ", "MH", "RJ", "GA"
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['name']
+        unique_together = ('country', 'name')
+
+    def __str__(self):
+        return f"{self.name}, {self.country.name}"
+
+
+class City(models.Model):
+    state = models.ForeignKey(State, on_delete=models.CASCADE, related_name='cities')
+    name = models.CharField(max_length=100, db_index=True)
+    latitude = models.DecimalField(max_digits=10, decimal_places=6, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=10, decimal_places=6, null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['name']
+        unique_together = ('state', 'name')
+        verbose_name_plural = 'Cities'
+
+    def __str__(self):
+        return f"{self.name}, {self.state.name}"
+
+
+class Area(models.Model):
+    city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='areas')
+    name = models.CharField(max_length=150, db_index=True)
+    zip_code = models.CharField(max_length=20, blank=True, default='')
+    latitude = models.DecimalField(max_digits=10, decimal_places=6, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=10, decimal_places=6, null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __init__(self, *args, **kwargs):
+        if 'pincode' in kwargs:
+            kwargs['zip_code'] = kwargs.pop('pincode')
+        super().__init__(*args, **kwargs)
+
+    @property
+    def pincode(self):
+        return self.zip_code
+
+    @pincode.setter
+    def pincode(self, val):
+        self.zip_code = val or ''
+
+    class Meta:
+        ordering = ['name']
+        unique_together = ('city', 'name')
+
+    def __str__(self):
+        return f"{self.name}, {self.city.name}"
+
+
 class Amenity(models.Model):
     name = models.CharField(max_length=100, unique=True)
     icon_name = models.CharField(max_length=50, default='CheckCircle')
@@ -95,9 +171,23 @@ class Hotel(models.Model):
     rejected_at = models.DateTimeField(blank=True, null=True)
     rejected_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True, related_name='rejected_hotels')
     
+    country_rel = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True, related_name='hotels')
+    state_rel = models.ForeignKey(State, on_delete=models.SET_NULL, null=True, blank=True, related_name='hotels')
+    city_rel = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True, related_name='hotels')
+    area_rel = models.ForeignKey(Area, on_delete=models.SET_NULL, null=True, blank=True, related_name='hotels')
+
     rejection_reason = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['city']),
+            models.Index(fields=['state']),
+            models.Index(fields=['latitude', 'longitude']),
+            models.Index(fields=['guest_rating']),
+            models.Index(fields=['is_deleted', 'is_approved', 'status']),
+        ]
 
     def clean(self):
         super().clean()
@@ -119,6 +209,21 @@ class Hotel(models.Model):
 
     def save(self, *args, **kwargs):
         self.clean()
+        # Bi-directional location sync:
+        if self.area_rel:
+            self.area = self.area_rel.name
+            if not self.city_rel:
+                self.city_rel = self.area_rel.city
+        if self.city_rel:
+            self.city = self.city_rel.name
+            if not self.state_rel:
+                self.state_rel = self.city_rel.state
+        if self.state_rel:
+            self.state = self.state_rel.name
+            if not self.country_rel:
+                self.country_rel = self.state_rel.country
+        if self.country_rel:
+            self.country = self.country_rel.name
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -133,9 +238,15 @@ class HotelImage(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def get_image_display(self):
+        if self.image_url:
+            return self.image_url
         if self.image:
-            return self.image.url
-        return self.image_url or ''
+            try:
+                url = str(self.image.url) if hasattr(self.image, 'url') else str(self.image)
+                return url
+            except Exception:
+                return ''
+        return ''
 
     def __str__(self):
         return f"Image for {self.hotel.name}"
@@ -188,3 +299,38 @@ class HotelStaff(models.Model):
 
     def __str__(self):
         return f"Staff {self.user.username} @ {self.hotel.name}"
+
+
+class DeletedHotelArchive(models.Model):
+    hotel = models.OneToOneField(Hotel, on_delete=models.CASCADE, related_name='archive_record')
+    hotel_name = models.CharField(max_length=255)
+    city = models.CharField(max_length=100)
+    address = models.CharField(max_length=255)
+    property_type = models.CharField(max_length=50, blank=True, default='')
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='archived_hotels')
+    owner_name = models.CharField(max_length=255, blank=True, null=True, default='')
+    owner_email = models.CharField(max_length=255, blank=True, null=True, default='')
+    owner_phone = models.CharField(max_length=50, blank=True, null=True, default='')
+
+    deleted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='hotel_deletions_performed')
+    deleted_by_name = models.CharField(max_length=255, blank=True, null=True, default='')
+    deleted_by_role = models.CharField(max_length=50, blank=True, null=True, default='')
+    deleted_at = models.DateTimeField(auto_now_add=True)
+    deletion_reason = models.TextField(blank=True, null=True, default='')
+
+    # Full JSON snapshot at time of deletion
+    snapshot_data = models.JSONField(default=dict, blank=True)
+
+    # Restoration tracking
+    is_restored = models.BooleanField(default=False)
+    restored_at = models.DateTimeField(null=True, blank=True)
+    restored_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='+')
+
+    class Meta:
+        ordering = ['-deleted_at']
+        verbose_name = 'Deleted Hotel Archive'
+        verbose_name_plural = 'Deleted Hotel Archives'
+
+    def __str__(self):
+        return f"Archived: {self.hotel_name} (ID {self.hotel_id}) - Deleted by {self.deleted_by_name}"
+

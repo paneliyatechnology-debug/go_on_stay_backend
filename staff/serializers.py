@@ -336,12 +336,42 @@ class StaffActivityLogSerializer(serializers.ModelSerializer):
 
 
 class StaffNotificationSerializer(serializers.ModelSerializer):
+    target_url = serializers.SerializerMethodField()
+    target_entity_type = serializers.SerializerMethodField()
+    target_entity_id = serializers.SerializerMethodField()
+    fallback_url = serializers.SerializerMethodField()
+    navigation_metadata = serializers.SerializerMethodField()
+
     class Meta:
         model = StaffNotification
         fields = (
             'id', 'title', 'message', 'notification_type',
-            'is_read', 'read_at', 'metadata', 'created_at'
+            'is_read', 'read_at', 'metadata', 'created_at',
+            'target_url', 'target_entity_type', 'target_entity_id', 'fallback_url', 'navigation_metadata'
         )
+
+    def _get_nav(self, obj):
+        if not hasattr(obj, '_cached_navigation'):
+            from notifications.navigation import resolve_notification_navigation
+            request = self.context.get('request')
+            user = request.user if request and hasattr(request, 'user') and request.user.is_authenticated else (obj.recipient.user if obj.recipient else None)
+            obj._cached_navigation = resolve_notification_navigation(notification=obj, user=user)
+        return obj._cached_navigation
+
+    def get_target_url(self, obj):
+        return self._get_nav(obj).get('target_url', '')
+
+    def get_target_entity_type(self, obj):
+        return self._get_nav(obj).get('target_entity_type', '')
+
+    def get_target_entity_id(self, obj):
+        return self._get_nav(obj).get('target_entity_id', '')
+
+    def get_fallback_url(self, obj):
+        return self._get_nav(obj).get('fallback_url', '')
+
+    def get_navigation_metadata(self, obj):
+        return self._get_nav(obj)
 
 
 class StaffTicketNoteSerializer(serializers.ModelSerializer):

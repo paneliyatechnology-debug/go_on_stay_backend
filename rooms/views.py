@@ -10,7 +10,7 @@ from hotels.models import Hotel
 from util.validators import parse_flexible_date
 
 class RoomListView(generics.ListCreateAPIView):
-    queryset = Room.objects.all().order_by('price_per_night')
+    queryset = Room.objects.filter(hotel__is_deleted=False).order_by('price_per_night')
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_serializer_class(self):
@@ -37,7 +37,7 @@ class IsRoomOwnerOrAdminOrReadOnly(permissions.BasePermission):
         return obj.hotel.owner == request.user or request.user.is_staff or getattr(request.user, 'role', '') in ['ADMIN', 'SUPER_ADMIN']
 
 class RoomDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Room.objects.all()
+    queryset = Room.objects.filter(hotel__is_deleted=False)
     permission_classes = [IsRoomOwnerOrAdminOrReadOnly]
 
     def get_serializer_class(self):
@@ -80,7 +80,7 @@ class RoomsByHotelView(generics.ListAPIView):
 
     def get_queryset(self):
         hotel_id = self.kwargs['hotel_id']
-        queryset = Room.objects.filter(hotel_id=hotel_id).order_by('price_per_night')
+        queryset = Room.objects.filter(hotel_id=hotel_id, hotel__is_deleted=False).order_by('price_per_night')
 
         check_in = self.request.query_params.get('check_in')
         check_out = self.request.query_params.get('check_out')
@@ -236,11 +236,12 @@ class RoomImageUploadView(APIView):
     def post(self, request, pk):
         try:
             room = Room.objects.get(pk=pk)
-            if room.hotel.owner != request.user and not request.user.is_staff:
+            is_admin = request.user.is_staff or getattr(request.user, 'role', '') in ['ADMIN', 'SUPER_ADMIN']
+            if room.hotel.owner != request.user and not is_admin:
                 return Response({"error": "Permission denied."}, status=status.HTTP_403_FORBIDDEN)
 
             image = request.FILES.get('image')
-            image_url = request.data.get('image_url')
+            image_url = request.data.get('image_url') or request.data.get('url')
             is_primary_raw = request.data.get('is_primary', False)
             if isinstance(is_primary_raw, bool):
                 is_primary = is_primary_raw
@@ -249,6 +250,9 @@ class RoomImageUploadView(APIView):
 
             if not image and not image_url:
                 return Response({"error": "Please provide an image file or URL."}, status=status.HTTP_400_BAD_REQUEST)
+
+            if is_primary:
+                room.images.filter(is_primary=True).update(is_primary=False)
 
             room_image = RoomImage.objects.create(
                 room=room,

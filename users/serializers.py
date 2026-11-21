@@ -9,9 +9,45 @@ from util.validators import (
 
 User = get_user_model()
 
+class HybridAvatarField(serializers.Field):
+    """
+    Field that accepts both an uploaded file (traditional multipart form)
+    and a Cloudinary direct upload string URL (e.g. https://res.cloudinary.com/...).
+    """
+    def to_internal_value(self, data):
+        if not data:
+            return None
+        if isinstance(data, str):
+            val = data.strip()
+            if not val:
+                return None
+            if val.startswith(('http://', 'https://')):
+                return val
+            if val.startswith(('users/avatars/', '/media/')):
+                return val
+            raise serializers.ValidationError("Invalid image URL or path format.")
+        from django.core.files.uploadedfile import UploadedFile
+        if isinstance(data, UploadedFile):
+            return data
+        raise serializers.ValidationError("Expected an image file or a valid Cloudinary image URL.")
+
+    def to_representation(self, value):
+        if not value:
+            return None
+        val_str = str(value)
+        if val_str.startswith(('http://', 'https://')):
+            return val_str
+        if hasattr(value, 'url'):
+            request = self.context.get('request', None)
+            if request:
+                return request.build_absolute_uri(value.url)
+            return value.url
+        return val_str
+
 class UserSerializer(serializers.ModelSerializer):
     payout_account = serializers.SerializerMethodField()
     hotels_count = serializers.SerializerMethodField()
+    avatar = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -25,6 +61,19 @@ class UserSerializer(serializers.ModelSerializer):
             'created_at', 'updated_at'
         )
         read_only_fields = ('id', 'is_blocked', 'is_email_verified', 'created_at', 'updated_at')
+
+    def get_avatar(self, obj):
+        if not obj.avatar:
+            return None
+        val_str = str(obj.avatar)
+        if val_str.startswith(('http://', 'https://')):
+            return val_str
+        if hasattr(obj.avatar, 'url'):
+            request = self.context.get('request', None)
+            if request:
+                return request.build_absolute_uri(obj.avatar.url)
+            return obj.avatar.url
+        return val_str
 
     def get_hotels_count(self, obj):
         if hasattr(obj, 'hotels'):
@@ -325,6 +374,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 class UserProfileUpdateSerializer(serializers.ModelSerializer):
+    avatar = HybridAvatarField(required=False, allow_null=True)
+
     class Meta:
         model = User
         fields = (
@@ -339,6 +390,8 @@ class UserProfileUpdateSerializer(serializers.ModelSerializer):
             data['phone_number'] = data['phone']
         if 'email' in data and isinstance(data['email'], str):
             data['email'] = data['email'].lower().strip()
+        if 'avatar_url' in data and not data.get('avatar'):
+            data['avatar'] = data['avatar_url']
         if 'name' in data and not (data.get('first_name') or data.get('last_name')):
             raw_name = str(data['name']).strip()
             parts = raw_name.split(' ', 1)
