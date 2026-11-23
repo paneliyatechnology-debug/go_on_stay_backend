@@ -6,8 +6,11 @@ from payments.views import SettlementLedgerListView, AdminAuditLogListView
 from staff.views import PortalNavigationDetailView, AdminDashboardView
 from hotels.views import AdminDeletedHotelListView, AdminDeletedHotelDetailView, AdminDeletedHotelRestoreView
 from core.cloudinary_views import CloudinarySignatureView, CloudinaryConfigCheckView
+from core.views import HealthCheckView, ReadinessCheckView
 
 urlpatterns = [
+    path('api/health/', HealthCheckView.as_view(), name='api-health-check'),
+    path('api/health/ready/', ReadinessCheckView.as_view(), name='api-health-ready'),
     path('admin/', admin.site.urls),
     path('api/portal/navigation/', PortalNavigationDetailView.as_view(), name='api-portal-navigation'),
     path('api/admin/dashboard/', AdminDashboardView.as_view(), name='api-admin-dashboard'),

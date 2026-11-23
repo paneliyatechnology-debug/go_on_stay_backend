@@ -48,6 +48,8 @@ class UserSerializer(serializers.ModelSerializer):
     payout_account = serializers.SerializerMethodField()
     hotels_count = serializers.SerializerMethodField()
     avatar = serializers.SerializerMethodField()
+    razorpay_key_secret = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    has_custom_razorpay_keys = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -56,11 +58,23 @@ class UserSerializer(serializers.ModelSerializer):
             'role', 'subscription_tier', 'phone_number', 'dob', 'avatar', 'bio',
             'preferred_language', 'preferred_currency', 'is_email_verified',
             'is_blocked', 'is_staff', 'is_superuser',
-            'razorpay_key_id', 'razorpay_key_secret',
+            'razorpay_key_id', 'razorpay_key_secret', 'has_custom_razorpay_keys',
             'payout_account', 'hotels_count',
             'created_at', 'updated_at'
         )
         read_only_fields = ('id', 'is_blocked', 'is_email_verified', 'created_at', 'updated_at')
+        extra_kwargs = {
+            'razorpay_key_secret': {'write_only': True}
+        }
+
+    def get_has_custom_razorpay_keys(self, obj):
+        return bool(obj.razorpay_key_id and obj.razorpay_key_secret)
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        # Defense-in-depth: Never expose merchant Razorpay secret in API serialization responses
+        ret.pop('razorpay_key_secret', None)
+        return ret
 
     def get_avatar(self, obj):
         if not obj.avatar:
@@ -117,6 +131,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     state = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
     address = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
     zip_code = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
+    razorpay_key_secret = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
 
     class Meta:
         model = User
@@ -129,6 +144,9 @@ class RegisterSerializer(serializers.ModelSerializer):
             'account_number', 'ifsc_code', 'upi_id',
             'hotel_name', 'property_type', 'city', 'state', 'address', 'zip_code'
         )
+        extra_kwargs = {
+            'razorpay_key_secret': {'write_only': True}
+        }
 
     def to_internal_value(self, data):
         data = data.copy() if hasattr(data, 'copy') else dict(data)
@@ -375,6 +393,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 class UserProfileUpdateSerializer(serializers.ModelSerializer):
     avatar = HybridAvatarField(required=False, allow_null=True)
+    razorpay_key_secret = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
 
     class Meta:
         model = User
@@ -383,6 +402,9 @@ class UserProfileUpdateSerializer(serializers.ModelSerializer):
             'avatar', 'bio', 'preferred_language', 'preferred_currency',
             'razorpay_key_id', 'razorpay_key_secret'
         )
+        extra_kwargs = {
+            'razorpay_key_secret': {'write_only': True}
+        }
 
     def to_internal_value(self, data):
         data = data.copy() if hasattr(data, 'copy') else dict(data)

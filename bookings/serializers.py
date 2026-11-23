@@ -22,6 +22,12 @@ class BookingSerializer(serializers.ModelSerializer):
     room_number = serializers.SerializerMethodField()
     room_allocation_status = serializers.SerializerMethodField()
     room_allocation_message = serializers.SerializerMethodField()
+    cancellation_fee = serializers.SerializerMethodField()
+    refund_status = serializers.SerializerMethodField()
+    refund_amount = serializers.SerializerMethodField()
+    refund_date = serializers.SerializerMethodField()
+    original_payment_source = serializers.SerializerMethodField()
+    razorpay_refund_id = serializers.SerializerMethodField()
 
     class Meta:
         model = Booking
@@ -33,14 +39,16 @@ class BookingSerializer(serializers.ModelSerializer):
             'cleaning_fee', 'service_fee', 'taxes', 'discount', 'total_amount', 'currency',
             'payment_status', 'booking_status', 'razorpay_order_id', 'payment_details', 'user_review',
             'guest_name', 'guest_email', 'guest_phone', 'meal_plan', 'estimated_arrival_time', 'special_requests',
-            'cancellation_reason', 'cancellation_fee_percentage', 'cancellation_charge', 'refundable_amount',
+            'cancellation_reason', 'cancellation_fee_percentage', 'cancellation_charge', 'cancellation_fee',
+            'refundable_amount', 'refund_status', 'refund_amount', 'refund_date', 'original_payment_source', 'razorpay_refund_id',
             'cancellation_calculated_at', 'cancellation_breakdown', 'applied_cancellation_policy',
             'confirmed_at', 'confirmation_email_sent', 'confirmation_email_sent_at', 'confirmation_email_error',
             'created_at', 'updated_at'
         )
         read_only_fields = (
-            'id', 'booking_id', 'customer', 'cancellation_fee_percentage', 'cancellation_charge',
-            'refundable_amount', 'cancellation_calculated_at', 'cancellation_breakdown',
+            'id', 'booking_id', 'customer', 'cancellation_fee_percentage', 'cancellation_charge', 'cancellation_fee',
+            'refundable_amount', 'refund_status', 'refund_amount', 'refund_date', 'original_payment_source', 'razorpay_refund_id',
+            'cancellation_calculated_at', 'cancellation_breakdown',
             'applied_cancellation_policy', 'created_at', 'updated_at'
         )
 
@@ -72,8 +80,29 @@ class BookingSerializer(serializers.ModelSerializer):
             }
         return None
 
+    def _get_captured_payment(self, obj):
+        if not hasattr(obj, '_cached_captured_payment'):
+            if hasattr(obj, '_prefetched_objects_cache') and 'payments' in obj._prefetched_objects_cache:
+                payments = list(obj._prefetched_objects_cache['payments'])
+                captured = next((p for p in payments if getattr(p, 'status', None) == 'CAPTURED'), None) or (payments[0] if payments else None)
+                obj._cached_captured_payment = captured
+            else:
+                obj._cached_captured_payment = obj.payments.filter(status='CAPTURED').first() or obj.payments.first()
+        return obj._cached_captured_payment
+
+    def _get_latest_refund(self, obj):
+        if not hasattr(obj, '_cached_latest_refund'):
+            if hasattr(obj, '_prefetched_objects_cache') and 'refunds' in obj._prefetched_objects_cache:
+                refunds = list(obj._prefetched_objects_cache['refunds'])
+                from django.utils import timezone
+                refunds.sort(key=lambda r: getattr(r, 'created_at', None) or timezone.now(), reverse=True)
+                obj._cached_latest_refund = refunds[0] if refunds else None
+            else:
+                obj._cached_latest_refund = obj.refunds.order_by('-created_at').first()
+        return obj._cached_latest_refund
+
     def get_payment_details(self, obj):
-        captured_payment = obj.payments.filter(status='CAPTURED').first() or obj.payments.first()
+        captured_payment = self._get_captured_payment(obj)
         if captured_payment:
             return {
                 'razorpay_payment_id': captured_payment.razorpay_payment_id,
@@ -82,6 +111,50 @@ class BookingSerializer(serializers.ModelSerializer):
                 'status': captured_payment.status,
                 'paid_at': captured_payment.paid_at,
             }
+        return None
+
+    def get_cancellation_fee(self, obj):
+        return obj.cancellation_charge
+
+    def get_refund_status(self, obj):
+        refund = self._get_latest_refund(obj)
+        if refund:
+            return refund.status
+        if obj.payment_status == Booking.PAYMENT_REFUNDED:
+            return 'REFUNDED'
+        elif obj.payment_status == Booking.PAYMENT_REFUND_PENDING:
+            return 'REFUND_PENDING'
+        return None
+
+    def get_refund_amount(self, obj):
+        refund = self._get_latest_refund(obj)
+        if refund:
+            return refund.amount
+        return obj.refundable_amount
+
+    def get_refund_date(self, obj):
+        refund = self._get_latest_refund(obj)
+        if refund and refund.processed_at:
+            return refund.processed_at
+        elif refund:
+            return refund.created_at
+        return None
+
+    def get_original_payment_source(self, obj):
+        captured_payment = self._get_captured_payment(obj)
+        if captured_payment:
+            return captured_payment.payment_method or 'Razorpay Online'
+        return None
+
+    def get_razorpay_refund_id(self, obj):
+        if hasattr(obj, '_prefetched_objects_cache') and 'refunds' in obj._prefetched_objects_cache:
+            refunds = [r for r in obj._prefetched_objects_cache['refunds'] if getattr(r, 'razorpay_refund_id', None)]
+            from django.utils import timezone
+            refunds.sort(key=lambda r: getattr(r, 'created_at', None) or timezone.now(), reverse=True)
+            return refunds[0].razorpay_refund_id if refunds else None
+        refund = obj.refunds.exclude(razorpay_refund_id__isnull=True).exclude(razorpay_refund_id='').order_by('-created_at').first()
+        if refund:
+            return refund.razorpay_refund_id
         return None
 
 class BookingCreateSerializer(serializers.ModelSerializer):

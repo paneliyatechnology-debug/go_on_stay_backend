@@ -130,18 +130,29 @@ class StaffProfile(models.Model):
         if not perm_code:
             return True
         target = str(perm_code).strip().upper()
-        assigned_perms = list(self.permissions.values_list('code', flat=True))
-        if assigned_perms:
-            if target in assigned_perms or '*' in assigned_perms:
+        # Collect both codes and names of assigned permissions
+        assigned_codes = list(self.permissions.values_list('code', flat=True))
+        assigned_names = list(self.permissions.values_list('name', flat=True))
+        assigned_all = set(
+            [str(c).strip().upper() for c in assigned_codes] +
+            [str(n).strip().upper() for n in assigned_names]
+        )
+        if assigned_all:
+            if target in assigned_all or '*' in assigned_all:
                 return True
-            return self._matches_permission_alias(assigned_perms, target)
+            return self._matches_permission_alias(assigned_all, target)
         else:
             # Default to all permissions configured for employee's assigned department
             if self.department:
-                dept_perms = list(self.department.permissions.values_list('code', flat=True))
-                if target in dept_perms:
+                dept_codes = list(self.department.permissions.values_list('code', flat=True))
+                dept_names = list(self.department.permissions.values_list('name', flat=True))
+                dept_all = set(
+                    [str(c).strip().upper() for c in dept_codes] +
+                    [str(n).strip().upper() for n in dept_names]
+                )
+                if target in dept_all or '*' in dept_all:
                     return True
-                return self._matches_permission_alias(dept_perms, target)
+                return self._matches_permission_alias(dept_all, target)
             return False
 
     @staticmethod
@@ -168,12 +179,51 @@ class StaffProfile(models.Model):
             'APPROVE_REFUND': {'APPROVE_REFUND', 'PROCESS_REFUND'},
             'REJECT_REFUND': {'REJECT_REFUND', 'PROCESS_REFUND'},
             # Payout & Escrow
-            'VIEW_PAYOUTS': {'VIEW_PAYOUTS', 'MANAGE_ESCROW', 'AUDIT_SETTLEMENT', 'PROCESS_PAYOUT', 'APPROVE_PAYOUT'},
-            'MANAGE_ESCROW': {'MANAGE_ESCROW', 'VIEW_PAYOUTS', 'AUDIT_SETTLEMENT'},
-            'AUDIT_SETTLEMENT': {'AUDIT_SETTLEMENT', 'VIEW_PAYOUTS', 'MANAGE_ESCROW'},
-            'PROCESS_PAYOUT': {'PROCESS_PAYOUT', 'APPROVE_PAYOUT'},
-            'APPROVE_PAYOUT': {'APPROVE_PAYOUT', 'PROCESS_PAYOUT'},
-            'REJECT_PAYOUT': {'REJECT_PAYOUT', 'PROCESS_PAYOUT'},
+            'VIEW_PAYOUTS': {
+                'VIEW_PAYOUTS', 'MANAGE_ESCROW', 'AUDIT_SETTLEMENT', 'PROCESS_PAYOUT', 'APPROVE_PAYOUT',
+                'PAYOUTS & ESCROW', 'PAYOUTS AND ESCROW', 'PAYOUTS_AND_ESCROW', 'PAYOUT_AND_ESCROW',
+                'PAYOUTS', 'PAYOUT', 'ESCROW'
+            },
+            'MANAGE_ESCROW': {
+                'MANAGE_ESCROW', 'VIEW_PAYOUTS', 'AUDIT_SETTLEMENT', 'PROCESS_PAYOUT', 'APPROVE_PAYOUT',
+                'PAYOUTS & ESCROW', 'PAYOUTS AND ESCROW', 'PAYOUTS_AND_ESCROW', 'PAYOUT_AND_ESCROW',
+                'PAYOUTS', 'PAYOUT', 'ESCROW'
+            },
+            'AUDIT_SETTLEMENT': {
+                'AUDIT_SETTLEMENT', 'VIEW_PAYOUTS', 'MANAGE_ESCROW', 'PROCESS_PAYOUT', 'APPROVE_PAYOUT',
+                'PAYOUTS & ESCROW', 'PAYOUTS AND ESCROW', 'PAYOUTS_AND_ESCROW', 'PAYOUT_AND_ESCROW',
+                'PAYOUTS', 'PAYOUT', 'ESCROW'
+            },
+            'PROCESS_PAYOUT': {
+                'PROCESS_PAYOUT', 'APPROVE_PAYOUT', 'DISTRIBUTE_PAYOUT', 'INITIATE_PAYOUT',
+                'PAYOUTS & ESCROW', 'PAYOUTS AND ESCROW', 'PAYOUTS_AND_ESCROW', 'PAYOUT_AND_ESCROW',
+                'PAYOUT', 'PAYOUTS', 'ESCROW', 'MANAGE_ESCROW', 'AUDIT_SETTLEMENT'
+            },
+            'APPROVE_PAYOUT': {
+                'APPROVE_PAYOUT', 'PROCESS_PAYOUT', 'DISTRIBUTE_PAYOUT', 'INITIATE_PAYOUT',
+                'PAYOUTS & ESCROW', 'PAYOUTS AND ESCROW', 'PAYOUTS_AND_ESCROW', 'PAYOUT_AND_ESCROW',
+                'PAYOUT', 'PAYOUTS'
+            },
+            'REJECT_PAYOUT': {
+                'REJECT_PAYOUT', 'PROCESS_PAYOUT',
+                'PAYOUTS & ESCROW', 'PAYOUTS AND ESCROW', 'PAYOUTS_AND_ESCROW', 'PAYOUT_AND_ESCROW',
+                'PAYOUT', 'PAYOUTS'
+            },
+            'PAYOUTS & ESCROW': {
+                'PAYOUTS & ESCROW', 'PAYOUTS AND ESCROW', 'PAYOUTS_AND_ESCROW', 'PAYOUT_AND_ESCROW',
+                'PROCESS_PAYOUT', 'APPROVE_PAYOUT', 'VIEW_PAYOUTS', 'MANAGE_ESCROW', 'AUDIT_SETTLEMENT',
+                'DISTRIBUTE_PAYOUT', 'INITIATE_PAYOUT', 'PAYOUT', 'PAYOUTS', 'ESCROW'
+            },
+            'PAYOUTS_AND_ESCROW': {
+                'PAYOUTS & ESCROW', 'PAYOUTS AND ESCROW', 'PAYOUTS_AND_ESCROW', 'PAYOUT_AND_ESCROW',
+                'PROCESS_PAYOUT', 'APPROVE_PAYOUT', 'VIEW_PAYOUTS', 'MANAGE_ESCROW', 'AUDIT_SETTLEMENT',
+                'DISTRIBUTE_PAYOUT', 'INITIATE_PAYOUT', 'PAYOUT', 'PAYOUTS', 'ESCROW'
+            },
+            'PAYOUT_AND_ESCROW': {
+                'PAYOUTS & ESCROW', 'PAYOUTS AND ESCROW', 'PAYOUTS_AND_ESCROW', 'PAYOUT_AND_ESCROW',
+                'PROCESS_PAYOUT', 'APPROVE_PAYOUT', 'VIEW_PAYOUTS', 'MANAGE_ESCROW', 'AUDIT_SETTLEMENT',
+                'DISTRIBUTE_PAYOUT', 'INITIATE_PAYOUT', 'PAYOUT', 'PAYOUTS', 'ESCROW'
+            },
             # Hotel Verification
             'VIEW_HOTELS': {'VIEW_HOTELS', 'VERIFY_HOTEL', 'VERIFY_HOTELS', 'REVIEW_DOCUMENTS', 'APPROVE_HOTEL'},
             'REVIEW_DOCUMENTS': {'REVIEW_DOCUMENTS', 'VIEW_HOTELS', 'VERIFY_HOTEL', 'VERIFY_HOTELS'},
@@ -183,7 +233,15 @@ class StaffProfile(models.Model):
             'REJECT_HOTEL': {'REJECT_HOTEL', 'VERIFY_HOTEL', 'VERIFY_HOTELS'},
         }
         allowed_sources = aliases.get(target, {target})
-        return bool(set(perm_set).intersection(allowed_sources))
+        if set(perm_set).intersection(allowed_sources):
+            return True
+
+        def _norm(v):
+            return str(v).upper().replace('&', 'AND').replace(' ', '').replace('_', '')
+
+        norm_perm_set = {_norm(p) for p in perm_set}
+        norm_allowed = {_norm(a) for a in allowed_sources}
+        return bool(norm_perm_set.intersection(norm_allowed))
 
 
 class StaffPasswordResetToken(models.Model):

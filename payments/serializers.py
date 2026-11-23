@@ -316,6 +316,20 @@ class PlatformSettingSerializer(serializers.ModelSerializer):
         ]
 
 
+class PublicPlatformSettingSerializer(serializers.ModelSerializer):
+    """
+    Public platform settings exposed to guests, customers, and non-admin users.
+    Omits corporate banking and sensitive payout credentials (razorpayx_account_number, payout_provider_mode).
+    """
+    class Meta:
+        model = PlatformSetting
+        fields = [
+            'id', 'commission_percentage', 'gst_tax_percentage',
+            'default_currency', 'support_email', 'support_phone',
+            'is_maintenance_mode', 'updated_at'
+        ]
+
+
 class InitiatePayoutRequestSerializer(serializers.Serializer):
     earning_ids = serializers.ListField(
         child=serializers.IntegerField(),

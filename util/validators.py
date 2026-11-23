@@ -294,3 +294,56 @@ def validate_city_or_state(value, field_name="City"):
     return val_clean
 
 
+# 12. Media & Upload Validators (P3-FINDING-08)
+def validate_upload_image(file):
+    """
+    Validates uploaded hotel/room/avatar images:
+    - Maximum file size: 5 MB
+    - Allowed extensions: .jpg, .jpeg, .png, .webp
+    """
+    if not file:
+        return file
+    
+    max_size = 5 * 1024 * 1024  # 5 MB
+    file_size = getattr(file, 'size', 0)
+    if file_size > max_size:
+        raise serializers.ValidationError(
+            f"Image file size cannot exceed 5MB. Uploaded size: {file_size / (1024 * 1024):.2f}MB."
+        )
+    
+    import os
+    ext = os.path.splitext(getattr(file, 'name', ''))[1].lower()
+    allowed = ['.jpg', '.jpeg', '.png', '.webp']
+    if ext not in allowed:
+        raise serializers.ValidationError(
+            f"Invalid image format '{ext}'. Allowed image formats: {', '.join(allowed)}."
+        )
+    return file
+
+
+def validate_upload_document(file):
+    """
+    Validates uploaded verification/KYC documents:
+    - Maximum file size: 10 MB
+    - Allowed extensions: .pdf, .jpg, .jpeg, .png, .webp
+    """
+    if not file:
+        return file
+    
+    max_size = 10 * 1024 * 1024  # 10 MB
+    file_size = getattr(file, 'size', 0)
+    if file_size > max_size:
+        raise serializers.ValidationError(
+            f"Document file size cannot exceed 10MB. Uploaded size: {file_size / (1024 * 1024):.2f}MB."
+        )
+    
+    import os
+    ext = os.path.splitext(getattr(file, 'name', ''))[1].lower()
+    allowed = ['.pdf', '.jpg', '.jpeg', '.png', '.webp']
+    if ext not in allowed:
+        raise serializers.ValidationError(
+            f"Invalid document format '{ext}'. Allowed document formats: {', '.join(allowed)}."
+        )
+    return file
+
+

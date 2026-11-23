@@ -42,7 +42,7 @@ class Payment(models.Model):
     paid_at = models.DateTimeField(blank=True, null=True)
     is_duplicate_captured = models.BooleanField(default=False, db_index=True)
     review_notes = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -121,7 +121,7 @@ class Refund(models.Model):
     status = models.CharField(max_length=30, choices=REFUND_STATUS_CHOICES, default=STATUS_REFUND_PENDING, db_index=True)
     
     processed_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='processed_refunds')
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     processed_at = models.DateTimeField(blank=True, null=True)
     failed_at = models.DateTimeField(blank=True, null=True)
 
@@ -258,11 +258,16 @@ class HostEarning(models.Model):
     
     available_at = models.DateTimeField(blank=True, null=True)
     settled_at = models.DateTimeField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['-created_at']
+
+    @property
+    def is_hold_matured(self):
+        from django.utils import timezone
+        return bool(self.hold_until and self.hold_until <= timezone.now())
 
     def calculate_eligibility(self, as_of_time=None):
         """
@@ -404,7 +409,7 @@ class HostPayout(models.Model):
     notes = models.TextField(blank=True, null=True)
     
     processed_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True, related_name='approved_payouts')
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     processed_at = models.DateTimeField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
@@ -488,7 +493,7 @@ class SupportTicket(models.Model):
     
     category = models.CharField(max_length=30, choices=CATEGORY_CHOICES, default='BOOKING')
     priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES, default='MEDIUM')
-    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='OPEN')
+    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='OPEN', db_index=True)
     
     subject = models.CharField(max_length=255)
     description = models.TextField()
@@ -497,7 +502,7 @@ class SupportTicket(models.Model):
     
     assigned_agent = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True, related_name='assigned_tickets')
     
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     @property

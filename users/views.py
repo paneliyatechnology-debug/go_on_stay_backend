@@ -651,9 +651,28 @@ class UserDeleteView(APIView):
             user = User.objects.get(pk=pk)
             if user.is_superuser:
                 return Response({"error": "Cannot delete superuser account."}, status=status.HTTP_400_BAD_REQUEST)
-            username = user.username
-            user.delete()
-            return Response({"message": f"User account '{username}' deleted permanently."})
+
+            has_bookings = user.bookings.exists() if hasattr(user, 'bookings') else False
+            has_hotels = user.hotels.exists() if hasattr(user, 'hotels') else False
+            has_payments = user.payments.exists() if hasattr(user, 'payments') else False
+
+            if has_bookings or has_hotels or has_payments:
+                return Response({
+                    "error": "Cannot permanently delete user account with existing bookings, hotels, or financial transaction history. Please block or deactivate the user account instead to preserve financial audit trail.",
+                    "has_bookings": has_bookings,
+                    "has_hotels": has_hotels,
+                    "has_payments": has_payments
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            from django.db.models import ProtectedError
+            try:
+                username = user.username
+                user.delete()
+                return Response({"message": f"User account '{username}' deleted permanently."})
+            except ProtectedError:
+                return Response({
+                    "error": "Cannot delete user account because related financial or audit records are protected."
+                }, status=status.HTTP_400_BAD_REQUEST)
         except User.DoesNotExist:
             return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 

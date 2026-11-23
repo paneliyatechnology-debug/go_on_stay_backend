@@ -162,9 +162,9 @@ class Hotel(models.Model):
     nearby_attractions = models.TextField(blank=True, null=True, default='Airport 10km, Railway Station 4km.')
 
     amenities = models.ManyToManyField(Amenity, related_name='hotels', blank=True)
-    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default=STATUS_SUBMITTED)
-    is_approved = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default=STATUS_SUBMITTED, db_index=True)
+    is_approved = models.BooleanField(default=False, db_index=True)
+    is_active = models.BooleanField(default=True, db_index=True)
     is_deleted = models.BooleanField(default=False)
     deleted_at = models.DateTimeField(blank=True, null=True)
     deleted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True, related_name='deleted_hotels')
@@ -177,7 +177,7 @@ class Hotel(models.Model):
     area_rel = models.ForeignKey(Area, on_delete=models.SET_NULL, null=True, blank=True, related_name='hotels')
 
     rejection_reason = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:

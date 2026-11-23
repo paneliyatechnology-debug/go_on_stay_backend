@@ -46,14 +46,22 @@ class RoomSerializer(serializers.ModelSerializer):
         )
 
     def get_primary_image(self, obj):
-        primary = obj.images.filter(is_primary=True).first() or obj.images.first()
-        if primary:
-            return primary.get_image_display()
+        if hasattr(obj, '_prefetched_objects_cache') and 'images' in obj._prefetched_objects_cache:
+            imgs = obj._prefetched_objects_cache['images']
+            primary = next((img for img in imgs if getattr(img, 'is_primary', False)), None) or (imgs[0] if imgs else None)
+            if primary:
+                return primary.get_image_display()
+        else:
+            primary = obj.images.filter(is_primary=True).first() or obj.images.first()
+            if primary:
+                return primary.get_image_display()
         return "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=800&q=80"
 
     def _get_avail(self, obj):
         check_in = self.context.get('check_in')
         check_out = self.context.get('check_out')
+        if not check_in or not check_out:
+            return getattr(obj, 'total_rooms', getattr(obj, 'total_units', 1)) or 1
         cache_attr = f"_avail_{check_in}_{check_out}"
         if not hasattr(obj, cache_attr):
             setattr(obj, cache_attr, get_available_room_count(obj, check_in, check_out))
@@ -82,6 +90,8 @@ class RoomSerializer(serializers.ModelSerializer):
     def get_room_numbers_status(self, obj):
         check_in = self.context.get('check_in')
         check_out = self.context.get('check_out')
+        if not check_in or not check_out:
+            return []
         return get_room_numbers_availability(obj, check_in, check_out)
 
 class RoomCreateUpdateSerializer(serializers.ModelSerializer):

@@ -2,14 +2,66 @@ import os
 from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
+from django.core.exceptions import ImproperlyConfigured
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-bookmyroom-super-secret-key-production-2026')
-DEBUG = os.getenv('DEBUG', 'True') == 'True'
-ALLOWED_HOSTS = ['*'] if DEBUG else os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+# Environment Detection
+ENVIRONMENT = os.getenv('DJANGO_ENV', os.getenv('ENVIRONMENT', 'development')).lower().strip()
+IS_PRODUCTION = ENVIRONMENT in ('production', 'prod')
+
+# Insecure placeholder keys that must NEVER be used in production
+INSECURE_PLACEHOLDER_KEYS = {
+    'django-insecure-bookmyroom-super-secret-key-production-2026',
+    'django-insecure-default-key-change-in-production',
+    'changeme',
+    'secret',
+}
+
+# DEBUG configuration
+DEBUG_ENV = os.getenv('DEBUG')
+if DEBUG_ENV is not None:
+    DEBUG = DEBUG_ENV.lower() in ('true', '1', 'yes')
+else:
+    DEBUG = not IS_PRODUCTION
+
+# Security Guard: Production must never start with DEBUG=True
+if IS_PRODUCTION and DEBUG:
+    raise ImproperlyConfigured(
+        "Security Violation: DEBUG cannot be set to True in a production environment."
+    )
+
+# SECRET_KEY configuration
+RAW_SECRET_KEY = os.getenv('SECRET_KEY')
+if IS_PRODUCTION or not DEBUG:
+    if not RAW_SECRET_KEY:
+        raise ImproperlyConfigured(
+            "Production Configuration Error: The SECRET_KEY environment variable is missing. "
+            "A strong, unique SECRET_KEY must be provided in production."
+        )
+    if RAW_SECRET_KEY in INSECURE_PLACEHOLDER_KEYS or 'insecure' in RAW_SECRET_KEY.lower():
+        raise ImproperlyConfigured(
+            "Production Configuration Error: An insecure or well-known placeholder SECRET_KEY "
+            "is configured. Please generate and set a cryptographically secure SECRET_KEY in your environment."
+        )
+    SECRET_KEY = RAW_SECRET_KEY
+else:
+    # Development workstation fallback
+    SECRET_KEY = RAW_SECRET_KEY or 'django-insecure-bookmyroom-local-dev-fallback-key'
+
+# ALLOWED_HOSTS configuration
+raw_allowed_hosts = os.getenv('ALLOWED_HOSTS', '')
+if DEBUG:
+    ALLOWED_HOSTS = [h.strip() for h in raw_allowed_hosts.split(',') if h.strip()] if raw_allowed_hosts else ['*']
+else:
+    if not raw_allowed_hosts or raw_allowed_hosts.strip() in ('*', ''):
+        raise ImproperlyConfigured(
+            "Production Configuration Error: ALLOWED_HOSTS cannot be empty or wildcard ('*') when DEBUG is False. "
+            "Specify comma-separated valid domain names or IP addresses (e.g. 'goonstay.com,api.goonstay.com')."
+        )
+    ALLOWED_HOSTS = [h.strip() for h in raw_allowed_hosts.split(',') if h.strip() and h.strip() != '*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -39,6 +91,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    'core.middleware.RequestCorrelationMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -105,6 +158,25 @@ def _configure_sqlite_connection(sender, connection, **kwargs):
             pass
 connection_created.connect(_configure_sqlite_connection)
 
+# Caching Configuration (P3-FINDING-07)
+REDIS_URL = os.getenv('REDIS_URL', '')
+if REDIS_URL:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': REDIS_URL,
+            'TIMEOUT': 300,
+        }
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'goonstay-locmem-cache',
+            'TIMEOUT': 300,
+        }
+    }
+
 # Custom User Model
 AUTH_USER_MODEL = 'users.User'
 
@@ -143,6 +215,9 @@ REST_FRAMEWORK = {
         'email_resend': '5/minute',
         'support_ticket_create': '10/hour',
         'support_ticket_message': '30/hour',
+        'booking_create': '15/minute',
+        'order_create': '15/minute',
+        'coupon_apply': '20/minute',
     }
 }
 
@@ -173,10 +248,27 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
 
-# Security Headers (TASK-19)
-SECURE_BROWSER_XSS_FILTER = True
-X_FRAME_OPTIONS = 'DENY'
-SECURE_CONTENT_TYPE_NOSNIFF = True
+# Security Headers & Deployment Hardening (TASK-19 / P3-FINDING-06)
+if not DEBUG:
+    SECURE_SSL_REDIRECT = os.getenv('SECURE_SSL_REDIRECT', 'True').lower() in ('true', '1', 'yes')
+    SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'True').lower() in ('true', '1', 'yes')
+    CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE', 'True').lower() in ('true', '1', 'yes')
+    SECURE_HSTS_SECONDS = int(os.getenv('SECURE_HSTS_SECONDS', 31536000))
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv('SECURE_HSTS_INCLUDE_SUBDOMAINS', 'True').lower() in ('true', '1', 'yes')
+    SECURE_HSTS_PRELOAD = os.getenv('SECURE_HSTS_PRELOAD', 'True').lower() in ('true', '1', 'yes')
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
+    SECURE_BROWSER_XSS_FILTER = True
+else:
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    SECURE_HSTS_SECONDS = 0
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+    SECURE_HSTS_PRELOAD = False
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
+    SECURE_BROWSER_XSS_FILTER = True
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
@@ -204,10 +296,40 @@ DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL') or (f"Book My Room <{EMAIL_
 EMAIL_TIMEOUT = int(os.getenv('EMAIL_TIMEOUT', 15))
 
 # Razorpay Configuration
-PAYMENT_MODE = os.getenv('PAYMENT_MODE', 'test')
-RAZORPAY_KEY_ID = os.getenv('RAZORPAY_KEY_ID', 'rzp_test_bookmyroom_key_2026')
-RAZORPAY_KEY_SECRET = os.getenv('RAZORPAY_KEY_SECRET', 'rzp_test_bookmyroom_secret_2026')
-RAZORPAY_WEBHOOK_SECRET = os.getenv('RAZORPAY_WEBHOOK_SECRET', 'rzp_whsec_bookmyroom_2026')
+PAYMENT_MODE = os.getenv('PAYMENT_MODE', 'test').lower().strip()
+IS_LIVE_PAYMENT = PAYMENT_MODE in ('live', 'production')
+
+RAW_RZP_KEY_ID = os.getenv('RAZORPAY_KEY_ID')
+RAW_RZP_KEY_SECRET = os.getenv('RAZORPAY_KEY_SECRET')
+RAW_RZP_WEBHOOK_SECRET = os.getenv('RAZORPAY_WEBHOOK_SECRET')
+
+INSECURE_TEST_KEYS = {
+    'rzp_test_bookmyroom_key_2026',
+    'rzp_test_bookmyroom_secret_2026',
+    'rzp_whsec_bookmyroom_2026'
+}
+
+if IS_LIVE_PAYMENT:
+    if not RAW_RZP_KEY_ID or RAW_RZP_KEY_ID in INSECURE_TEST_KEYS:
+        raise ImproperlyConfigured(
+            "Production Payment Gateway Error: Live PAYMENT_MODE requires a valid production RAZORPAY_KEY_ID."
+        )
+    if not RAW_RZP_KEY_SECRET or RAW_RZP_KEY_SECRET in INSECURE_TEST_KEYS:
+        raise ImproperlyConfigured(
+            "Production Payment Gateway Error: Live PAYMENT_MODE requires a valid production RAZORPAY_KEY_SECRET."
+        )
+    if not RAW_RZP_WEBHOOK_SECRET or RAW_RZP_WEBHOOK_SECRET in INSECURE_TEST_KEYS:
+        raise ImproperlyConfigured(
+            "Production Payment Gateway Error: Live PAYMENT_MODE requires a valid production RAZORPAY_WEBHOOK_SECRET."
+        )
+    RAZORPAY_KEY_ID = RAW_RZP_KEY_ID
+    RAZORPAY_KEY_SECRET = RAW_RZP_KEY_SECRET
+    RAZORPAY_WEBHOOK_SECRET = RAW_RZP_WEBHOOK_SECRET
+else:
+    # Test / Development mode fallback
+    RAZORPAY_KEY_ID = RAW_RZP_KEY_ID or 'rzp_test_bookmyroom_key_2026'
+    RAZORPAY_KEY_SECRET = RAW_RZP_KEY_SECRET or 'rzp_test_bookmyroom_secret_2026'
+    RAZORPAY_WEBHOOK_SECRET = RAW_RZP_WEBHOOK_SECRET or 'rzp_whsec_bookmyroom_2026'
 
 # Payment Hold Configuration (Immediate unlock & fallback duration)
 PAYMENT_HOLD_DURATION_MINUTES = int(os.getenv('PAYMENT_HOLD_DURATION_MINUTES', 15))
@@ -229,4 +351,98 @@ if CLOUDINARY_CLOUD_NAME and CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET:
         )
     except Exception:
         pass
+
+# Production Structured Logging & Error Tracking (P3-FINDING-04)
+import logging
+import logging.handlers
+
+LOGS_DIR = BASE_DIR / 'logs'
+try:
+    LOGS_DIR.mkdir(exist_ok=True)
+except Exception:
+    pass
+
+class SensitiveDataLogFilter(logging.Filter):
+    """
+    Sanitizes sensitive keywords (passwords, tokens, secrets) from log messages
+    to prevent accidental credential leakage in log streams.
+    """
+    SENSITIVE_PATTERNS = ('password', 'secret', 'token', 'authorization', 'bearer', 'cvv', 'card')
+
+    def filter(self, record):
+        if isinstance(record.msg, str):
+            msg_lower = record.msg.lower()
+            if any(p in msg_lower for p in self.SENSITIVE_PATTERNS):
+                import re
+                record.msg = re.sub(
+                    r'(?i)(password|secret|token|key|authorization|bearer)\s*[:=]\s*[\'\"]?([^\s,\'\"]+)',
+                    r'\1=********',
+                    record.msg
+                )
+        return True
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'sensitive_data_filter': {
+            '()': SensitiveDataLogFilter,
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} [{levelname}] [{name}] {message}',
+            'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        },
+        'simple': {
+            'format': '[{levelname}] {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+            'filters': ['sensitive_data_filter'],
+        },
+        'file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': LOGS_DIR / 'goonstay.log',
+            'maxBytes': 10 * 1024 * 1024,
+            'backupCount': 5,
+            'formatter': 'verbose',
+            'filters': ['sensitive_data_filter'],
+            'encoding': 'utf-8',
+        },
+    },
+    'root': {
+        'handlers': ['console', 'file'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['console', 'file'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'django.security': {
+            'handlers': ['console', 'file'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'core': {'handlers': ['console', 'file'], 'level': 'INFO', 'propagate': False},
+        'bookings': {'handlers': ['console', 'file'], 'level': 'INFO', 'propagate': False},
+        'payments': {'handlers': ['console', 'file'], 'level': 'INFO', 'propagate': False},
+        'hotels': {'handlers': ['console', 'file'], 'level': 'INFO', 'propagate': False},
+        'rooms': {'handlers': ['console', 'file'], 'level': 'INFO', 'propagate': False},
+        'staff': {'handlers': ['console', 'file'], 'level': 'INFO', 'propagate': False},
+        'users': {'handlers': ['console', 'file'], 'level': 'INFO', 'propagate': False},
+    },
+}
 

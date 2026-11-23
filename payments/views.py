@@ -33,7 +33,7 @@ from .serializers import (
     CustomerHotelMessageSerializer, AuditLogSerializer
 )
 from bookings.models import Booking
-from staff.permissions import is_platform_admin, IsAdminUserRole, check_staff_permission
+from staff.permissions import is_platform_admin, IsAdminUserRole, check_staff_permission, is_authorized_payout_staff, IsAdminOrPayoutStaff
 from staff.models import Department
 
 from .validators import validate_support_attachment, sanitize_text_input
@@ -57,6 +57,7 @@ def get_razorpay_client(hotel=None):
 
 class CreateOrderView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+    throttle_scope = 'order_create'
 
     def post(self, request):
         serializer = PaymentOrderCreateSerializer(data=request.data)
@@ -492,7 +493,6 @@ class VerifyPaymentView(APIView):
                 # Automatic refund dispatch
                 auto_refund_success = False
                 try:
-                    from payments.models import Refund
                     refund_record, _ = Refund.objects.get_or_create(
                         booking=booking_to_update,
                         payment=payment_obj,
@@ -864,6 +864,7 @@ class PaymentFailureNotificationView(APIView):
 
 class WebhookView(APIView):
     permission_classes = [permissions.AllowAny]
+    throttle_classes = []
 
     def post(self, request):
         raw_body = request.body.decode('utf-8')
@@ -882,8 +883,18 @@ class WebhookView(APIView):
 
         try:
             event_data = json.loads(raw_body)
-            event_id = event_data.get('event_id') or event_data.get('id') or f"evt_{timezone.now().timestamp()}"
             event_type = event_data.get('event')
+            entity_id = None
+            if 'payload' in event_data and isinstance(event_data['payload'], dict):
+                for k in ['payment', 'refund', 'payout', 'order']:
+                    if k in event_data['payload'] and isinstance(event_data['payload'][k], dict):
+                        entity_id = event_data['payload'][k].get('entity', {}).get('id')
+                        if entity_id:
+                            break
+            event_id = event_data.get('event_id') or event_data.get('id') or (f"{event_type}_{entity_id}" if (event_type and entity_id) else None)
+            if not event_id:
+                import hashlib
+                event_id = f"evt_{hashlib.sha256(raw_body.encode('utf-8')).hexdigest()[:24]}"
         except Exception:
             return Response({"error": "Invalid JSON body."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -950,7 +961,6 @@ class WebhookView(APIView):
                             booking.save(update_fields=['booking_status', 'payment_status', 'cancellation_reason', 'refundable_amount', 'room_number'])
 
                             try:
-                                from payments.models import Refund
                                 refund_record, _ = Refund.objects.get_or_create(
                                     booking=booking,
                                     payment=payment,
@@ -1082,6 +1092,98 @@ class WebhookView(APIView):
                             reason=payload_entity.get('error_description', 'Payment failed via Razorpay webhook'),
                             new_status=Booking.STATUS_EXPIRED
                         )
+
+            # Handle Razorpay Payments Refund Webhook Events (refund.processed, refund.created, refund.failed, refund.speed_changed)
+            elif event_type and event_type.startswith('refund.'):
+                refund_entity = event_data.get('payload', {}).get('refund', {}).get('entity', {})
+                refund_id = refund_entity.get('id')
+                rfnd_payment_id = refund_entity.get('payment_id')
+                rfnd_status = str(refund_entity.get('status', '')).lower()
+                notes = refund_entity.get('notes', {}) or {}
+                booking_id_note = notes.get('booking_id')
+                
+                failure_reason = (
+                    refund_entity.get('error_description') or
+                    refund_entity.get('error_reason') or
+                    refund_entity.get('status_details', {}).get('description') or
+                    'Refund processing failed at payment gateway'
+                )
+
+                matching_refund = None
+                if refund_id:
+                    matching_refund = Refund.objects.filter(razorpay_refund_id=refund_id).first()
+                if not matching_refund and booking_id_note:
+                    matching_refund = Refund.objects.filter(booking__booking_id=booking_id_note).order_by('-created_at').first()
+                if not matching_refund and rfnd_payment_id:
+                    matching_refund = Refund.objects.filter(razorpay_payment_id=rfnd_payment_id).order_by('-created_at').first()
+
+                if matching_refund:
+                    matching_refund.provider_status = rfnd_status
+                    matching_refund.provider_raw_response = refund_entity
+                    if refund_id and not matching_refund.razorpay_refund_id:
+                        matching_refund.razorpay_refund_id = refund_id
+
+                    if event_type == 'refund.processed' or rfnd_status == 'processed':
+                        matching_refund.status = Refund.STATUS_REFUNDED
+                        matching_refund.processed_at = timezone.now()
+                        matching_refund.failure_reason = None
+                        
+                        booking = matching_refund.booking
+                        booking.payment_status = Booking.PAYMENT_REFUNDED
+                        booking.save(update_fields=['payment_status'])
+
+                        payment = matching_refund.payment
+                        if payment:
+                            total_ref = Refund.objects.filter(booking=booking, status=Refund.STATUS_REFUNDED).aggregate(Sum('amount'))['amount__sum'] or Decimal('0.00')
+                            payment.status = Payment.STATUS_REFUNDED if total_ref >= payment.amount else Payment.STATUS_PARTIALLY_REFUNDED
+                            payment.save(update_fields=['status'])
+
+                        _exclude_host_earnings_for_refund(booking, matching_refund.amount, refund_id or matching_refund.id)
+                        _dispatch_refund_notifications(booking, matching_refund.amount, refund_id or matching_refund.id, matching_refund.refund_mode)
+                        logger.info(f"[WebhookView] Refund {refund_id} for booking {booking.booking_id} marked as REFUNDED.")
+
+                    elif event_type == 'refund.failed' or rfnd_status == 'failed':
+                        matching_refund.status = Refund.STATUS_REFUND_FAILED
+                        matching_refund.failure_reason = failure_reason
+                        matching_refund.failed_at = timezone.now()
+                        
+                        booking = matching_refund.booking
+                        booking.payment_status = Booking.PAYMENT_REFUND_PENDING
+                        booking.save(update_fields=['payment_status'])
+                        logger.warning(f"[WebhookView] Refund {refund_id} for booking {booking.booking_id} marked as FAILED: {failure_reason}")
+
+                    elif event_type == 'refund.created' or rfnd_status in ['pending', 'processing']:
+                        matching_refund.status = Refund.STATUS_REFUND_PROCESSING
+                        
+                    matching_refund.save()
+
+                elif rfnd_payment_id:
+                    # Case where refund was created directly in Razorpay Dashboard
+                    payment = Payment.objects.filter(razorpay_payment_id=rfnd_payment_id).first()
+                    if payment:
+                        amount_in_rupees = Decimal(str(refund_entity.get('amount', 0))) / Decimal('100.00')
+                        is_processed = (event_type == 'refund.processed' or rfnd_status == 'processed')
+                        new_ref = Refund.objects.create(
+                            booking=payment.booking,
+                            payment=payment,
+                            razorpay_payment_id=rfnd_payment_id,
+                            razorpay_refund_id=refund_id,
+                            amount=amount_in_rupees,
+                            currency=refund_entity.get('currency', 'INR'),
+                            reason=notes.get('reason', 'Refund issued via Razorpay Dashboard'),
+                            refund_mode=Refund.REFUND_MODE_ORIGINAL,
+                            status=Refund.STATUS_REFUNDED if is_processed else Refund.STATUS_REFUND_PROCESSING,
+                            provider_status=rfnd_status,
+                            provider_raw_response=refund_entity,
+                            processed_at=timezone.now() if is_processed else None
+                        )
+                        if is_processed:
+                            payment.booking.payment_status = Booking.PAYMENT_REFUNDED
+                            payment.booking.save(update_fields=['payment_status'])
+                            payment.status = Payment.STATUS_REFUNDED
+                            payment.save(update_fields=['status'])
+                            _exclude_host_earnings_for_refund(payment.booking, amount_in_rupees, refund_id)
+                            _dispatch_refund_notifications(payment.booking, amount_in_rupees, refund_id, Refund.REFUND_MODE_ORIGINAL)
 
             # Handle RazorpayX Payout Webhook Events (Customer Bank Transfers & Host Disbursements)
             elif event_type and event_type.startswith('payout.'):
@@ -1482,10 +1584,10 @@ def execute_refund_with_provider(
             raise
 
     # Determine final state based on confirmed provider status
-    if provider_status in ["processed", "created"]:
+    if provider_status in ["processed"]:
         final_status = Refund.STATUS_REFUNDED
         booking_pay_status = Booking.PAYMENT_REFUNDED
-    elif provider_status in ["processing", "queued", "pending"]:
+    elif provider_status in ["processing", "queued", "pending", "created"]:
         final_status = Refund.STATUS_REFUND_PROCESSING
         booking_pay_status = Booking.PAYMENT_REFUND_PENDING
     else:
@@ -1511,7 +1613,14 @@ def execute_refund_with_provider(
     booking_locked.save(update_fields=['payment_status'])
 
     if captured_payment:
-        captured_payment.status = Payment.STATUS_REFUNDED
+        if final_status == Refund.STATUS_REFUNDED:
+            total_refunded = Refund.objects.filter(booking=booking_locked, status=Refund.STATUS_REFUNDED).aggregate(Sum('amount'))['amount__sum'] or Decimal('0.00')
+            if total_refunded < captured_payment.amount:
+                captured_payment.status = Payment.STATUS_PARTIALLY_REFUNDED
+            else:
+                captured_payment.status = Payment.STATUS_REFUNDED
+        elif final_status == Refund.STATUS_REFUND_PROCESSING:
+            captured_payment.status = Payment.STATUS_REFUND_PENDING
         captured_payment.save(update_fields=['status'])
 
     # Exclude & Reverse Host Earnings
@@ -1545,7 +1654,7 @@ class RefundView(APIView):
 
         user = request.user
         user_role = str(getattr(user, 'role', '')).upper()
-        is_admin = user.is_staff or user.is_superuser or user_role in ['ADMIN', 'SUPER_ADMIN']
+        is_admin = is_platform_admin(user)
         is_hotel_owner = (booking.hotel.owner == user)
         is_refund_staff = False
         if user_role == 'STAFF':
@@ -1555,13 +1664,35 @@ class RefundView(APIView):
                 if Department.normalize_code(dept_code) == Department.CODE_REFUNDS_AND_CLAIMS and profile.has_perm('PROCESS_REFUND'):
                     is_refund_staff = True
 
-        if not (is_admin or is_hotel_owner or is_refund_staff):
-            return Response({"error": "Permission denied. Only Platform Admin, Hotel Owner, or authorized Refunds Staff can process refunds."}, status=status.HTTP_403_FORBIDDEN)
+        if is_hotel_owner and not (is_admin or is_refund_staff):
+            return Response({
+                "error": "Permission denied. Hotel owners cannot initiate payment gateway refunds. Please approve or reject the cancellation request; Platform Admin or Refunds Staff will process the refund.",
+                "booking_id": booking.booking_id,
+                "booking_status": booking.booking_status
+            }, status=status.HTTP_403_FORBIDDEN)
+
+        if not (is_admin or is_refund_staff):
+            return Response({"error": "Permission denied. Only Platform Admin or authorized Refunds Staff can process refunds."}, status=status.HTTP_403_FORBIDDEN)
 
         with transaction.atomic():
             booking_locked = Booking.objects.select_for_update().get(id=booking.id)
 
-            captured_payment = Payment.objects.filter(booking=booking_locked, status=Payment.STATUS_CAPTURED).first()
+            # Workflow validation: Hotel Owner approval guard
+            if booking_locked.booking_status in [Booking.STATUS_OWNER_REJECTED, 'OWNER_REJECTED']:
+                return Response({
+                    "error": f"Refund cannot be processed because the hotel owner rejected the cancellation request.",
+                    "booking_id": booking_locked.booking_id,
+                    "booking_status": booking_locked.booking_status
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            if booking_locked.booking_status not in [Booking.STATUS_OWNER_APPROVED, 'OWNER_APPROVED', Booking.STATUS_CANCELLED]:
+                return Response({
+                    "error": f"Refund cannot be processed. Booking status is '{booking_locked.booking_status}'. Cancellation must be approved by the hotel owner ('OWNER_APPROVED') before refund can be initiated.",
+                    "booking_id": booking_locked.booking_id,
+                    "booking_status": booking_locked.booking_status
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            captured_payment = Payment.objects.filter(booking=booking_locked, status__in=[Payment.STATUS_CAPTURED, Payment.STATUS_PARTIALLY_REFUNDED]).first()
             if not captured_payment:
                 captured_payment = Payment.objects.filter(booking=booking_locked).exclude(status=Payment.STATUS_FAILED).first()
 
@@ -1576,10 +1707,20 @@ class RefundView(APIView):
             specified_amount = serializer.validated_data.get('amount')
             if specified_amount is not None and float(specified_amount) > 0:
                 refund_amount = Decimal(str(specified_amount))
-            elif booking_locked.refundable_amount and booking_locked.refundable_amount > 0:
+            elif booking_locked.refundable_amount is not None and booking_locked.refundable_amount > 0:
                 refund_amount = booking_locked.refundable_amount
+            elif booking_locked.refundable_amount == Decimal('0.00'):
+                refund_amount = Decimal('0.00')
             else:
                 refund_amount = booking_locked.total_amount
+
+            if refund_amount <= Decimal('0.00'):
+                return Response({
+                    "error": "Refundable amount is ₹0.00 according to cancellation policy. No refund is due.",
+                    "booking_id": booking_locked.booking_id,
+                    "cancellation_fee_percentage": float(booking_locked.cancellation_fee_percentage or 100),
+                    "refundable_amount": 0.00
+                }, status=status.HTTP_400_BAD_REQUEST)
 
             # 1. Total Refund Cap & Duplicate Prevention
             already_refunded = Refund.objects.filter(
@@ -1694,13 +1835,18 @@ class RefundView(APIView):
                 )
 
                 return Response({
+                    "success": True,
                     "message": f"Refund of ₹{refund_amount} processed and confirmed by provider.",
                     "booking_id": booking_locked.booking_id,
                     "cancellation_status": booking_locked.booking_status,
                     "refund_status": refund_record.status,
                     "refund_amount": float(refund_amount),
                     "provider_refund_id": refund_record.razorpay_refund_id,
+                    "razorpay_refund_id": refund_record.razorpay_refund_id,
                     "payout_reference_id": refund_record.payout_reference_id,
+                    "refund_mode": refund_record.refund_mode,
+                    "cancellation_fee": float(booking_locked.cancellation_charge or 0),
+                    "refundable_amount": float(booking_locked.refundable_amount or refund_amount),
                     "payout_eligibility": False,
                     "host_payable_amount": 0.00,
                     "updated_timestamps": (refund_record.processed_at or timezone.now()).isoformat()
@@ -1773,37 +1919,73 @@ class CustomerPayoutDisburseView(APIView):
             if not booking_locked:
                 return Response({"error": f"Booking '{booking_id}' not found."}, status=status.HTTP_404_NOT_FOUND)
 
-            # Authorization Check (IDOR Prevention)
+            # Authorization Check: Strictly Platform Admin or Authorized Refunds Staff
             user = request.user
-            is_admin = bool(user.is_staff or user.is_superuser or getattr(user, 'role', '') in ['ADMIN', 'SUPER_ADMIN'])
-            is_owner = bool(booking_locked.hotel.owner == user)
-            is_customer = bool(booking_locked.customer == user)
+            is_admin = is_platform_admin(user)
+            user_role = str(getattr(user, 'role', '')).upper()
+            is_refund_staff = False
+            if user_role == 'STAFF':
+                profile = getattr(user, 'staff_profile', None)
+                if profile and profile.is_active_account:
+                    dept_code = profile.department.code if profile.department else ''
+                    if Department.normalize_code(dept_code) == Department.CODE_REFUNDS_AND_CLAIMS and profile.has_perm('PROCESS_REFUND'):
+                        is_refund_staff = True
 
-            if not (is_admin or is_owner or is_customer):
+            if not (is_admin or is_refund_staff):
                 return Response({
-                    "error": "Permission denied. You cannot initiate a payout for another user's booking."
+                    "error": "Permission denied. Only Platform Admin or authorized Refunds & Claims Staff can disburse customer payouts."
                 }, status=status.HTTP_403_FORBIDDEN)
 
-            captured_payment = booking_locked.payments.filter(status=Payment.STATUS_CAPTURED).first()
-            if not captured_payment:
-                captured_payment = booking_locked.payments.first()
-                if not captured_payment:
-                    captured_payment = Payment.objects.create(
-                        booking=booking_locked,
-                        user=booking_locked.customer,
-                        razorpay_order_id=booking_locked.razorpay_order_id or f"order_{uuid.uuid4().hex[:10]}",
-                        razorpay_payment_id=f"pay_{uuid.uuid4().hex[:10]}",
-                        amount=booking_locked.total_amount,
-                        status=Payment.STATUS_CAPTURED
-                    )
+            # Workflow Guard: Owner Approval / Cancellation Validation
+            if booking_locked.booking_status in [Booking.STATUS_OWNER_REJECTED, 'OWNER_REJECTED']:
+                return Response({
+                    "error": "Payout cannot be processed because the hotel owner rejected the cancellation request.",
+                    "booking_id": booking_locked.booking_id,
+                    "booking_status": booking_locked.booking_status
+                }, status=status.HTTP_400_BAD_REQUEST)
 
-            # Determine Disbursement Amount
+            if booking_locked.booking_status not in [Booking.STATUS_OWNER_APPROVED, 'OWNER_APPROVED', Booking.STATUS_CANCELLED]:
+                return Response({
+                    "error": f"Payout cannot be processed. Booking status is '{booking_locked.booking_status}'. Cancellation must be approved by the hotel owner ('OWNER_APPROVED') or already cancelled before payout can be disbursed.",
+                    "booking_id": booking_locked.booking_id,
+                    "booking_status": booking_locked.booking_status
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            # Valid Payment Check: Never create synthetic payments
+            captured_payment = booking_locked.payments.filter(status__in=[Payment.STATUS_CAPTURED, Payment.STATUS_PARTIALLY_REFUNDED]).first()
+            if not captured_payment:
+                captured_payment = booking_locked.payments.exclude(status=Payment.STATUS_FAILED).first()
+
+            if not captured_payment or not captured_payment.razorpay_payment_id:
+                return Response({
+                    "error": "No captured payment record found for this booking to disburse payout.",
+                    "booking_id": booking_locked.booking_id
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            # Determine Disbursement Amount & Cap to Remaining Eligible Balance
+            already_refunded = Refund.objects.filter(
+                booking=booking_locked,
+                status__in=[Refund.STATUS_REFUNDED, Refund.STATUS_REFUND_PROCESSING, 'PROCESSED']
+            ).aggregate(Sum('amount'))['amount__sum'] or Decimal('0.00')
+
+            max_eligible_refund = booking_locked.refundable_amount if (booking_locked.refundable_amount is not None and booking_locked.refundable_amount > 0) else booking_locked.total_amount
+            remaining_balance = max(Decimal('0.00'), max_eligible_refund - already_refunded)
+
+            if remaining_balance <= Decimal('0.00'):
+                return Response({
+                    "error": f"Booking '{booking_locked.booking_id}' has no remaining refundable balance. Already refunded: ₹{already_refunded}.",
+                    "booking_id": booking_locked.booking_id
+                }, status=status.HTTP_400_BAD_REQUEST)
+
             if custom_amount and custom_amount > Decimal('0.00'):
+                if custom_amount > remaining_balance:
+                    return Response({
+                        "error": f"Requested payout amount ₹{custom_amount} exceeds remaining eligible refundable balance of ₹{remaining_balance}.",
+                        "booking_id": booking_locked.booking_id
+                    }, status=status.HTTP_400_BAD_REQUEST)
                 disburse_amount = custom_amount
-            elif booking_locked.refundable_amount and booking_locked.refundable_amount > Decimal('0.00'):
-                disburse_amount = booking_locked.refundable_amount
             else:
-                disburse_amount = booking_locked.total_amount
+                disburse_amount = remaining_balance
 
             # Persistent Idempotency Check
             existing_refund = Refund.objects.filter(
@@ -1981,6 +2163,24 @@ class CustomerPayoutDisburseView(APIView):
         if not refund:
             return Response({"error": f"No payout record found for '{lookup_str}'."}, status=status.HTTP_404_NOT_FOUND)
 
+        # Authorization Check (IDOR Prevention)
+        user = request.user
+        is_admin = is_platform_admin(user)
+        user_role = str(getattr(user, 'role', '')).upper()
+        is_refund_staff = False
+        if user_role == 'STAFF':
+            profile = getattr(user, 'staff_profile', None)
+            if profile and profile.is_active_account:
+                dept_code = profile.department.code if profile.department else ''
+                if Department.normalize_code(dept_code) == Department.CODE_REFUNDS_AND_CLAIMS and profile.has_perm('VIEW_REFUND'):
+                    is_refund_staff = True
+
+        is_customer = bool(refund.booking and refund.booking.customer == user)
+        is_owner = bool(refund.booking and refund.booking.hotel and refund.booking.hotel.owner == user)
+
+        if not (is_admin or is_refund_staff or is_customer or is_owner):
+            return Response({"error": "Permission denied. You are not authorized to view this payout record."}, status=status.HTTP_403_FORBIDDEN)
+
         if request.query_params.get('sync') in ['true', '1', 'yes'] and refund.payout_reference_id:
             from services.razorpayx_service import fetch_razorpayx_payout
             live_data = fetch_razorpayx_payout(refund.payout_reference_id)
@@ -2032,7 +2232,7 @@ class RefundDetailView(APIView):
             return Response({"error": f"Refund record for '{lookup}' not found."}, status=status.HTTP_404_NOT_FOUND)
 
         user = request.user
-        is_admin = bool(user.is_staff or user.is_superuser or getattr(user, 'role', '') in ['ADMIN', 'SUPER_ADMIN'])
+        is_admin = is_platform_admin(user)
         is_customer = bool(refund.booking.customer == user)
         is_owner = bool(refund.booking.hotel.owner == user)
         is_refund_staff = False
@@ -2072,7 +2272,7 @@ class RefundStatusView(APIView):
             return Response({"error": f"Refund record for '{lookup}' not found."}, status=status.HTTP_404_NOT_FOUND)
 
         user = request.user
-        is_admin = bool(user.is_staff or user.is_superuser or getattr(user, 'role', '') in ['ADMIN', 'SUPER_ADMIN'])
+        is_admin = is_platform_admin(user)
         is_customer = bool(refund.booking.customer == user)
         is_owner = bool(refund.booking.hotel.owner == user)
         is_refund_staff = False
@@ -2086,22 +2286,32 @@ class RefundStatusView(APIView):
         if not (is_admin or is_customer or is_owner or is_refund_staff):
             return Response({"error": "Permission denied."}, status=status.HTTP_403_FORBIDDEN)
 
-        # Optional live sync with provider if Admin requests
+        # Optional live sync with provider if Admin / Staff requests or if still processing
         sync_provider = request.query_params.get('sync', '').lower() in ['true', '1']
-        if sync_provider and is_admin and refund.razorpay_refund_id:
+        should_sync = (sync_provider or refund.status in [Refund.STATUS_REFUND_PROCESSING, Refund.STATUS_REFUND_PENDING])
+        if should_sync and (is_admin or is_refund_staff) and refund.razorpay_refund_id:
             try:
                 client, _ = get_platform_razorpay_client()
                 rzp_refund = client.refund.fetch(refund.razorpay_refund_id)
                 new_status = rzp_refund.get('status')
                 if new_status:
                     refund.provider_status = new_status
+                    refund.provider_raw_response = rzp_refund
                     if new_status == 'processed':
                         refund.status = Refund.STATUS_REFUNDED
                         if not refund.processed_at:
                             refund.processed_at = timezone.now()
                         refund.booking.payment_status = Booking.PAYMENT_REFUNDED
                         refund.booking.save(update_fields=['payment_status'])
-                    refund.save(update_fields=['provider_status', 'status', 'processed_at'])
+                        if refund.payment:
+                            refund.payment.status = Payment.STATUS_REFUNDED
+                            refund.payment.save(update_fields=['status'])
+                        _exclude_host_earnings_for_refund(refund.booking, refund.amount, refund.razorpay_refund_id)
+                    elif new_status == 'failed':
+                        refund.status = Refund.STATUS_REFUND_FAILED
+                        refund.failure_reason = rzp_refund.get('error_description') or 'Failed at gateway'
+                        refund.failed_at = timezone.now()
+                    refund.save()
             except Exception as e:
                 logger.warning(f"Failed to sync refund status with Razorpay: {e}")
 
@@ -2112,10 +2322,14 @@ class RefundStatusView(APIView):
             "refund_status": refund.status,
             "provider_status": refund.provider_status,
             "provider_refund_id": refund.razorpay_refund_id,
+            "razorpay_refund_id": refund.razorpay_refund_id,
             "payout_reference_id": refund.payout_reference_id,
             "refund_amount": float(refund.amount),
             "currency": refund.currency,
             "refund_mode": refund.refund_mode,
+            "cancellation_fee": float(refund.booking.cancellation_charge or 0),
+            "refundable_amount": float(refund.booking.refundable_amount or refund.amount),
+            "original_payment_source": refund.payment.payment_method if refund.payment else 'Razorpay Online',
             "payout_eligibility": False,
             "host_payable_amount": 0.00,
             "failure_details": refund.failure_reason,
@@ -2313,11 +2527,12 @@ class HostPayoutAccountView(APIView):
         User = get_user_model()
         user = request.user
         user_role = str(getattr(user, 'role', '')).upper()
-        is_admin = user.is_staff or user_role in ['ADMIN', 'SUPER_ADMIN']
+        is_admin = is_platform_admin(user)
+        is_payout_staff = is_authorized_payout_staff(user, 'VIEW_PAYOUTS')
 
         target_host_id = request.query_params.get('host_id')
         if target_host_id:
-            if not is_admin:
+            if not (is_admin or is_payout_staff):
                 return Response({"error": "Permission denied. You cannot view other hosts' payout details."}, status=status.HTTP_403_FORBIDDEN)
             target_user = User.objects.filter(id=target_host_id).first()
             if not target_user:
@@ -2611,7 +2826,7 @@ class SettlementLedgerListView(APIView):
 
         # Build Hotels Summary for Hotel-Wise Grouping
         from hotels.models import Hotel
-        base_hotels = Hotel.objects.filter(is_approved=True).select_related('owner') if is_admin else Hotel.objects.filter(owner=user).select_related('owner')
+        base_hotels = Hotel.objects.filter(is_approved=True).select_related('owner') if (is_admin or is_payout_staff) else Hotel.objects.filter(owner=user).select_related('owner')
         hotel_map = {}
         for h in base_hotels:
             hid = h.id
@@ -2770,8 +2985,10 @@ class SettlementStatementView(APIView):
     def get(self, request):
         user = request.user
         target_host_id = request.query_params.get('host_id')
+        is_admin = is_platform_admin(user)
+        is_payout_staff = is_authorized_payout_staff(user, 'VIEW_PAYOUTS')
 
-        if target_host_id and (user.is_staff or getattr(user, 'role', '') in ['ADMIN', 'SUPER_ADMIN']):
+        if target_host_id and (is_admin or is_payout_staff):
             from django.contrib.auth import get_user_model
             User = get_user_model()
             host = User.objects.filter(id=target_host_id).first()
@@ -2825,11 +3042,12 @@ class SettlementStatementView(APIView):
 
 
 class InitiateHostPayoutView(APIView):
-    permission_classes = [IsAdminUserRole]
+    permission_classes = [IsAdminOrPayoutStaff]
+    required_staff_permission = 'PROCESS_PAYOUT'
 
     def post(self, request):
-        if not is_platform_admin(request.user):
-            return Response({"error": "Admin permission required to review and initiate hotel owner payouts."}, status=status.HTTP_403_FORBIDDEN)
+        if not is_authorized_payout_staff(request.user, 'PROCESS_PAYOUT'):
+            return Response({"error": "Admin or authorized Payout & Escrow Staff permission required to review and initiate hotel owner payouts."}, status=status.HTTP_403_FORBIDDEN)
 
         serializer = InitiatePayoutRequestSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -3067,6 +3285,22 @@ class InitiateHostPayoutView(APIView):
                     }
                 )
 
+                profile = getattr(request.user, 'staff_profile', None)
+                if profile:
+                    try:
+                        from staff.views import log_staff_activity
+                        log_staff_activity(
+                            request=request,
+                            staff_profile=profile,
+                            actor_user=request.user,
+                            action="PROCESS_PAYOUT",
+                            entity_type="HostPayout",
+                            entity_id=payout.id,
+                            description=f"Staff {profile.employee_id} ({request.user.get_full_name() or request.user.username}) disbursed payout #{payout.payout_id} of ₹{host_payable} to host {host_user.username}."
+                        )
+                    except Exception as staff_log_err:
+                        logger.warning(f"Failed to log staff activity for payout: {staff_log_err}")
+
             # Build Hotel-Wise Breakdown for all earnings in this batch
             hotel_breakdown_map = {}
             for e in earnings:
@@ -3128,11 +3362,12 @@ class InitiateHostPayoutView(APIView):
 
 
 class VerifyPayoutStatusView(APIView):
-    permission_classes = [IsAdminUserRole]
+    permission_classes = [IsAdminOrPayoutStaff]
+    required_staff_permission = 'VIEW_PAYOUTS'
 
     def post(self, request, payout_id):
-        if not is_platform_admin(request.user):
-            return Response({"error": "Admin permission required."}, status=status.HTTP_403_FORBIDDEN)
+        if not is_authorized_payout_staff(request.user, 'VIEW_PAYOUTS'):
+            return Response({"error": "Admin or authorized Payout Staff permission required."}, status=status.HTTP_403_FORBIDDEN)
 
         try:
             payout = HostPayout.objects.get(payout_id=payout_id)
@@ -3173,11 +3408,12 @@ class VerifyPayoutStatusView(APIView):
 
 
 class ToggleDisputeHoldView(APIView):
-    permission_classes = [IsAdminUserRole]
+    permission_classes = [IsAdminOrPayoutStaff]
+    required_staff_permission = 'MANAGE_ESCROW'
 
     def post(self, request):
-        if not is_platform_admin(request.user):
-            return Response({"error": "Admin permission required to place dispute holds."}, status=status.HTTP_403_FORBIDDEN)
+        if not is_authorized_payout_staff(request.user, 'MANAGE_ESCROW'):
+            return Response({"error": "Admin or authorized Payout Staff permission required to place dispute holds."}, status=status.HTTP_403_FORBIDDEN)
 
         serializer = ToggleDisputeHoldSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -3258,11 +3494,12 @@ class ToggleDisputeHoldView(APIView):
 
 
 class ProviderSetupStatusView(APIView):
-    permission_classes = [IsAdminUserRole]
+    permission_classes = [IsAdminOrPayoutStaff]
+    required_staff_permission = 'VIEW_PAYOUTS'
 
     def get(self, request):
-        if not is_platform_admin(request.user):
-            return Response({"error": "Admin permission required."}, status=status.HTTP_403_FORBIDDEN)
+        if not is_authorized_payout_staff(request.user, 'VIEW_PAYOUTS'):
+            return Response({"error": "Admin or authorized Payout Staff permission required."}, status=status.HTTP_403_FORBIDDEN)
 
         setting = PlatformSetting.objects.first()
         if not setting:
@@ -3335,10 +3572,17 @@ class PlatformSettingsView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request):
+        from .serializers import PlatformSettingSerializer, PublicPlatformSettingSerializer
         setting = PlatformSetting.objects.first()
         if not setting:
             setting = PlatformSetting.objects.create()
-        data = PlatformSettingSerializer(setting).data
+
+        # Strict isolation: Only Platform Admins can inspect corporate RazorpayX banking details
+        if request.user and request.user.is_authenticated and is_platform_admin(request.user):
+            data = PlatformSettingSerializer(setting).data
+        else:
+            data = PublicPlatformSettingSerializer(setting).data
+
         data['holding_period_days'] = setting.payout_hold_days
         return Response(data)
 

@@ -10,10 +10,20 @@ __pycache__/
 
 # Environment Variables & Secrets
 .env
+.env.*
 .env.local
+.env.staging
+.env.production
 
-# SQLite Database (optional - if developer wants fresh db in git)
-# db.sqlite3
+# SQLite Databases & Backups
+db.sqlite3
+db.sqlite3.*
+*.sqlite3
+
+# Test & Scratch Artifacts
+scratch_*.json
+staging_migration_fixture.json
+staging_*.json
 
 # Static & Media uploads (if large)
 # media/

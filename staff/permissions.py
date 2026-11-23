@@ -100,6 +100,60 @@ class IsAdminUserRole(permissions.BasePermission):
         return is_platform_admin(request.user)
 
 
+def is_authorized_payout_staff(user, required_permission='PROCESS_PAYOUT'):
+    """
+    Checks if user is a Platform Admin OR active GoOnStay Staff member
+    in PAYOUT_AND_ESCROW department possessing the required payout permission.
+    """
+    if not (user and user.is_authenticated):
+        return False
+    if is_platform_admin(user):
+        return True
+    if getattr(user, 'role', '') != 'STAFF' or not hasattr(user, 'staff_profile'):
+        return False
+    profile = user.staff_profile
+    try:
+        profile.refresh_from_db(fields=['department', 'status', 'must_change_password'])
+    except Exception:
+        pass
+    if not profile.is_active_account or profile.must_change_password:
+        return False
+    if not profile.department:
+        return False
+    from staff.models import Department
+    user_dept = Department.normalize_code(profile.department.code)
+    if user_dept != Department.CODE_PAYOUT_AND_ESCROW:
+        return False
+    if required_permission:
+        return profile.has_perm(required_permission)
+    return True
+
+
+class IsAdminOrPayoutStaff(permissions.BasePermission):
+    """
+    Grants access to:
+    1. Platform Administrators (full access).
+    2. Active GoOnStay Staff members in PAYOUT_AND_ESCROW department
+       possessing payout authorization.
+    """
+    message = "Administrator or authorized Payout & Escrow Staff privilege required."
+
+    def __init__(self, required_permission='PROCESS_PAYOUT'):
+        self.required_permission = required_permission
+
+    def __call__(self):
+        return self
+
+    def has_permission(self, request, view):
+        user = request.user
+        if not (user and user.is_authenticated):
+            return False
+        if is_platform_admin(user):
+            return True
+        req_perm = getattr(view, 'required_staff_permission', self.required_permission)
+        return is_authorized_payout_staff(user, req_perm)
+
+
 class IsStaffUser(permissions.BasePermission):
     """
     Grants access to active GoOnStay Staff members (and Platform Admins).

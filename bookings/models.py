@@ -54,11 +54,11 @@ class Booking(models.Model):
     booking_id = models.CharField(max_length=50, unique=True, db_index=True)
     customer = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name='bookings'
     )
-    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='bookings')
-    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='bookings')
+    hotel = models.ForeignKey(Hotel, on_delete=models.PROTECT, related_name='bookings')
+    room = models.ForeignKey(Room, on_delete=models.PROTECT, related_name='bookings')
     
     check_in = models.DateField(db_index=True)
     check_out = models.DateField(db_index=True)
@@ -78,8 +78,8 @@ class Booking(models.Model):
     
     price_snapshot = models.JSONField(blank=True, null=True, help_text="Immutable financial price calculation snapshot")
 
-    payment_status = models.CharField(max_length=30, choices=PAYMENT_STATUS_CHOICES, default=PAYMENT_PENDING)
-    booking_status = models.CharField(max_length=30, choices=BOOKING_STATUS_CHOICES, default=STATUS_PENDING_PAYMENT)
+    payment_status = models.CharField(max_length=30, choices=PAYMENT_STATUS_CHOICES, default=PAYMENT_PENDING, db_index=True)
+    booking_status = models.CharField(max_length=30, choices=BOOKING_STATUS_CHOICES, default=STATUS_PENDING_PAYMENT, db_index=True)
     
     razorpay_order_id = models.CharField(max_length=100, blank=True, null=True, db_index=True)
     
@@ -112,7 +112,7 @@ class Booking(models.Model):
     action_by_staff = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True, related_name='processed_stay_actions')
     
     expires_at = models.DateTimeField(blank=True, null=True, help_text="Pending booking auto-expiration timestamp")
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     @property

@@ -25,7 +25,7 @@ class Room(models.Model):
     )
 
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='rooms')
-    room_type = models.CharField(max_length=30, choices=ROOM_TYPES, default='DELUXE')
+    room_type = models.CharField(max_length=30, choices=ROOM_TYPES, default='DELUXE', db_index=True)
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     
@@ -71,7 +71,7 @@ class Room(models.Model):
     )
     
     amenities = models.ManyToManyField(Amenity, related_name='rooms', blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def get_all_room_numbers(self):

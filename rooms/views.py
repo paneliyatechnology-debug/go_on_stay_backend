@@ -55,6 +55,7 @@ class RoomDetailView(generics.RetrieveUpdateDestroyAPIView):
         room = self.get_object()
         from bookings.models import Booking
         from django.utils import timezone
+        from django.db.models import ProtectedError
         today = timezone.now().date()
         active_bookings = Booking.objects.filter(
             room=room,
@@ -66,7 +67,18 @@ class RoomDetailView(generics.RetrieveUpdateDestroyAPIView):
                 {"error": "Cannot delete room with active upcoming reservations."},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        return super().destroy(request, *args, **kwargs)
+        if room.bookings.exists():
+            return Response(
+                {"error": "Cannot delete room with existing booking history. Consider archiving or updating room inventory instead to preserve financial records."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            return super().destroy(request, *args, **kwargs)
+        except ProtectedError:
+            return Response(
+                {"error": "Cannot delete room because it is protected by associated booking records."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
 class RoomsByHotelView(generics.ListAPIView):
     serializer_class = RoomSerializer

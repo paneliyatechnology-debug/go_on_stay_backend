@@ -23,6 +23,11 @@ from .views import (
     StaffPayoutListView, StaffPayoutDetailView,
     StaffPayoutProcessView, StaffPayoutHistoryView,
     StaffEscrowListView, StaffSettlementListView,
+)
+from payments.views import (
+    InitiateHostPayoutView, VerifyPayoutStatusView, ToggleDisputeHoldView
+)
+from .views import (
 
     # Customer Support Department
     StaffSupportTicketListView, StaffSupportTicketDetailView,
@@ -85,8 +90,11 @@ urlpatterns = [
     path('payouts/history/', StaffPayoutHistoryView.as_view(), name='staff-payouts-history'),
     path('payouts/escrow/', StaffEscrowListView.as_view(), name='staff-payouts-escrow'),
     path('payouts/settlements/', StaffSettlementListView.as_view(), name='staff-payouts-settlements'),
-    path('payouts/<int:pk>/', StaffPayoutDetailView.as_view(), name='staff-payouts-detail'),
-    path('payouts/<int:pk>/process/', StaffPayoutProcessView.as_view(), name='staff-payouts-process'),
+    path('payouts/initiate/', InitiateHostPayoutView.as_view(), name='staff-payouts-initiate'),
+    path('payouts/<str:payout_id>/verify/', VerifyPayoutStatusView.as_view(), name='staff-payouts-verify'),
+    path('payouts/<str:pk>/', StaffPayoutDetailView.as_view(), name='staff-payouts-detail'),
+    path('payouts/<str:pk>/process/', StaffPayoutProcessView.as_view(), name='staff-payouts-process'),
+    path('earnings/toggle-dispute/', ToggleDisputeHoldView.as_view(), name='staff-toggle-dispute'),
 
     # 6. Customer Support Department – Tickets, Inquiries & Internal Notes
     path('support/', StaffSupportTicketListView.as_view(), name='staff-support-list'),

@@ -340,7 +340,12 @@ class HotelListView(generics.ListCreateAPIView):
                 is_deleted=False
             ).order_by('-created_at')
 
-        return filter_hotels_queryset(base_qs, self.request.query_params)
+        filtered_qs = filter_hotels_queryset(base_qs, self.request.query_params)
+        return filtered_qs.select_related(
+            'owner', 'city_rel', 'state_rel', 'country_rel', 'area_rel'
+        ).prefetch_related(
+            'images', 'amenities', 'verification_documents', 'rooms', 'rooms__amenities', 'reviews'
+        )
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user, status=Hotel.STATUS_SUBMITTED, is_approved=False)
@@ -986,7 +991,13 @@ class HotelDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         pk = self.kwargs.get('pk')
-        hotel = Hotel.objects.filter(pk=pk, is_deleted=False).first()
+        hotel = Hotel.objects.filter(
+            pk=pk, is_deleted=False
+        ).select_related(
+            'owner', 'city_rel', 'state_rel', 'country_rel', 'area_rel'
+        ).prefetch_related(
+            'images', 'amenities', 'verification_documents', 'rooms', 'rooms__amenities', 'reviews'
+        ).first()
         if not hotel:
             from rest_framework.exceptions import NotFound
             raise NotFound("Hotel not found.")

@@ -150,14 +150,24 @@ class SimulatePayoutDueView(APIView):
         }, status=status.HTTP_200_OK)
 
 class SendTestNotificationView(APIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
-        user = request.user if request.user.is_authenticated else None
-        if not user:
+        from payments.views import is_platform_admin
+        if not is_platform_admin(request.user):
+            return Response(
+                {"error": "Permission denied. Only Platform Administrators can dispatch test notifications."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        recipient = request.user
+        recipient_id = request.data.get('recipient_id')
+        if recipient_id:
             from django.contrib.auth import get_user_model
             User = get_user_model()
-            user = User.objects.first()
+            target_user = User.objects.filter(id=recipient_id).first()
+            if target_user:
+                recipient = target_user
 
         title = request.data.get('title', '🔔 GoOnStay Test Alert!')
         message = request.data.get(
@@ -165,14 +175,12 @@ class SendTestNotificationView(APIView):
             'Yeh test notification hai! Live stay alerts, reminders aur booking updates successfully work kar rahe hain. 🎉'
         )
 
-        notification = None
-        if user:
-            notification = Notification.objects.create(
-                recipient=user,
-                title=title,
-                message=message,
-                notification_type=Notification.TYPE_GENERAL
-            )
+        notification = Notification.objects.create(
+            recipient=recipient,
+            title=title,
+            message=message,
+            notification_type=Notification.TYPE_GENERAL
+        )
 
         return Response({
             "message": "Test notification created successfully!",

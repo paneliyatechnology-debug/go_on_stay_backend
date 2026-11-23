@@ -1150,6 +1150,20 @@ class StaffRefundProcessView(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
         booking = refund.booking
+
+        # Hotel Owner Approval Guard
+        if booking.booking_status in [Booking.STATUS_OWNER_REJECTED, 'OWNER_REJECTED']:
+            return Response({
+                "success": False,
+                "error": "Refund cannot be processed because the hotel owner rejected the cancellation request."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        if booking.booking_status not in [Booking.STATUS_OWNER_APPROVED, 'OWNER_APPROVED', Booking.STATUS_CANCELLED]:
+            return Response({
+                "success": False,
+                "error": f"Cancellation must be approved by the hotel owner ('OWNER_APPROVED') before refund can be processed. Current status: '{booking.booking_status}'."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
         captured_payment = refund.payment or booking.payments.filter(status=Payment.STATUS_CAPTURED).first()
         if not captured_payment:
             return Response({
@@ -1269,7 +1283,13 @@ class StaffPayoutDetailView(APIView):
         if not check_staff_permission(request.user, 'VIEW_PAYOUTS'):
             return Response({"error": "Permission 'VIEW_PAYOUTS' is required."}, status=status.HTTP_403_FORBIDDEN)
 
-        payout = generics.get_object_or_404(HostPayout.objects.select_related('host', 'payout_account').prefetch_related('earnings'), pk=pk)
+        qs = HostPayout.objects.select_related('host', 'payout_account').prefetch_related('earnings')
+        if str(pk).isdigit():
+            payout = qs.filter(pk=int(pk)).first()
+        else:
+            payout = qs.filter(payout_id=pk).first()
+        if not payout:
+            return Response({"error": "Payout not found."}, status=status.HTTP_404_NOT_FOUND)
 
         earnings_data = []
         for e in payout.earnings.all():
@@ -1313,7 +1333,13 @@ class StaffPayoutProcessView(APIView):
         if not check_staff_permission(request.user, 'PROCESS_PAYOUT'):
             return Response({"error": "Permission 'PROCESS_PAYOUT' is required."}, status=status.HTTP_403_FORBIDDEN)
 
-        payout = generics.get_object_or_404(HostPayout.objects.select_related('host'), pk=pk)
+        qs = HostPayout.objects.select_related('host')
+        if str(pk).isdigit():
+            payout = qs.filter(pk=int(pk)).first()
+        else:
+            payout = qs.filter(payout_id=pk).first()
+        if not payout:
+            return Response({"error": "Payout not found."}, status=status.HTTP_404_NOT_FOUND)
 
         if payout.status == HostPayout.STATUS_COMPLETED:
             return Response({
@@ -1342,7 +1368,7 @@ class StaffPayoutProcessView(APIView):
             payout.transaction_reference = f"tx_payout_{secrets.token_hex(6)}"
             payout.save()
 
-            payout.earnings.update(status=getattr(HostEarning, 'STATUS_PAID', 'PAID'))
+            payout.earnings.update(status=getattr(HostEarning, 'STATUS_PAID', 'PAID'), settled_at=now)
 
             log_staff_activity(
                 request=request,
@@ -1353,6 +1379,23 @@ class StaffPayoutProcessView(APIView):
                 entity_id=payout.id,
                 description=f"Staff processed payout #{payout.payout_id or payout.id} of ₹{payout.amount} to {payout.host.username}."
             )
+
+            try:
+                from payments.models import AuditLog
+                AuditLog.objects.create(
+                    user=request.user,
+                    action='PAYOUT_DISBURSED',
+                    entity_type='HostPayout',
+                    entity_id=payout.payout_id or str(payout.id),
+                    new_values={
+                        'amount': str(payout.amount),
+                        'host': payout.host.username,
+                        'transaction_reference': payout.transaction_reference,
+                        'status': 'COMPLETED'
+                    }
+                )
+            except Exception as audit_err:
+                logger.warning(f"Failed to record audit log for staff payout disbursement: {audit_err}")
 
         return Response({
             "success": True,

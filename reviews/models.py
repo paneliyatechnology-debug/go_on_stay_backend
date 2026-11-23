@@ -31,8 +31,8 @@ class Review(models.Model):
     owner_response = models.TextField(blank=True, null=True)
     owner_responded_at = models.DateTimeField(blank=True, null=True)
     
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_VISIBLE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_VISIBLE, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):

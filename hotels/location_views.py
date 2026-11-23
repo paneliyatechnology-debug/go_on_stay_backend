@@ -2,6 +2,7 @@ from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models import Q
+from django.core.cache import cache
 from .models import Country, State, City, Area
 from .location_serializers import (
     CountrySerializer,
@@ -14,50 +15,81 @@ class CountryListView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request):
-        qs = Country.objects.all().order_by('name')
         query = request.query_params.get('q') or request.query_params.get('search')
+        cache_key = f"location_countries_{query.strip().lower()}" if query else "location_countries_all"
+        cached_data = cache.get(cache_key)
+        if cached_data is not None:
+            return Response(cached_data, status=status.HTTP_200_OK)
+
+        qs = Country.objects.all().order_by('name')
         if query:
             qs = qs.filter(name__icontains=query.strip())
         serializer = CountrySerializer(qs, many=True)
-        return Response({
+        resp_data = {
             'success': True,
             'count': len(serializer.data),
             'data': serializer.data,
             'results': serializer.data
-        }, status=status.HTTP_200_OK)
+        }
+        cache.set(cache_key, resp_data, timeout=3600)
+        return Response(resp_data, status=status.HTTP_200_OK)
 
 
 class StateListView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request):
+        country_id = request.query_params.get('country_id') or ''
+        query = request.query_params.get('q') or request.query_params.get('search') or ''
+        cache_key = f"location_states_{country_id}_{query.strip().lower()}"
+        cached_data = cache.get(cache_key)
+        if cached_data is not None:
+            return Response(cached_data, status=status.HTTP_200_OK)
+
         qs = State.objects.select_related('country').all().order_by('name')
-        country_id = request.query_params.get('country_id')
         if country_id:
             qs = qs.filter(country_id=country_id)
-        query = request.query_params.get('q') or request.query_params.get('search')
         if query:
             qs = qs.filter(name__icontains=query.strip())
         serializer = StateSerializer(qs, many=True)
-        return Response({
+        resp_data = {
             'success': True,
             'count': len(serializer.data),
             'data': serializer.data,
             'results': serializer.data
-        }, status=status.HTTP_200_OK)
+        }
+        cache.set(cache_key, resp_data, timeout=3600)
+        return Response(resp_data, status=status.HTTP_200_OK)
 
 
 class CityListView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request):
+        state_id = request.query_params.get('state_id') or ''
+        country_id = request.query_params.get('country_id') or ''
+        query = request.query_params.get('q') or request.query_params.get('search') or ''
+        cache_key = f"location_cities_{state_id}_{country_id}_{query.strip().lower()}"
+        cached_data = cache.get(cache_key)
+        if cached_data is not None:
+            return Response(cached_data, status=status.HTTP_200_OK)
+
         qs = City.objects.select_related('state', 'state__country').all().order_by('name')
-        state_id = request.query_params.get('state_id')
         if state_id:
             qs = qs.filter(state_id=state_id)
-        country_id = request.query_params.get('country_id')
         if country_id:
             qs = qs.filter(state__country_id=country_id)
+        if query:
+            qs = qs.filter(name__icontains=query.strip())
+        serializer = CitySerializer(qs, many=True)
+        resp_data = {
+            'success': True,
+            'count': len(serializer.data),
+            'data': serializer.data,
+            'results': serializer.data
+        }
+        cache.set(cache_key, resp_data, timeout=3600)
+        return Response(resp_data, status=status.HTTP_200_OK)
         query = request.query_params.get('q') or request.query_params.get('search')
         if query:
             qs = qs.filter(name__icontains=query.strip())

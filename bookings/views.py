@@ -20,6 +20,13 @@ class BookingListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = BookingPagination
 
+    def get_throttles(self):
+        if self.request.method == 'POST':
+            self.throttle_scope = 'booking_create'
+        else:
+            self.throttle_scope = None
+        return super().get_throttles()
+
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return BookingCreateSerializer
@@ -29,20 +36,30 @@ class BookingListCreateView(generics.ListCreateAPIView):
         user = self.request.user
         role = str(getattr(user, 'role', '')).upper()
         if is_platform_admin(user):
-            return Booking.objects.all().order_by('-created_at')
+            base_qs = Booking.objects.all().order_by('-created_at')
         elif role == 'STAFF':
             profile = getattr(user, 'staff_profile', None)
             dept_code = profile.department.code if (profile and profile.department) else ''
             if Department.normalize_code(dept_code) == Department.CODE_RESERVATION or check_staff_permission(user, 'VIEW_BOOKINGS'):
-                return Booking.objects.all().order_by('-created_at')
-            return Booking.objects.none()
+                base_qs = Booking.objects.all().order_by('-created_at')
+            else:
+                return Booking.objects.none()
         elif role == 'HOTEL_STAFF':
             from hotels.models import HotelStaff
             staff_hotel_ids = HotelStaff.objects.filter(user=user).values_list('hotel_id', flat=True)
-            return Booking.objects.filter(hotel_id__in=staff_hotel_ids).order_by('-created_at')
+            base_qs = Booking.objects.filter(hotel_id__in=staff_hotel_ids).order_by('-created_at')
         elif role in ['HOTEL_OWNER', 'HOST', 'OWNER'] or (hasattr(user, 'hotels') and user.hotels.exists()):
-            return Booking.objects.filter(hotel__owner=user).order_by('-created_at')
-        return Booking.objects.filter(customer=user).order_by('-created_at')
+            base_qs = Booking.objects.filter(hotel__owner=user).order_by('-created_at')
+        else:
+            base_qs = Booking.objects.filter(customer=user).order_by('-created_at')
+
+        return base_qs.select_related(
+            'customer', 'hotel', 'hotel__owner', 'room', 'room__hotel'
+        ).prefetch_related(
+            'payments', 'refunds',
+            'hotel__images', 'hotel__amenities', 'hotel__rooms', 'hotel__verification_documents', 'hotel__reviews',
+            'room__images', 'room__amenities', 'room__calendar_blocks'
+        )
 
     @transaction.atomic
     def create(self, request, *args, **kwargs):
@@ -145,13 +162,20 @@ class BookingDetailView(generics.RetrieveAPIView):
 
     def get_object(self):
         lookup = self.kwargs.get('pk')
+        qs = Booking.objects.select_related(
+            'customer', 'hotel', 'hotel__owner', 'room', 'room__hotel'
+        ).prefetch_related(
+            'payments', 'refunds',
+            'hotel__images', 'hotel__amenities', 'hotel__rooms', 'hotel__verification_documents', 'hotel__reviews',
+            'room__images', 'room__amenities', 'room__calendar_blocks'
+        )
         booking = None
 
         if str(lookup).isdigit():
-            booking = Booking.objects.filter(pk=int(lookup)).first()
+            booking = qs.filter(pk=int(lookup)).first()
         
         if not booking:
-            booking = Booking.objects.filter(booking_id=lookup).first()
+            booking = qs.filter(booking_id=lookup).first()
 
         if not booking:
             from rest_framework.exceptions import NotFound
@@ -166,7 +190,7 @@ class BookingDetailView(generics.RetrieveAPIView):
             is_reservation_staff = bool(Department.normalize_code(dept_code) == Department.CODE_RESERVATION or check_staff_permission(user, 'VIEW_BOOKINGS'))
 
         is_admin = is_platform_admin(user) or is_reservation_staff
-        is_owner = (booking.hotel.owner == user)
+        is_owner = bool(booking.hotel and booking.hotel.owner == user)
         is_customer = (booking.customer == user)
 
         if not (is_customer or is_owner or is_admin):
@@ -405,6 +429,7 @@ class BookingCancelView(APIView):
                 if raw_bank:
                     existing_refund.customer_bank_name = raw_bank
                 existing_refund.save()
+            booking.save()
         elif is_paid and Decimal(str(calc['refundable_amount'])) == Decimal('0.00'):
             booking.payment_status = Booking.PAYMENT_REFUNDED
             booking.save()
@@ -498,6 +523,225 @@ class BookingCancelView(APIView):
             "payment_status": booking.payment_status,
             "refund_status": "PENDING" if is_paid and calc['refundable_amount'] > 0 else "NONE",
             **calc
+        }, status=status.HTTP_200_OK)
+
+
+class BookingOwnerApprovalView(APIView):
+    """
+    POST /api/bookings/{pk}/owner-approval/
+    Hotel Owner approves or rejects a guest cancellation request for their property.
+    Supports pk as numeric ID or booking_id string (e.g. KH-2026-748CB7).
+    Accepts:
+      - action: 'APPROVE' / 'OWNER_APPROVE'
+      - action: 'REJECT' / 'OWNER_REJECT' (with 'reason')
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def _get_booking(self, pk, user):
+        lookup = str(pk).strip()
+        booking = (
+            (Booking.objects.select_related('hotel', 'hotel__owner', 'customer').filter(pk=int(lookup)).first() if lookup.isdigit() else None)
+            or Booking.objects.select_related('hotel', 'hotel__owner', 'customer').filter(booking_id=lookup).first()
+        )
+        if not booking:
+            return None, Response({"error": "Booking not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        is_owner = bool(booking.hotel and booking.hotel.owner == user)
+        is_admin = is_platform_admin(user)
+
+        if not (is_owner or is_admin):
+            return None, Response({
+                "error": "Permission denied. Only the authorized hotel owner can approve or reject cancellation requests for this property."
+            }, status=status.HTTP_403_FORBIDDEN)
+
+        return booking, None
+
+    def get(self, request, pk):
+        booking, err = self._get_booking(pk, request.user)
+        if err:
+            return err
+
+        from .cancellation import calculate_cancellation_details
+        calc = calculate_cancellation_details(booking)
+
+        return Response({
+            "booking_id": booking.booking_id,
+            "hotel_id": booking.hotel.id if booking.hotel else None,
+            "hotel_name": booking.hotel.name if booking.hotel else '',
+            "guest_name": booking.guest_name,
+            "check_in": str(booking.check_in),
+            "check_out": str(booking.check_out),
+            "booking_status": booking.booking_status,
+            "payment_status": booking.payment_status,
+            "cancellation_reason": booking.cancellation_reason,
+            "total_amount": float(booking.total_amount),
+            "cancellation_fee": float(booking.cancellation_charge or calc.get('cancellation_charge', 0)),
+            "refundable_amount": float(booking.refundable_amount or calc.get('refundable_amount', 0)),
+            "can_decide": booking.booking_status in [Booking.STATUS_CANCELLED, Booking.STATUS_CANCELLATION_REQUESTED, 'CANCELLED', 'CANCELLATION_REQUESTED'],
+            "cancellation_breakdown": booking.cancellation_breakdown or calc
+        }, status=status.HTTP_200_OK)
+
+    def post(self, request, pk):
+        booking, err = self._get_booking(pk, request.user)
+        if err:
+            return err
+
+        raw_action = (
+            request.data.get('action') or
+            request.data.get('decision') or
+            request.data.get('status') or
+            ''
+        ).strip().upper()
+
+        if raw_action in ['APPROVE', 'OWNER_APPROVE', 'APPROVED']:
+            return self._handle_approval(request, booking)
+        elif raw_action in ['REJECT', 'OWNER_REJECT', 'REJECTED']:
+            return self._handle_rejection(request, booking)
+        else:
+            return Response({
+                "error": "Invalid action. Expected 'action': 'APPROVE' or 'action': 'REJECT'."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+    def _handle_approval(self, request, booking):
+        if booking.booking_status in [Booking.STATUS_REFUNDED, 'REFUNDED']:
+            return Response({"error": "Booking is already refunded."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Idempotent re-approval check
+        if booking.booking_status in [Booking.STATUS_OWNER_APPROVED, 'OWNER_APPROVED']:
+            return Response({
+                "success": True,
+                "message": "Cancellation request has already been approved. Forwarded to Admin for refund review.",
+                "booking_id": booking.booking_id,
+                "status": booking.booking_status,
+                "booking_status": booking.booking_status,
+                "action": "OWNER_APPROVE",
+                "refundable_amount": float(booking.refundable_amount or 0),
+                "cancellation_fee": float(booking.cancellation_charge or 0),
+                "updated_at": booking.updated_at.isoformat() if booking.updated_at else timezone.now().isoformat()
+            }, status=status.HTTP_200_OK)
+
+        booking.booking_status = Booking.STATUS_OWNER_APPROVED
+        booking.save(update_fields=['booking_status', 'updated_at'])
+
+        # Ensure pending Refund record is active for Admin to review and process
+        from payments.models import Payment, Refund
+        captured_payment = booking.payments.filter(status=Payment.STATUS_CAPTURED).first()
+        is_paid = (booking.payment_status == Booking.PAYMENT_PAID) or bool(captured_payment)
+
+        if is_paid and booking.refundable_amount and booking.refundable_amount > 0:
+            existing_refund = Refund.objects.filter(booking=booking).first()
+            if not existing_refund:
+                Refund.objects.create(
+                    booking=booking,
+                    payment=captured_payment if captured_payment else booking.payments.first(),
+                    razorpay_payment_id=captured_payment.razorpay_payment_id if (captured_payment and captured_payment.razorpay_payment_id) else (booking.razorpay_order_id or "PENDING"),
+                    razorpay_refund_id=None,
+                    idempotency_key=f"ref_{booking.booking_id}",
+                    amount=booking.refundable_amount,
+                    currency=booking.currency,
+                    reason=booking.cancellation_reason or "Customer cancellation approved by Hotel Owner",
+                    status=Refund.STATUS_REFUND_PENDING,
+                    refund_mode=Refund.REFUND_MODE_ORIGINAL
+                )
+            elif existing_refund.status not in [Refund.STATUS_REFUNDED, 'PROCESSED']:
+                existing_refund.status = Refund.STATUS_REFUND_PENDING
+                existing_refund.amount = booking.refundable_amount
+                existing_refund.save(update_fields=['status', 'amount', 'updated_at'])
+
+        # Notifications
+        from notifications.utils import create_notification
+        from notifications.models import Notification
+        create_notification(
+            recipient=booking.customer,
+            title=f"✅ Cancellation Approved ({booking.booking_id})",
+            message=f"The hotel owner has approved your cancellation request for booking {booking.booking_id}. Refund is being processed by administration.",
+            notification_type=Notification.TYPE_BOOKING_CANCELLED,
+            booking=booking
+        )
+
+        # Notify Refunds Staff / Admin
+        try:
+            from staff.models import Department
+            from staff.utils import create_staff_notification
+            ref_dept = Department.objects.filter(code=Department.CODE_REFUNDS_AND_CLAIMS).first()
+            if ref_dept:
+                create_staff_notification(
+                    department=ref_dept,
+                    title=f"Cancellation Approved: {booking.booking_id}",
+                    message=f"Hotel Owner approved cancellation for {booking.booking_id}. Refund of ₹{booking.refundable_amount or 0} requires admin processing.",
+                    notification_type='REFUND_PENDING',
+                    metadata={'booking_id': booking.booking_id, 'refundable_amount': str(booking.refundable_amount or 0)}
+                )
+        except Exception:
+            pass
+
+        return Response({
+            "success": True,
+            "message": "Cancellation request approved successfully. Forwarded to Admin for refund review.",
+            "booking_id": booking.booking_id,
+            "status": booking.booking_status,
+            "booking_status": booking.booking_status,
+            "action": "OWNER_APPROVE",
+            "decision": "APPROVE",
+            "refundable_amount": float(booking.refundable_amount or 0),
+            "cancellation_fee": float(booking.cancellation_charge or 0),
+            "updated_at": booking.updated_at.isoformat() if booking.updated_at else timezone.now().isoformat()
+        }, status=status.HTTP_200_OK)
+
+    def _handle_rejection(self, request, booking):
+        reason = (
+            request.data.get('reason') or
+            request.data.get('rejection_reason') or
+            request.data.get('notes') or
+            ''
+        ).strip()
+        if not reason:
+            return Response({"error": "Rejection reason is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Idempotent re-rejection check
+        if booking.booking_status in [Booking.STATUS_OWNER_REJECTED, 'OWNER_REJECTED']:
+            return Response({
+                "success": True,
+                "message": "Cancellation request has already been rejected.",
+                "booking_id": booking.booking_id,
+                "status": booking.booking_status,
+                "booking_status": booking.booking_status,
+                "action": "OWNER_REJECT",
+                "reason": booking.cancellation_reason,
+                "updated_at": booking.updated_at.isoformat() if booking.updated_at else timezone.now().isoformat()
+            }, status=status.HTTP_200_OK)
+
+        booking.booking_status = Booking.STATUS_OWNER_REJECTED
+        booking.cancellation_reason = f"Owner Rejection: {reason}"
+        booking.save(update_fields=['booking_status', 'cancellation_reason', 'updated_at'])
+
+        # Update any pending refund record
+        from payments.models import Refund
+        Refund.objects.filter(booking=booking, status=Refund.STATUS_REFUND_PENDING).update(
+            status=Refund.STATUS_REFUND_FAILED,
+            failure_reason=f"Hotel Owner rejected cancellation: {reason}"
+        )
+
+        from notifications.utils import create_notification
+        from notifications.models import Notification
+        create_notification(
+            recipient=booking.customer,
+            title=f"❌ Cancellation Request Rejected ({booking.booking_id})",
+            message=f"Your cancellation request for booking {booking.booking_id} was rejected by the hotel owner. Reason: {reason}",
+            notification_type=Notification.TYPE_BOOKING_CANCELLED,
+            booking=booking
+        )
+
+        return Response({
+            "success": True,
+            "message": "Cancellation request rejected.",
+            "booking_id": booking.booking_id,
+            "status": booking.booking_status,
+            "booking_status": booking.booking_status,
+            "reason": reason,
+            "action": "OWNER_REJECT",
+            "decision": "REJECT",
+            "updated_at": booking.updated_at.isoformat() if booking.updated_at else timezone.now().isoformat()
         }, status=status.HTTP_200_OK)
 
 

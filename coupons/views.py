@@ -1,6 +1,7 @@
 from rest_framework import status, permissions, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.throttling import ScopedRateThrottle
 from django.utils import timezone
 from decimal import Decimal
 from .models import Coupon, CouponUsage
@@ -9,19 +10,9 @@ from util.validators import parse_flexible_date
 
 
 class ValidateCouponView(APIView):
-    """
-    Validates promo coupons enforcing:
-    - Active status (Admin controlled)
-    - Date validity (valid_from to valid_until)
-    - Minimum booking subtotal
-    - Per-user redemption limit (max_uses_per_user)
-    - New User vs Existing User eligibility
-    - First successful booking detection
-    - Seasonal check-in date window validity
-    - Festive / Event campaign details
-    - Preserves discount if user already applied coupon before admin deactivation ("last time discount")
-    """
     permission_classes = [permissions.AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'coupon_apply'
 
     def post(self, request):
         code = (

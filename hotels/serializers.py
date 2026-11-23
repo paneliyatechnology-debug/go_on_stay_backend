@@ -77,7 +77,10 @@ class HotelSerializer(serializers.ModelSerializer):
         cache_attr = f"_hotel_room_avails_{check_in}_{check_out}"
         if not hasattr(obj, cache_attr):
             from rooms.utils import get_available_room_count
-            rooms = list(obj.rooms.all())
+            if hasattr(obj, '_prefetched_objects_cache') and 'rooms' in obj._prefetched_objects_cache:
+                rooms = list(obj._prefetched_objects_cache['rooms'])
+            else:
+                rooms = list(obj.rooms.all())
             if not rooms:
                 setattr(obj, cache_attr, (True, 0))
             elif not check_in or not check_out:
@@ -102,6 +105,17 @@ class HotelSerializer(serializers.ModelSerializer):
         return bool(obj.owner and obj.owner.is_blocked)
 
     def get_guest_rating(self, obj):
+        if hasattr(obj, 'avg_rating') and obj.avg_rating is not None:
+            return round(float(obj.avg_rating), 1)
+        if hasattr(obj, 'calculated_rating') and obj.calculated_rating is not None:
+            return round(float(obj.calculated_rating), 1)
+        if hasattr(obj, '_prefetched_objects_cache') and 'reviews' in obj._prefetched_objects_cache:
+            visible_revs = [r for r in obj._prefetched_objects_cache['reviews'] if getattr(r, 'status', '') == 'VISIBLE']
+            if visible_revs:
+                ratings = [r.rating for r in visible_revs if getattr(r, 'rating', None) is not None]
+                if ratings:
+                    return round(float(sum(ratings) / len(ratings)), 1)
+            return None
         from django.db.models import Avg
         avg_val = obj.reviews.filter(status='VISIBLE').aggregate(Avg('rating'))['rating__avg']
         if avg_val is not None:
@@ -109,6 +123,12 @@ class HotelSerializer(serializers.ModelSerializer):
         return None
 
     def get_reviews_count(self, obj):
+        if hasattr(obj, 'num_reviews') and obj.num_reviews is not None:
+            return int(obj.num_reviews)
+        if hasattr(obj, 'calculated_review_count') and obj.calculated_review_count is not None:
+            return int(obj.calculated_review_count)
+        if hasattr(obj, '_prefetched_objects_cache') and 'reviews' in obj._prefetched_objects_cache:
+            return sum(1 for r in obj._prefetched_objects_cache['reviews'] if getattr(r, 'status', '') == 'VISIBLE')
         return obj.reviews.filter(status='VISIBLE').count()
 
     def get_owner_name(self, obj):
@@ -126,13 +146,27 @@ class HotelSerializer(serializers.ModelSerializer):
         return obj.owner.phone_number if obj.owner else ""
 
     def get_starting_price(self, obj):
+        if hasattr(obj, 'starting_price') and obj.starting_price is not None:
+            return float(obj.starting_price)
+        if hasattr(obj, '_prefetched_objects_cache') and 'rooms' in obj._prefetched_objects_cache:
+            rooms = obj._prefetched_objects_cache['rooms']
+            if rooms:
+                prices = [r.price_per_night for r in rooms if r.price_per_night is not None]
+                if prices:
+                    return float(min(prices))
         min_price = obj.rooms.aggregate(Min('price_per_night'))['price_per_night__min']
         return min_price or 2500.00
 
     def get_primary_image(self, obj):
-        primary = obj.images.filter(is_primary=True).first() or obj.images.first()
-        if primary:
-            return primary.get_image_display()
+        if hasattr(obj, '_prefetched_objects_cache') and 'images' in obj._prefetched_objects_cache:
+            images = obj._prefetched_objects_cache['images']
+            primary = next((img for img in images if getattr(img, 'is_primary', False)), None) or (images[0] if images else None)
+            if primary:
+                return primary.get_image_display()
+        else:
+            primary = obj.images.filter(is_primary=True).first() or obj.images.first()
+            if primary:
+                return primary.get_image_display()
         
         DEFAULT_HOTEL_IMAGES = [
             'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80',
