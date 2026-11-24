@@ -341,3 +341,67 @@ class HasStaffPermission:
                 return user.staff_profile.has_perm(perm_code)
 
         return _DynamicPermission()
+
+
+class IsMainManagerRole(permissions.BasePermission):
+    """
+    Grants access to Main Managers and Platform Admins (Level 3 & 4).
+    """
+    message = "Main Manager or Administrator privileges are required for this action."
+
+    def has_permission(self, request, view):
+        from .services import get_user_hierarchy_level
+        user = request.user
+        if not (user and user.is_authenticated):
+            return False
+        return get_user_hierarchy_level(user) >= 3
+
+
+class IsDepartmentStaffManagerRole(permissions.BasePermission):
+    """
+    Grants access to Department Staff Managers, Main Managers, and Admins (Level 2+).
+    """
+    message = "Department Staff Manager, Main Manager, or Administrator privileges required."
+
+    def has_permission(self, request, view):
+        from .services import get_user_hierarchy_level
+        user = request.user
+        if not (user and user.is_authenticated):
+            return False
+        return get_user_hierarchy_level(user) >= 2
+
+
+class IsHierarchyManagerRole(permissions.BasePermission):
+    """
+    Grants access to any hierarchy manager:
+    - Level 2: Department Staff Manager
+    - Level 3: Main Manager
+    - Level 4: Administrator
+    """
+    message = "Manager or Administrator privileges are required for this action."
+
+    def has_permission(self, request, view):
+        from .services import get_user_hierarchy_level
+        user = request.user
+        if not (user and user.is_authenticated):
+            return False
+        return get_user_hierarchy_level(user) >= 2
+
+
+class CanManageStaffObjectPermission(permissions.BasePermission):
+    """
+    Object-level permission enforcer:
+    Prevents IDOR and cross-department tampering.
+    """
+    message = "You do not have authority to manage this staff member."
+
+    def has_object_permission(self, request, view, obj):
+        from .services import validate_can_manage_target_staff
+        profile = obj if hasattr(obj, 'employee_id') else getattr(obj, 'staff_profile', None)
+        if not profile:
+            return False
+        try:
+            return validate_can_manage_target_staff(request.user, profile)
+        except PermissionDenied:
+            return False
+

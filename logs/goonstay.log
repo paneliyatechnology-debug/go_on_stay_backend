@@ -7278,3 +7278,763 @@ socket.gaierror: [Errno 11001] getaddrinfo failed
 2026-11-23 18:18:46 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
 2026-11-23 18:18:46 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
 2026-11-23 18:27:55 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-23 18:28:05 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-23 18:28:05 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-23 18:28:26 [WARNING] [django.request] Unauthorized: /api/users/login/
+2026-11-23 18:28:26 [WARNING] [django.server] "POST /api/users/login/ HTTP/1.1" 401 124
+2026-11-23 18:28:26 [INFO] [django.server] "OPTIONS /api/staff/login/ HTTP/1.1" 200 0
+2026-11-23 18:28:28 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-23 18:28:28 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 401 83
+2026-11-23 18:28:28 [INFO] [django.server] "OPTIONS /api/users/profile/ HTTP/1.1" 200 0
+2026-11-23 18:28:28 [INFO] [django.server] "OPTIONS /api/hotels/cities/ HTTP/1.1" 200 0
+2026-11-23 18:28:29 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 815
+2026-11-23 18:28:29 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-23 18:28:29 [INFO] [django.server] "OPTIONS /api/notifications/unread-count/ HTTP/1.1" 200 0
+2026-11-23 18:28:29 [INFO] [django.server] "OPTIONS /api/bookings/?page_size=1000 HTTP/1.1" 200 0
+2026-11-23 18:28:29 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1547
+2026-11-23 18:28:29 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:28:29 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 214408
+2026-11-23 18:28:31 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 53269
+2026-11-23 18:29:13 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:29:33 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 214408
+2026-11-23 18:29:44 [INFO] [django.server] "OPTIONS /api/rooms/by-hotel/47/ HTTP/1.1" 200 0
+2026-11-23 18:29:44 [INFO] [django.server] "GET /api/rooms/by-hotel/47/ HTTP/1.1" 200 1068
+2026-11-23 18:29:48 [INFO] [django.server] "OPTIONS /api/reviews/?owner=true HTTP/1.1" 200 0
+2026-11-23 18:29:48 [INFO] [django.server] "GET /api/reviews/?owner=true HTTP/1.1" 200 1316
+2026-11-23 18:29:53 [INFO] [django.server] "OPTIONS /api/payments/support-tickets/ HTTP/1.1" 200 0
+2026-11-23 18:29:53 [INFO] [django.server] "GET /api/payments/support-tickets/ HTTP/1.1" 200 1917
+2026-11-23 18:29:53 [INFO] [django.server] "OPTIONS /api/payments/support-tickets/4/ HTTP/1.1" 200 0
+2026-11-23 18:29:53 [INFO] [django.server] "GET /api/payments/support-tickets/4/ HTTP/1.1" 200 1865
+2026-11-23 18:29:57 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 815
+2026-11-23 18:29:59 [INFO] [django.server] "OPTIONS /api/payments/payout-account/ HTTP/1.1" 200 0
+2026-11-23 18:29:59 [INFO] [django.server] "GET /api/payments/payout-account/ HTTP/1.1" 200 591
+2026-11-23 18:30:01 [INFO] [django.server] "OPTIONS /api/notifications/ HTTP/1.1" 200 0
+2026-11-23 18:30:01 [INFO] [django.server] "GET /api/notifications/ HTTP/1.1" 200 6881
+2026-11-23 18:30:08 [INFO] [django.server] "PATCH /api/users/profile/ HTTP/1.1" 200 207
+2026-11-23 18:30:08 [INFO] [django.server] "PATCH /api/users/profile/ HTTP/1.1" 200 207
+2026-11-23 18:30:13 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:30:13 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 815
+2026-11-23 18:30:13 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-23 18:30:13 [INFO] [django.server] "OPTIONS /api/wishlist/ HTTP/1.1" 200 0
+2026-11-23 18:30:13 [INFO] [django.server] "OPTIONS /api/hotels/ HTTP/1.1" 200 0
+2026-11-23 18:30:13 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-23 18:30:13 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-23 18:30:36 [INFO] [django.server] "OPTIONS /api/users/login/ HTTP/1.1" 200 0
+2026-11-23 18:30:37 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1627
+2026-11-23 18:30:37 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:30:37 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 815
+2026-11-23 18:30:37 [INFO] [django.server] "OPTIONS /api/hotels/owner-hotels/ HTTP/1.1" 200 0
+2026-11-23 18:30:37 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 214408
+2026-11-23 18:30:37 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1547
+2026-11-23 18:30:40 [INFO] [django.server] "OPTIONS /api/payments/settlements/ HTTP/1.1" 200 0
+2026-11-23 18:30:40 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 53269
+2026-11-23 18:30:48 [INFO] [django.server] "OPTIONS /api/rooms/by-hotel/47/ HTTP/1.1" 200 0
+2026-11-23 18:30:48 [INFO] [django.server] "GET /api/rooms/by-hotel/47/ HTTP/1.1" 200 1068
+2026-11-23 18:30:49 [INFO] [django.server] "GET /api/reviews/?owner=true HTTP/1.1" 200 1316
+2026-11-23 18:30:50 [INFO] [django.server] "GET /api/payments/support-tickets/ HTTP/1.1" 200 1917
+2026-11-23 18:30:50 [INFO] [django.server] "GET /api/payments/support-tickets/4/ HTTP/1.1" 200 1865
+2026-11-23 18:31:04 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 815
+2026-11-23 18:31:07 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:31:08 [INFO] [django.server] "GET /api/payments/support-tickets/ HTTP/1.1" 200 1917
+2026-11-23 18:31:08 [INFO] [django.server] "GET /api/payments/support-tickets/4/ HTTP/1.1" 200 1865
+2026-11-23 18:31:24 [INFO] [django.server] "PATCH /api/users/profile/ HTTP/1.1" 200 207
+2026-11-23 18:31:24 [INFO] [django.server] "PATCH /api/users/profile/ HTTP/1.1" 200 207
+2026-11-23 18:31:27 [INFO] [django.server] "OPTIONS /api/hotels/cities/ HTTP/1.1" 200 0
+2026-11-23 18:31:27 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 815
+2026-11-23 18:31:27 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:31:27 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-23 18:31:27 [INFO] [django.server] "OPTIONS /api/wishlist/ HTTP/1.1" 200 0
+2026-11-23 18:31:27 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-23 18:31:27 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-23 18:31:42 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1627
+2026-11-23 18:31:42 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 815
+2026-11-23 18:31:42 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1547
+2026-11-23 18:31:42 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 214408
+2026-11-23 18:31:53 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:32:40 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:32:45 [INFO] [django.server] "GET /api/rooms/by-hotel/47/ HTTP/1.1" 200 1068
+2026-11-23 18:32:49 [INFO] [django.server] "OPTIONS /api/notifications/unread-count/ HTTP/1.1" 200 0
+2026-11-23 18:32:49 [INFO] [django.server] "OPTIONS /api/hotels/cities/ HTTP/1.1" 200 0
+2026-11-23 18:32:49 [INFO] [django.server] "OPTIONS /api/users/profile/ HTTP/1.1" 200 0
+2026-11-23 18:32:49 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:32:49 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 545
+2026-11-23 18:32:49 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-23 18:32:51 [INFO] [django.server] "OPTIONS /api/wishlist/ HTTP/1.1" 200 0
+2026-11-23 18:32:51 [INFO] [django.server] "OPTIONS /api/hotels/ HTTP/1.1" 200 0
+2026-11-23 18:32:51 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-23 18:32:51 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-23 18:32:54 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 53269
+2026-11-23 18:33:05 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:33:05 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 545
+2026-11-23 18:33:05 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-23 18:33:05 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-23 18:33:06 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-23 18:33:23 [INFO] [django.server] "OPTIONS /api/notifications/ HTTP/1.1" 200 0
+2026-11-23 18:33:23 [INFO] [django.server] "GET /api/notifications/ HTTP/1.1" 200 6881
+2026-11-23 18:33:34 [INFO] [django.server] "GET /api/reviews/?owner=true HTTP/1.1" 200 1316
+2026-11-23 18:33:37 [INFO] [django.server] "OPTIONS /api/payments/payout-account/ HTTP/1.1" 200 0
+2026-11-23 18:33:37 [INFO] [django.server] "GET /api/payments/payout-account/ HTTP/1.1" 200 591
+2026-11-23 18:33:39 [INFO] [django.server] "GET /api/notifications/ HTTP/1.1" 200 6881
+2026-11-23 18:33:40 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:33:41 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 815
+2026-11-23 18:33:42 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:33:48 [INFO] [django.server] "GET /api/notifications/ HTTP/1.1" 200 6881
+2026-11-23 18:33:57 [INFO] [django.server] "OPTIONS /api/payments/support-tickets/ HTTP/1.1" 200 0
+2026-11-23 18:33:57 [INFO] [django.server] "GET /api/payments/support-tickets/ HTTP/1.1" 200 1917
+2026-11-23 18:33:57 [INFO] [django.server] "OPTIONS /api/payments/support-tickets/4/ HTTP/1.1" 200 0
+2026-11-23 18:33:57 [INFO] [django.server] "GET /api/payments/support-tickets/4/ HTTP/1.1" 200 1865
+2026-11-23 18:34:18 [INFO] [django.server] "GET /api/notifications/ HTTP/1.1" 200 6881
+2026-11-23 18:34:52 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:35:16 [INFO] [django.server] "GET /api/notifications/ HTTP/1.1" 200 6881
+2026-11-23 18:35:18 [INFO] [django.server] "GET /api/notifications/ HTTP/1.1" 200 6881
+2026-11-23 18:35:52 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:38:43 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:39:01 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:39:05 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:39:07 [INFO] [django.server] "OPTIONS /api/hotels/amenities/ HTTP/1.1" 200 0
+2026-11-23 18:39:07 [INFO] [django.server] "OPTIONS /api/hotels/?property_type=HOTEL,RESORT HTTP/1.1" 200 0
+2026-11-23 18:39:07 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-23 18:39:07 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-23 18:39:07 [INFO] [django.server] "GET /api/hotels/amenities/ HTTP/1.1" 200 820
+2026-11-23 18:39:07 [INFO] [django.server] "GET /api/hotels/?property_type=HOTEL,RESORT HTTP/1.1" 200 12889
+2026-11-23 18:39:34 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:39:34 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 545
+2026-11-23 18:39:34 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-23 18:39:47 [INFO] [django.server] "OPTIONS /api/users/login/ HTTP/1.1" 200 0
+2026-11-23 18:39:51 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-23 18:39:51 [INFO] [django.server] "OPTIONS /api/users/profile/ HTTP/1.1" 200 0
+2026-11-23 18:39:51 [INFO] [django.server] "OPTIONS /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 0
+2026-11-23 18:39:51 [INFO] [django.server] "OPTIONS /api/notifications/unread-count/ HTTP/1.1" 200 0
+2026-11-23 18:39:51 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 912
+2026-11-23 18:39:51 [INFO] [django.server] "OPTIONS /api/users/all/ HTTP/1.1" 200 0
+2026-11-23 18:39:51 [INFO] [django.server] "OPTIONS /api/payments/settlements/ HTTP/1.1" 200 0
+2026-11-23 18:39:51 [INFO] [django.server] "OPTIONS /api/coupons/ HTTP/1.1" 200 0
+2026-11-23 18:39:51 [INFO] [django.server] "OPTIONS /api/bookings/?page_size=1000 HTTP/1.1" 200 0
+2026-11-23 18:39:51 [INFO] [django.server] "OPTIONS /api/payments/settings/ HTTP/1.1" 200 0
+2026-11-23 18:39:51 [INFO] [django.server] "OPTIONS /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 0
+2026-11-23 18:39:52 [INFO] [django.server] "OPTIONS /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 0
+2026-11-23 18:39:52 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:39:52 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-23 18:39:52 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6390
+2026-11-23 18:39:52 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-23 18:39:52 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-23 18:39:52 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-23 18:39:52 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-23 18:39:52 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-23 18:39:52 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6390
+2026-11-23 18:39:52 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 20468
+2026-11-23 18:39:52 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 20468
+2026-11-23 18:39:55 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 684001
+2026-11-23 18:39:56 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-23 18:39:59 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 684001
+2026-11-23 18:39:59 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 116215
+2026-11-23 18:39:59 [INFO] [django.server] "OPTIONS /api/payments/admin/refunds/? HTTP/1.1" 200 0
+2026-11-23 18:40:00 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-23 18:40:00 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-23 18:40:02 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6390
+2026-11-23 18:40:02 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 116215
+2026-11-23 18:40:02 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-23 18:40:09 [INFO] [django.server] "OPTIONS /api/staff/?page=1 HTTP/1.1" 200 0
+2026-11-23 18:40:09 [INFO] [django.server] "OPTIONS /api/staff/dashboard/ HTTP/1.1" 200 0
+2026-11-23 18:40:09 [INFO] [django.server] "OPTIONS /api/staff/departments/ HTTP/1.1" 200 0
+2026-11-23 18:40:09 [INFO] [django.server] "GET /api/staff/?page=1 HTTP/1.1" 200 5558
+2026-11-23 18:40:09 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1580
+2026-11-23 18:40:09 [INFO] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 200 1644
+2026-11-23 18:40:10 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6390
+2026-11-23 18:40:14 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 912
+2026-11-23 18:40:14 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:40:14 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-23 18:40:14 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-23 18:40:14 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6390
+2026-11-23 18:40:14 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-23 18:40:14 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 20468
+2026-11-23 18:40:16 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 684001
+2026-11-23 18:40:18 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-23 18:40:19 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 116215
+2026-11-23 18:40:19 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-23 18:40:23 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:40:32 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-23 18:40:32 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 912
+2026-11-23 18:40:32 [INFO] [django.server] "OPTIONS /api/bookings/?page_size=1000 HTTP/1.1" 200 0
+2026-11-23 18:40:32 [INFO] [django.server] "OPTIONS /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 0
+2026-11-23 18:40:32 [INFO] [django.server] "OPTIONS /api/coupons/ HTTP/1.1" 200 0
+2026-11-23 18:40:32 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:40:32 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-23 18:40:32 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-23 18:40:32 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6390
+2026-11-23 18:40:33 [INFO] [django.server] "OPTIONS /api/coupons/ HTTP/1.1" 200 0
+2026-11-23 18:40:33 [INFO] [django.server] "OPTIONS /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 0
+2026-11-23 18:40:33 [INFO] [django.server] "OPTIONS /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 0
+2026-11-23 18:40:33 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-23 18:40:33 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-23 18:40:33 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6390
+2026-11-23 18:40:33 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-23 18:40:33 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-23 18:40:33 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 20468
+2026-11-23 18:40:34 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 20468
+2026-11-23 18:40:36 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 684001
+2026-11-23 18:40:37 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-23 18:40:40 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 684001
+2026-11-23 18:40:40 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 116215
+2026-11-23 18:40:40 [INFO] [django.server] "OPTIONS /api/users/all/ HTTP/1.1" 200 0
+2026-11-23 18:40:41 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6390
+2026-11-23 18:40:41 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-23 18:40:41 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-23 18:40:43 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 116215
+2026-11-23 18:40:44 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-23 18:40:56 [INFO] [django.server] "GET /api/staff/?page=1 HTTP/1.1" 200 5558
+2026-11-23 18:40:56 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1580
+2026-11-23 18:40:56 [INFO] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 200 1644
+2026-11-23 18:41:00 [INFO] [django.server] "GET /api/staff/?page=1 HTTP/1.1" 200 5558
+2026-11-23 18:41:00 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1580
+2026-11-23 18:41:00 [INFO] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 200 1644
+2026-11-23 18:41:07 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 912
+2026-11-23 18:41:07 [INFO] [django.server] "OPTIONS /api/notifications/unread-count/ HTTP/1.1" 200 0
+2026-11-23 18:41:07 [INFO] [django.server] "OPTIONS /api/payments/settlements/ HTTP/1.1" 200 0
+2026-11-23 18:41:08 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-23 18:41:08 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-23 18:41:08 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-23 18:41:08 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:41:08 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 20468
+2026-11-23 18:41:08 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6390
+2026-11-23 18:41:10 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 684001
+2026-11-23 18:41:11 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-23 18:41:12 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 116215
+2026-11-23 18:41:13 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-23 18:41:14 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:41:28 [INFO] [django.server] "OPTIONS /api/staff/?page=1 HTTP/1.1" 200 0
+2026-11-23 18:41:28 [INFO] [django.server] "OPTIONS /api/staff/dashboard/ HTTP/1.1" 200 0
+2026-11-23 18:41:28 [INFO] [django.server] "OPTIONS /api/staff/departments/ HTTP/1.1" 200 0
+2026-11-23 18:41:28 [INFO] [django.server] "GET /api/staff/?page=1 HTTP/1.1" 200 5558
+2026-11-23 18:41:28 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1580
+2026-11-23 18:41:28 [INFO] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 200 1644
+2026-11-23 18:41:33 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6390
+2026-11-23 18:41:33 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6390
+2026-11-23 18:41:46 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 912
+2026-11-23 18:41:47 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:41:47 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-23 18:41:47 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-23 18:41:47 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6390
+2026-11-23 18:41:47 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-23 18:41:47 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 20468
+2026-11-23 18:41:50 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 684001
+2026-11-23 18:41:51 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-23 18:41:52 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 116215
+2026-11-23 18:41:53 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-23 18:42:14 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:42:21 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 912
+2026-11-23 18:42:21 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:42:22 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-23 18:42:22 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-23 18:42:22 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6390
+2026-11-23 18:42:22 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-23 18:42:22 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 20468
+2026-11-23 18:42:24 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 684001
+2026-11-23 18:42:25 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-23 18:42:26 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 116215
+2026-11-23 18:42:27 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-23 18:42:54 [INFO] [django.server] "OPTIONS /api/users/214/change-role/ HTTP/1.1" 200 0
+2026-11-23 18:42:55 [INFO] [django.server] "POST /api/users/214/change-role/ HTTP/1.1" 200 75
+2026-11-23 18:43:10 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 912
+2026-11-23 18:43:11 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:43:11 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-23 18:43:11 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-23 18:43:11 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6390
+2026-11-23 18:43:11 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 20468
+2026-11-23 18:43:11 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-23 18:43:12 [INFO] [django.server] "OPTIONS /api/payments/support-tickets/ HTTP/1.1" 200 0
+2026-11-23 18:43:12 [INFO] [django.server] "GET /api/payments/support-tickets/ HTTP/1.1" 200 3677
+2026-11-23 18:43:14 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 684001
+2026-11-23 18:43:14 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:43:15 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-23 18:43:16 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 116215
+2026-11-23 18:43:17 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-23 18:43:18 [INFO] [django.server] "OPTIONS /api/payments/support-tickets/4/ HTTP/1.1" 200 0
+2026-11-23 18:43:18 [INFO] [django.server] "GET /api/payments/support-tickets/4/ HTTP/1.1" 200 1865
+2026-11-23 18:43:18 [INFO] [django.server] "OPTIONS /api/bookings/310/ HTTP/1.1" 200 0
+2026-11-23 18:43:18 [INFO] [django.server] "GET /api/bookings/310/ HTTP/1.1" 200 4235
+2026-11-23 18:43:24 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 20468
+2026-11-23 18:43:31 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1580
+2026-11-23 18:43:31 [INFO] [django.server] "GET /api/staff/?page=1 HTTP/1.1" 200 5558
+2026-11-23 18:43:31 [INFO] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 200 1644
+2026-11-23 18:43:40 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 684001
+2026-11-23 18:43:47 [INFO] [django.server] "OPTIONS /api/rooms/hotel/92/ HTTP/1.1" 200 0
+2026-11-23 18:43:47 [INFO] [django.server] "GET /api/rooms/hotel/92/ HTTP/1.1" 200 52
+2026-11-23 18:43:52 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6390
+2026-11-23 18:44:03 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 116215
+2026-11-23 18:44:11 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:44:12 [INFO] [django.server] "OPTIONS /api/payments/refunds/KH-2026-F63B8B/ HTTP/1.1" 200 0
+2026-11-23 18:44:12 [INFO] [django.server] "GET /api/payments/refunds/KH-2026-F63B8B/ HTTP/1.1" 200 1248
+2026-11-23 18:44:14 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:44:55 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6390
+2026-11-23 18:44:55 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-23 18:44:55 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-23 18:44:55 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-23 18:44:55 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 20468
+2026-11-23 18:44:56 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-23 18:44:56 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-23 18:44:56 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6390
+2026-11-23 18:44:56 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-23 18:44:56 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 20468
+2026-11-23 18:44:57 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 684001
+2026-11-23 18:44:58 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-23 18:44:59 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-23 18:44:59 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 684001
+2026-11-23 18:44:59 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 116215
+2026-11-23 18:44:59 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 116215
+2026-11-23 18:44:59 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-23 18:45:00 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-23 18:45:11 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:45:15 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:46:11 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:46:15 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:47:11 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:47:50 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:48:11 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:48:50 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:49:11 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:49:46 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 684001
+2026-11-23 18:49:48 [INFO] [django.server] "GET /api/staff/?page=1 HTTP/1.1" 200 5558
+2026-11-23 18:49:48 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1580
+2026-11-23 18:49:48 [INFO] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 200 1644
+2026-11-23 18:49:50 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:49:55 [INFO] [django.server] "OPTIONS /api/users/212/delete/ HTTP/1.1" 200 0
+2026-11-23 18:49:56 [INFO] [django.server] "DELETE /api/users/212/delete/ HTTP/1.1" 200 74
+2026-11-23 18:49:56 [INFO] [django.server] "GET /api/staff/?page=1 HTTP/1.1" 200 5012
+2026-11-23 18:49:56 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1580
+2026-11-23 18:49:56 [INFO] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 200 1644
+2026-11-23 18:50:03 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:50:11 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:50:34 [INFO] [django.server] "OPTIONS /api/users/login/ HTTP/1.1" 200 0
+2026-11-23 18:50:35 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1359
+2026-11-23 18:50:36 [INFO] [django.server] "OPTIONS /api/staff/me/ HTTP/1.1" 200 0
+2026-11-23 18:50:36 [INFO] [django.server] "GET /api/staff/me/ HTTP/1.1" 200 1782
+2026-11-23 18:50:50 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:50:52 [INFO] [django.server] "OPTIONS /api/staff/change-password/ HTTP/1.1" 200 0
+2026-11-23 18:50:54 [INFO] [django.server] "POST /api/staff/change-password/ HTTP/1.1" 200 100
+2026-11-23 18:50:55 [INFO] [django.server] "OPTIONS /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 0
+2026-11-23 18:50:55 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:50:55 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 20468
+2026-11-23 18:50:57 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 20468
+2026-11-23 18:51:00 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 20468
+2026-11-23 18:51:03 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:51:06 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6393
+2026-11-23 18:51:06 [INFO] [django.server] "OPTIONS /api/payments/support-tickets/ HTTP/1.1" 200 0
+2026-11-23 18:51:06 [INFO] [django.server] "GET /api/payments/support-tickets/ HTTP/1.1" 200 3677
+2026-11-23 18:51:09 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 684001
+2026-11-23 18:51:11 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:51:35 [INFO] [django.server] "GET /api/payments/support-tickets/ HTTP/1.1" 200 3677
+2026-11-23 18:51:50 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:52:08 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:52:11 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:52:50 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:52:55 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:53:18 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:53:50 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:53:55 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:54:18 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:54:50 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:54:55 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:55:18 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-23 18:55:38 [INFO] [django.server] - Broken pipe from ('192.168.1.106', 49218)
+2026-11-23 18:55:38 [INFO] [django.server] - Broken pipe from ('192.168.1.106', 52153)
+2026-11-23 18:55:50 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-24 14:30:57 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 15:02:43 [WARNING] [django.request] Bad Request: /api/hotels/search/
+2026-11-24 15:02:43 [WARNING] [django.request] Bad Request: /api/hotels/search/
+2026-11-24 15:02:43 [WARNING] [django.request] Bad Request: /api/hotels/search/
+2026-11-24 15:02:43 [WARNING] [django.request] Bad Request: /api/hotels/search/
+2026-11-24 15:02:43 [WARNING] [django.request] Bad Request: /api/hotels/search/
+2026-11-24 15:05:38 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\util\validators.py changed, reloading.
+2026-11-24 15:05:39 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 15:06:22 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\hotels\views.py changed, reloading.
+2026-11-24 15:06:23 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 15:06:38 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\hotels\views.py changed, reloading.
+2026-11-24 15:06:39 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 15:06:50 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\hotels\views.py changed, reloading.
+2026-11-24 15:06:51 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 15:07:19 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\rooms\views.py changed, reloading.
+2026-11-24 15:07:20 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 15:07:44 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\rooms\views.py changed, reloading.
+2026-11-24 15:07:45 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 15:08:03 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\bookings\serializers.py changed, reloading.
+2026-11-24 15:08:09 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 15:08:21 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\bookings\serializers.py changed, reloading.
+2026-11-24 15:08:22 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 15:08:43 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\bookings\views.py changed, reloading.
+2026-11-24 15:08:45 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 15:09:52 [WARNING] [django.request] Bad Request: /api/bookings/
+2026-11-24 15:09:55 [WARNING] [django.request] Bad Request: /api/bookings/
+2026-11-24 15:10:00 [WARNING] [django.request] Bad Request: /api/rooms/check-availability/
+2026-11-24 15:10:03 [WARNING] [django.request] Bad Request: /api/rooms/check-availability/
+2026-11-24 15:10:07 [ERROR] [core.exceptions] Unhandled server error: name 'serializers' is not defined
+Traceback (most recent call last):
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\hotels\views.py", line 691, in execute_hotel_search
+    cleaned_occ = validate_occupancy(
+        adults=adults_param,
+    ...<3 lines>...
+        room=None
+    )
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\util\validators.py", line 472, in validate_occupancy
+    raise serializers.ValidationError({
+        "rooms": f"Each room requires at least 1 adult. {adults_val} adult(s) cannot book {rooms_val} room(s). (1 person cannot book multiple rooms)."
+    })
+rest_framework.exceptions.ValidationError: {'rooms': ErrorDetail(string='Each room requires at least 1 adult. 1 adult(s) cannot book 2 room(s). (1 person cannot book multiple rooms).', code='invalid')}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\views.py", line 523, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\hotels\views.py", line 1000, in get
+    return execute_hotel_search(request.query_params, request=request, is_near_me=False)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\hotels\views.py", line 702, in execute_hotel_search
+    except serializers.ValidationError as e:
+           ^^^^^^^^^^^
+NameError: name 'serializers' is not defined
+2026-11-24 15:10:07 [ERROR] [django.request] Internal Server Error: /api/hotels/search/
+2026-11-24 15:10:09 [ERROR] [core.exceptions] Unhandled server error: name 'serializers' is not defined
+Traceback (most recent call last):
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\hotels\views.py", line 691, in execute_hotel_search
+    cleaned_occ = validate_occupancy(
+        adults=adults_param,
+    ...<3 lines>...
+        room=None
+    )
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\util\validators.py", line 472, in validate_occupancy
+    raise serializers.ValidationError({
+        "rooms": f"Each room requires at least 1 adult. {adults_val} adult(s) cannot book {rooms_val} room(s). (1 person cannot book multiple rooms)."
+    })
+rest_framework.exceptions.ValidationError: {'rooms': ErrorDetail(string='Each room requires at least 1 adult. 1 adult(s) cannot book 2 room(s). (1 person cannot book multiple rooms).', code='invalid')}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\views.py", line 523, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\hotels\views.py", line 1000, in get
+    return execute_hotel_search(request.query_params, request=request, is_near_me=False)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\hotels\views.py", line 702, in execute_hotel_search
+    except serializers.ValidationError as e:
+           ^^^^^^^^^^^
+NameError: name 'serializers' is not defined
+2026-11-24 15:10:09 [ERROR] [django.request] Internal Server Error: /api/hotels/search/
+2026-11-24 15:10:15 [ERROR] [core.exceptions] Unhandled server error: name 'serializers' is not defined
+Traceback (most recent call last):
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\hotels\views.py", line 691, in execute_hotel_search
+    cleaned_occ = validate_occupancy(
+        adults=adults_param,
+    ...<3 lines>...
+        room=None
+    )
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\util\validators.py", line 465, in validate_occupancy
+    raise serializers.ValidationError({
+        "adults": "At least 1 adult (age 13+) is required. Minors cannot book or stay in a hotel room without an adult."
+    })
+rest_framework.exceptions.ValidationError: {'adults': ErrorDetail(string='At least 1 adult (age 13+) is required. Minors cannot book or stay in a hotel room without an adult.', code='invalid')}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\views.py", line 523, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\hotels\views.py", line 1000, in get
+    return execute_hotel_search(request.query_params, request=request, is_near_me=False)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\hotels\views.py", line 702, in execute_hotel_search
+    except serializers.ValidationError as e:
+           ^^^^^^^^^^^
+NameError: name 'serializers' is not defined
+2026-11-24 15:10:15 [ERROR] [django.request] Internal Server Error: /api/hotels/search/
+2026-11-24 15:10:22 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\hotels\views.py changed, reloading.
+2026-11-24 15:10:23 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 15:10:39 [WARNING] [django.request] Bad Request: /api/bookings/
+2026-11-24 15:10:42 [WARNING] [django.request] Bad Request: /api/bookings/
+2026-11-24 15:10:51 [WARNING] [django.request] Bad Request: /api/rooms/check-availability/
+2026-11-24 15:10:55 [WARNING] [django.request] Bad Request: /api/rooms/check-availability/
+2026-11-24 15:11:07 [WARNING] [django.request] Bad Request: /api/hotels/search/
+2026-11-24 15:11:14 [WARNING] [django.request] Bad Request: /api/hotels/search/
+2026-11-24 15:11:24 [WARNING] [django.request] Bad Request: /api/hotels/search/
+2026-11-24 15:12:02 [WARNING] [django.request] Bad Request: /api/hotels/search/
+2026-11-24 15:12:02 [WARNING] [django.request] Bad Request: /api/hotels/search/
+2026-11-24 15:12:02 [WARNING] [django.request] Bad Request: /api/hotels/search/
+2026-11-24 15:12:02 [WARNING] [django.request] Bad Request: /api/hotels/search/
+2026-11-24 15:12:02 [WARNING] [django.request] Bad Request: /api/hotels/search/
+2026-11-24 15:15:00 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\bookings\serializers.py changed, reloading.
+2026-11-24 15:15:01 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 15:21:17 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 15:22:12 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-24 15:25:06 [INFO] [django.server] "GET /api/rooms/check-availability/?hotel_id=1&check_in=2026-12-10&check_out=2026-12-15 HTTP/1.1" 200 2343
+2026-11-24 15:26:43 [INFO] [django.server] "GET /api/hotels/search/?city=Jaipur&min_price=2000&max_price=10000&sort_by=rating HTTP/1.1" 200 1544
+2026-11-24 15:28:12 [WARNING] [django.request] Unauthorized: /api/bookings/1/check-in/
+2026-11-24 15:28:12 [WARNING] [django.server] "POST /api/bookings/1/check-in/ HTTP/1.1" 401 512
+2026-11-24 15:35:56 [INFO] [django.server] "GET /api/rooms/check-availability/?room_id=1&check_in=2026-12-10&check_out=2026-12-15&rooms=1 HTTP/1.1" 200 1064
+2026-11-24 15:37:41 [INFO] [django.server] "GET /api/bookings/ HTTP/1.1" 200 88196
+2026-11-24 15:38:35 [WARNING] [django.request] Unauthorized: /api/rooms/
+2026-11-24 15:38:35 [WARNING] [django.server] "POST /api/rooms/ HTTP/1.1" 401 512
+2026-11-24 15:38:44 [WARNING] [django.request] Unauthorized: /api/rooms/
+2026-11-24 15:38:44 [WARNING] [django.server] "POST /api/rooms/ HTTP/1.1" 401 512
+2026-11-24 15:38:46 [WARNING] [django.request] Unauthorized: /api/rooms/
+2026-11-24 15:38:46 [WARNING] [django.server] "POST /api/rooms/ HTTP/1.1" 401 512
+2026-11-24 15:38:55 [WARNING] [django.request] Unauthorized: /api/rooms/
+2026-11-24 15:38:55 [WARNING] [django.server] "POST /api/rooms/ HTTP/1.1" 401 512
+2026-11-24 15:39:05 [WARNING] [django.request] Unauthorized: /api/rooms/
+2026-11-24 15:39:05 [WARNING] [django.server] "POST /api/rooms/ HTTP/1.1" 401 512
+2026-11-24 15:39:19 [INFO] [django.server] "GET /api/rooms/ HTTP/1.1" 200 12928
+2026-11-24 15:39:24 [INFO] [django.server] "GET /api/rooms/by-hotel/1/?check_in=2026-12-10&check_out=2026-12-15&rooms=1 HTTP/1.1" 200 5805
+2026-11-24 15:55:34 [WARNING] [django.request] Bad Request: /api/payments/payouts/customer/
+2026-11-24 15:55:45 [WARNING] [django.request] Forbidden: /api/payments/payouts/customer/
+2026-11-24 15:55:58 [WARNING] [django.request] Forbidden: /api/payments/payouts/customer/
+2026-11-24 15:56:06 [WARNING] [django.request] Bad Request: /api/payments/payouts/customer/
+2026-11-24 15:56:15 [WARNING] [django.request] Bad Request: /api/payments/payouts/customer/
+2026-11-24 15:56:23 [WARNING] [django.request] Forbidden: /api/payments/payouts/customer/
+2026-11-24 15:56:40 [WARNING] [django.request] Bad Request: /api/rooms/1/
+2026-11-24 15:56:40 [WARNING] [django.request] Bad Request: /api/rooms/2/
+2026-11-24 15:56:54 [WARNING] [django.request] Bad Request: /api/users/3/delete/
+2026-11-24 15:58:08 [WARNING] [django.request] Unauthorized: /api/notifications/send-test/
+2026-11-24 15:58:17 [WARNING] [django.request] Forbidden: /api/notifications/send-test/
+2026-11-24 16:35:05 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\users\models.py changed, reloading.
+2026-11-24 16:35:06 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 16:35:12 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\users\models.py changed, reloading.
+2026-11-24 16:35:13 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 16:35:37 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\models.py changed, reloading.
+2026-11-24 16:35:38 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 16:35:48 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\models.py changed, reloading.
+2026-11-24 16:35:49 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 16:36:18 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\models.py changed, reloading.
+2026-11-24 16:36:19 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 16:38:04 [WARNING] [django.request] Forbidden: /api/staff/create/
+2026-11-24 16:38:04 [WARNING] [django.request] Forbidden: /api/staff/create/
+2026-11-24 16:38:06 [WARNING] [django.request] Forbidden: /api/staff/create/
+2026-11-24 16:38:35 [WARNING] [django.request] Bad Request: /api/staff/reset-password/
+2026-11-24 16:38:59 [WARNING] [django.request] Forbidden: /api/staff/login/
+2026-11-24 16:39:13 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-24 16:39:40 [WARNING] [django.request] Forbidden: /api/staff/bookings/
+2026-11-24 16:39:56 [WARNING] [django.request] Bad Request: /api/staff/verifications/2/reject/
+2026-11-24 16:40:02 [WARNING] [django.request] Bad Request: /api/staff/payouts/1/process/
+2026-11-24 16:40:36 [WARNING] [django.request] Forbidden: /api/staff/refunds/
+2026-11-24 16:40:36 [WARNING] [django.request] Forbidden: /api/staff/payouts/
+2026-11-24 16:40:36 [WARNING] [django.request] Forbidden: /api/staff/verifications/
+2026-11-24 16:40:42 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\permissions.py changed, reloading.
+2026-11-24 16:40:43 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 16:40:48 [WARNING] [django.request] Forbidden: /api/staff/bookings/
+2026-11-24 16:40:48 [WARNING] [django.request] Forbidden: /api/staff/dashboard/
+2026-11-24 16:40:48 [WARNING] [django.request] Forbidden: /api/staff/bookings/
+2026-11-24 16:40:48 [WARNING] [django.request] Forbidden: /api/staff/dashboard/
+2026-11-24 16:41:00 [WARNING] [django.request] Forbidden: /api/staff/refunds/1/process/
+2026-11-24 16:42:48 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\views.py changed, reloading.
+2026-11-24 16:42:51 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 16:43:06 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\users\views.py changed, reloading.
+2026-11-24 16:43:07 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 16:44:59 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\urls.py changed, reloading.
+2026-11-24 16:45:02 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 16:49:34 [WARNING] [staff.services] Could not blacklist tokens for user 4: type object 'OutstandingToken' has no attribute 'objects'
+2026-11-24 16:50:07 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/4/
+2026-11-24 16:50:07 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/4/
+2026-11-24 16:50:22 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/3/
+2026-11-24 16:50:39 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/3/permissions/
+2026-11-24 16:50:56 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/1/
+2026-11-24 16:51:48 [WARNING] [django.request] Forbidden: /api/staff/admin/main-managers/
+2026-11-24 16:52:00 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/3/permissions/
+2026-11-24 16:52:17 [WARNING] [django.request] Unauthorized: /api/staff/mfa/verify/
+2026-11-24 16:52:17 [WARNING] [django.request] Unauthorized: /api/staff/mfa/verify/
+2026-11-24 16:52:33 [WARNING] [django.request] Forbidden: /api/staff/admin/main-managers/
+2026-11-24 16:52:33 [WARNING] [django.request] Forbidden: /api/staff/admin/hierarchy-overview/
+2026-11-24 16:52:33 [WARNING] [django.request] Forbidden: /api/staff/admin/audit-logs/
+2026-11-24 16:52:49 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/
+2026-11-24 16:52:49 [WARNING] [django.request] Forbidden: /api/staff/main-manager/departments/
+2026-11-24 16:52:49 [WARNING] [django.request] Forbidden: /api/staff/admin/hierarchy-overview/
+2026-11-24 16:54:11 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\serializers.py changed, reloading.
+2026-11-24 16:54:12 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 16:54:37 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\services.py changed, reloading.
+2026-11-24 16:54:39 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 16:54:52 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\serializers.py changed, reloading.
+2026-11-24 16:54:53 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 16:57:28 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/4/
+2026-11-24 16:57:28 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/4/
+2026-11-24 16:57:36 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/3/
+2026-11-24 16:57:52 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/3/permissions/
+2026-11-24 16:58:09 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/1/
+2026-11-24 16:58:56 [WARNING] [django.request] Forbidden: /api/staff/admin/main-managers/
+2026-11-24 16:59:09 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/3/permissions/
+2026-11-24 16:59:29 [WARNING] [django.request] Unauthorized: /api/staff/mfa/verify/
+2026-11-24 16:59:29 [WARNING] [django.request] Unauthorized: /api/staff/mfa/verify/
+2026-11-24 16:59:45 [WARNING] [django.request] Forbidden: /api/staff/admin/main-managers/
+2026-11-24 16:59:45 [WARNING] [django.request] Forbidden: /api/staff/admin/hierarchy-overview/
+2026-11-24 16:59:45 [WARNING] [django.request] Forbidden: /api/staff/admin/audit-logs/
+2026-11-24 17:00:02 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/
+2026-11-24 17:00:02 [WARNING] [django.request] Forbidden: /api/staff/main-manager/departments/
+2026-11-24 17:00:02 [WARNING] [django.request] Forbidden: /api/staff/admin/hierarchy-overview/
+2026-11-24 17:00:37 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\serializers.py changed, reloading.
+2026-11-24 17:00:41 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 17:01:38 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\serializers.py changed, reloading.
+2026-11-24 17:01:40 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 17:04:12 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\users\models.py changed, reloading.
+2026-11-24 17:04:13 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 17:21:08 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-24 17:41:28 [WARNING] [django.request] Bad Request: /api/staff/login/
+2026-11-24 17:41:28 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 400 250
+2026-11-24 17:41:45 [WARNING] [django.request] Bad Request: /api/users/login/
+2026-11-24 17:41:45 [WARNING] [django.server] "POST /api/users/login/ HTTP/1.1" 400 486
+2026-11-24 17:42:00 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-24 17:43:27 [WARNING] [django.request] Unauthorized: /api/staff/mfa/setup/
+2026-11-24 17:43:27 [WARNING] [django.server] "POST /api/staff/mfa/setup/ HTTP/1.1" 401 110
+2026-11-24 17:43:48 [WARNING] [django.request] Unauthorized: /api/staff/admin/main-managers/
+2026-11-24 17:43:48 [WARNING] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 401 300
+2026-11-24 17:44:14 [WARNING] [django.request] Unauthorized: /api/users/login/
+2026-11-24 17:44:14 [WARNING] [django.server] "POST /api/users/login/ HTTP/1.1" 401 124
+2026-11-24 17:44:38 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-24 17:46:20 [WARNING] [django.request] Unauthorized: /api/staff/main-manager/dept-managers/
+2026-11-24 17:46:20 [WARNING] [django.server] "POST /api/staff/main-manager/dept-managers/ HTTP/1.1" 401 300
+2026-11-24 17:46:29 [WARNING] [django.request] Unauthorized: /api/staff/admin/main-managers/
+2026-11-24 17:46:29 [WARNING] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 401 300
+2026-11-24 17:46:42 [INFO] [django.server] "POST /api/staff/create/ HTTP/1.1" 201 4735
+2026-11-24 17:46:55 [WARNING] [django.request] Unauthorized: /api/staff/main-manager/dept-managers/
+2026-11-24 17:46:55 [WARNING] [django.server] "POST /api/staff/main-manager/dept-managers/ HTTP/1.1" 401 300
+2026-11-24 17:47:06 [WARNING] [django.request] Unauthorized: /api/staff/dept-manager/staff/
+2026-11-24 17:47:06 [WARNING] [django.server] "POST /api/staff/dept-manager/staff/ HTTP/1.1" 401 300
+2026-11-24 17:47:23 [WARNING] [django.request] Unauthorized: /api/staff/admin/main-managers/
+2026-11-24 17:47:23 [WARNING] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 401 300
+2026-11-24 17:48:27 [WARNING] [django.request] Unauthorized: /api/staff/admin/main-managers/
+2026-11-24 17:48:27 [WARNING] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 401 300
+2026-11-24 17:50:06 [WARNING] [django.request] Unauthorized: /api/staff/admin/delegation-policies/
+2026-11-24 17:50:06 [WARNING] [django.server] "POST /api/staff/admin/delegation-policies/ HTTP/1.1" 401 300
+2026-11-24 17:50:55 [WARNING] [django.request] Unauthorized: /api/staff/admin/main-managers/
+2026-11-24 17:50:55 [WARNING] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 401 300
+2026-11-24 17:52:07 [WARNING] [django.request] Unauthorized: /api/users/login/
+2026-11-24 17:52:07 [WARNING] [django.server] "POST /api/users/login/ HTTP/1.1" 401 124
+2026-11-24 17:53:01 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-24 17:53:20 [INFO] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 201 865
+2026-11-24 17:53:37 [WARNING] [django.request] Unauthorized: /api/staff/main-manager/dept-managers/
+2026-11-24 17:53:37 [WARNING] [django.server] "POST /api/staff/main-manager/dept-managers/ HTTP/1.1" 401 300
+2026-11-24 17:53:43 [WARNING] [django.request] Bad Request: /api/staff/create/
+2026-11-24 17:53:43 [WARNING] [django.server] "POST /api/staff/create/ HTTP/1.1" 400 399
+2026-11-24 17:54:02 [INFO] [django.server] "GET /api/staff/admin/main-managers/ HTTP/1.1" 200 737
+2026-11-24 17:54:14 [INFO] [django.server] "GET /api/staff/admin/audit-logs/?action_type=MANAGER_CREATE HTTP/1.1" 200 399
+2026-11-24 17:54:48 [ERROR] [core.exceptions] Unhandled server error: UNIQUE constraint failed: users_user.phone_number
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\sqlite3\base.py", line 359, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: UNIQUE constraint failed: users_user.phone_number
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\views.py", line 523, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\staff\views.py", line 519, in post
+    profile = serializer.save()
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\serializers.py", line 210, in save
+    self.instance = self.create(validated_data)
+                    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\staff\serializers.py", line 171, in create
+    user = User.objects.create_user(
+        username=login_id,
+    ...<7 lines>...
+        is_active=True
+    )
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\contrib\auth\models.py", line 180, in create_user
+    return self._create_user(username, email, password, **extra_fields)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\contrib\auth\models.py", line 168, in _create_user
+    user.save(using=self._db)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\contrib\auth\base_user.py", line 62, in save
+    super().save(**kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 904, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 996, in save_base
+    updated = self._save_table(
+        raw,
+    ...<4 lines>...
+        update_fields,
+    )
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 1201, in _save_table
+    results = self._do_insert(
+        cls._base_manager, using, insert_fields, returning_fields, raw
+    )
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 1253, in _do_insert
+    return manager._insert(
+           ~~~~~~~~~~~~~~~^
+        [self],
+        ^^^^^^^
+    ...<3 lines>...
+        raw=raw,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\query.py", line 2166, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\sql\compiler.py", line 1954, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\sqlite3\base.py", line 359, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: UNIQUE constraint failed: users_user.phone_number
+2026-11-24 17:54:48 [ERROR] [django.request] Internal Server Error: /api/staff/create/
+2026-11-24 17:54:48 [ERROR] [django.server] "POST /api/staff/create/ HTTP/1.1" 500 216
+2026-11-24 17:55:03 [WARNING] [django.request] Bad Request: /api/staff/create/
+2026-11-24 17:55:03 [WARNING] [django.server] "POST /api/staff/create/ HTTP/1.1" 400 399
+2026-11-24 17:56:02 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1580
+2026-11-24 17:56:58 [WARNING] [django.request] Unauthorized: /api/staff/dept-manager/staff/
+2026-11-24 17:56:58 [WARNING] [django.server] "POST /api/staff/dept-manager/staff/ HTTP/1.1" 401 300
+2026-11-24 17:58:41 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\mfa_views.py changed, reloading.
+2026-11-24 17:58:42 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 17:58:52 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\mfa_views.py changed, reloading.
+2026-11-24 17:58:55 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 17:59:08 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\views.py changed, reloading.
+2026-11-24 17:59:09 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-24 17:59:56 [WARNING] [django.request] Bad Request: /api/staff/login/
+2026-11-24 17:59:56 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 400 250
+2026-11-24 18:01:36 [WARNING] [django.request] Unauthorized: /api/staff/dept-manager/staff/
+2026-11-24 18:01:36 [WARNING] [django.server] "POST /api/staff/dept-manager/staff/ HTTP/1.1" 401 300
+2026-11-24 18:02:29 [WARNING] [django.request] Unauthorized: /api/staff/dept-manager/staff/
+2026-11-24 18:02:29 [WARNING] [django.server] "POST /api/staff/dept-manager/staff/ HTTP/1.1" 401 300
+2026-11-24 18:04:00 [WARNING] [django.request] Bad Request: /api/staff/admin/main-managers/
+2026-11-24 18:04:00 [WARNING] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 400 442
+2026-11-24 18:04:09 [WARNING] [django.request] Bad Request: /api/staff/admin/departments/
+2026-11-24 18:04:09 [WARNING] [django.server] "POST /api/staff/admin/departments/ HTTP/1.1" 400 307
+2026-11-24 18:05:48 [WARNING] [django.request] Bad Request: /api/staff/admin/departments/
+2026-11-24 18:05:48 [WARNING] [django.server] "POST /api/staff/admin/departments/ HTTP/1.1" 400 307
+2026-11-24 18:07:06 [WARNING] [django.request] Unauthorized: /api/staff/main-manager/dept-managers/
+2026-11-24 18:07:06 [WARNING] [django.server] "POST /api/staff/main-manager/dept-managers/ HTTP/1.1" 401 300
+2026-11-24 18:08:06 [INFO] [django.server] "GET /api/staff/admin/hierarchy-overview/ HTTP/1.1" 200 736
+2026-11-24 18:08:47 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\views.py changed, reloading.
+2026-11-24 18:08:48 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader

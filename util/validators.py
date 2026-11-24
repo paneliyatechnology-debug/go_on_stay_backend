@@ -347,3 +347,198 @@ def validate_upload_document(file):
     return file
 
 
+# 13. Guest & Room Occupancy Validator (Adults, Children, Rooms Required)
+def validate_occupancy(adults=None, children=None, rooms=None, total_guests=None, room=None):
+    """
+    Validates hotel occupancy across all 3 parts:
+      Part 1: Adults (Ages 13+)
+      Part 2: Children (Ages 2-12)
+      Part 3: Rooms Required (Number of rooms needed)
+
+    Validation Rules:
+      1. Adults:
+         - Must be an integer >= 1 (At least 1 adult is mandatory; minors cannot stay alone).
+         - Each room requires at least 1 adult: adults >= rooms (e.g. 1 adult cannot book 2 rooms).
+      2. Children:
+         - Must be an integer >= 0.
+         - Children cannot stay without an adult (if children > 0, adults must be >= 1).
+      3. Rooms Required:
+         - Must be an integer >= 1.
+         - Cannot exceed adults (rooms <= adults).
+         - Cannot exceed total guests (rooms <= adults + children).
+         - Maximum 30 rooms per single reservation.
+      4. Room Capacity Limits:
+         - If a specific Room instance is provided:
+           - Total guests (adults + children) cannot exceed rooms * (room.capacity_adults + room.capacity_children).
+           - Adults cannot exceed rooms * (room.capacity_adults + 1) [allowing max 1 extra adult if hotel supports it].
+         - If generic search (no room instance):
+           - Total guests cannot exceed rooms * 6.
+           - Adults cannot exceed rooms * 4.
+
+    Returns:
+      dict: {'adults': int, 'children': int, 'rooms': int, 'total_guests': int}
+    """
+    import math
+
+    # 1. Parse Rooms
+    if rooms is None or str(rooms).strip() == '':
+        rooms_val = 1
+    else:
+        try:
+            rooms_val = int(str(rooms).strip())
+        except (ValueError, TypeError):
+            raise serializers.ValidationError({
+                "rooms": f"Invalid number of rooms '{rooms}'. Must be a valid positive integer."
+            })
+
+    if rooms_val < 1:
+        raise serializers.ValidationError({
+            "rooms": "Number of rooms must be at least 1."
+        })
+
+    if rooms_val > 30:
+        raise serializers.ValidationError({
+            "rooms": "A maximum of 30 rooms can be booked in a single reservation. For larger group bookings, please contact GoOnStay Support."
+        })
+
+    # 2. Parse Children
+    if children is None or str(children).strip() == '':
+        children_val = 0
+    else:
+        try:
+            children_val = int(str(children).strip())
+        except (ValueError, TypeError):
+            raise serializers.ValidationError({
+                "children": f"Invalid number of children '{children}'. Must be a valid integer."
+            })
+
+    if children_val < 0:
+        raise serializers.ValidationError({
+            "children": "Number of children cannot be negative."
+        })
+
+    # 3. Parse Adults & Total Guests
+    adults_parsed = None
+    if adults is not None and str(adults).strip() != '':
+        try:
+            adults_parsed = int(str(adults).strip())
+        except (ValueError, TypeError):
+            raise serializers.ValidationError({
+                "adults": f"Invalid number of adults '{adults}'. Must be a valid positive integer."
+            })
+
+    guests_parsed = None
+    if total_guests is not None and str(total_guests).strip() != '':
+        try:
+            guests_parsed = int(str(total_guests).strip())
+        except (ValueError, TypeError):
+            raise serializers.ValidationError({
+                "guests": f"Invalid number of guests '{total_guests}'. Must be a valid positive integer."
+            })
+
+    # Resolve Adults and Total Guests
+    if adults_parsed is not None:
+        adults_val = adults_parsed
+        if guests_parsed is not None:
+            if guests_parsed < adults_val:
+                raise serializers.ValidationError({
+                    "guests": f"Total guests ({guests_parsed}) cannot be less than the number of adults ({adults_val})."
+                })
+            total_guests_val = adults_val + children_val
+        else:
+            total_guests_val = adults_val + children_val
+    elif guests_parsed is not None:
+        # Infer adults from total guests - children
+        if guests_parsed < children_val:
+            raise serializers.ValidationError({
+                "guests": f"Total guests ({guests_parsed}) cannot be less than number of children ({children_val})."
+            })
+        adults_val = guests_parsed - children_val
+        total_guests_val = guests_parsed
+    else:
+        # Neither adults nor total_guests specified
+        adults_val = max(1, rooms_val)
+        total_guests_val = adults_val + children_val
+
+    # --- PART 1 VALIDATION: Adults ---
+    if adults_val < 1:
+        raise serializers.ValidationError({
+            "adults": "At least 1 adult (age 13+) is required. Minors cannot book or stay in a hotel room without an adult."
+        })
+
+    # Rule: 1 person 1 room, not 1 person 2 rooms!
+    # Each room requires at least 1 adult.
+    if rooms_val > adults_val:
+        raise serializers.ValidationError({
+            "rooms": f"Each room requires at least 1 adult. {adults_val} adult(s) cannot book {rooms_val} room(s). (1 person cannot book multiple rooms)."
+        })
+
+    # --- PART 2 VALIDATION: Children ---
+    if children_val > 0 and adults_val < 1:
+        raise serializers.ValidationError({
+            "children": "Children (ages 2-12) must be accompanied by at least one adult."
+        })
+
+    # --- PART 3 VALIDATION: Rooms Required ---
+    if rooms_val > total_guests_val:
+        raise serializers.ValidationError({
+            "rooms": f"Number of rooms ({rooms_val}) cannot exceed total guests ({total_guests_val})."
+        })
+
+    # --- CAPACITY CHECKS (Combined 3 parts) ---
+    if room is not None:
+        cap_adults = getattr(room, 'capacity_adults', 2) or 2
+        cap_children = getattr(room, 'capacity_children', 1) or 0
+        room_title = getattr(room, 'title', 'Selected Room')
+        max_room_cap = cap_adults + cap_children
+        total_max_cap = rooms_val * max_room_cap
+
+        if total_guests_val > total_max_cap:
+            min_rooms_needed = math.ceil(total_guests_val / max(1, max_room_cap))
+            raise serializers.ValidationError({
+                "number_of_guests": (
+                    f"Total guests ({total_guests_val}) exceed maximum capacity ({total_max_cap}) for {rooms_val} room(s) of type '{room_title}'. "
+                    f"Each room accommodates up to {max_room_cap} guests ({cap_adults} adults, {cap_children} children). "
+                    f"Please select at least {min_rooms_needed} room(s)."
+                )
+            })
+
+        # Check adult capacity specifically (children capacity cannot be used for extra adults)
+        allowed_adults = rooms_val * (cap_adults + (1 if getattr(room, 'extra_guest_price', 0) else 0))
+        if adults_val > allowed_adults:
+            min_rooms_for_adults = math.ceil(adults_val / max(1, cap_adults))
+            raise serializers.ValidationError({
+                "adults": (
+                    f"{adults_val} adults exceed the adult capacity for {rooms_val} room(s) of type '{room_title}' (maximum {allowed_adults} adults). "
+                    f"Please select at least {min_rooms_for_adults} room(s)."
+                )
+            })
+    else:
+        # Generic Search / No specific room yet
+        if total_guests_val > rooms_val * 6:
+            min_rooms_needed = math.ceil(total_guests_val / 4)
+            raise serializers.ValidationError({
+                "rooms": (
+                    f"{total_guests_val} guests cannot be accommodated in {rooms_val} room(s). "
+                    f"Standard rooms accommodate up to 4-5 guests. Please select at least {min_rooms_needed} room(s)."
+                )
+            })
+
+        if adults_val > rooms_val * 4:
+            min_rooms_for_adults = math.ceil(adults_val / 3)
+            raise serializers.ValidationError({
+                "rooms": (
+                    f"{adults_val} adults cannot be accommodated in {rooms_val} room(s). "
+                    f"Maximum 4 adults allowed per standard room. Please select at least {min_rooms_for_adults} room(s)."
+                )
+            })
+
+    return {
+        'adults': adults_val,
+        'children': children_val,
+        'rooms': rooms_val,
+        'total_guests': total_guests_val
+    }
+
+
+

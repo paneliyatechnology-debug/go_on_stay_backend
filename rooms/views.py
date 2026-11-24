@@ -127,7 +127,6 @@ class CheckAvailabilityView(APIView):
         hotel_id = request.query_params.get('hotel_id')
         check_in = request.query_params.get('check_in')
         check_out = request.query_params.get('check_out')
-        requested_rooms = int(request.query_params.get('rooms', 1))
         requested_room_number = request.query_params.get('room_number')
 
         if not check_in or not check_out or (not room_id and not hotel_id):
@@ -149,6 +148,42 @@ class CheckAvailabilityView(APIView):
                 {"error": "check_out must be strictly after check_in."},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+        from util.validators import validate_occupancy
+        rooms_param = request.query_params.get('rooms', 1)
+        adults_param = request.query_params.get('adults')
+        children_param = request.query_params.get('children')
+        guests_param = request.query_params.get('guests')
+
+        target_room = None
+        if room_id:
+            try:
+                target_room = Room.objects.get(id=room_id)
+            except (Room.DoesNotExist, ValueError):
+                return Response({"error": "Room not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            cleaned_occ = validate_occupancy(
+                adults=adults_param,
+                children=children_param,
+                rooms=rooms_param,
+                total_guests=guests_param,
+                room=target_room
+            )
+            requested_rooms = cleaned_occ['rooms']
+            requested_adults = cleaned_occ['adults']
+            requested_children = cleaned_occ['children']
+            requested_guests = cleaned_occ['total_guests']
+        except Exception as e:
+            err_detail = getattr(e, 'detail', str(e))
+            if isinstance(err_detail, dict):
+                first_k = next(iter(err_detail))
+                err_msg = str(err_detail[first_k][0] if isinstance(err_detail[first_k], list) else err_detail[first_k])
+            elif isinstance(err_detail, list):
+                err_msg = str(err_detail[0])
+            else:
+                err_msg = str(err_detail)
+            return Response({"error": err_msg, "details": err_detail}, status=status.HTTP_400_BAD_REQUEST)
 
         # Case A: Query availability for ALL rooms under a Hotel (TASK-09 & Room-wise check)
         if hotel_id:
@@ -199,7 +234,7 @@ class CheckAvailabilityView(APIView):
 
         # Case B: Query availability for a specific Room
         try:
-            room = Room.objects.get(id=room_id)
+            room = target_room or Room.objects.get(id=room_id)
             available_count = get_available_room_count(room, cin, cout)
             is_available = available_count >= requested_rooms
             room_numbers_status = get_room_numbers_availability(room, cin, cout)
@@ -212,6 +247,9 @@ class CheckAvailabilityView(APIView):
                 "check_in": str(cin),
                 "check_out": str(cout),
                 "requested_rooms": requested_rooms,
+                "requested_adults": requested_adults,
+                "requested_children": requested_children,
+                "requested_guests": requested_guests,
                 "total_physical_rooms": room.total_rooms,
                 "available": is_available,
                 "is_available": is_available,

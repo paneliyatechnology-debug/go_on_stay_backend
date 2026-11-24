@@ -42,7 +42,11 @@ class StaffProfileListSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='user.first_name', read_only=True)
     last_name = serializers.CharField(source='user.last_name', read_only=True)
     full_name = serializers.SerializerMethodField()
+    user = serializers.SerializerMethodField()
     email = serializers.EmailField(source='user.email', read_only=True)
+    role = serializers.CharField(source='user.role', read_only=True)
+    hierarchy_level = serializers.IntegerField(read_only=True)
+    department = serializers.SerializerMethodField()
     department_id = serializers.IntegerField(source='department.id', read_only=True)
     department_name = serializers.CharField(source='department.name', read_only=True)
     department_code = serializers.CharField(source='department.code', read_only=True)
@@ -52,10 +56,29 @@ class StaffProfileListSerializer(serializers.ModelSerializer):
         model = StaffProfile
         fields = (
             'id', 'user_id', 'employee_id', 'login_id', 'username',
-            'first_name', 'last_name', 'full_name', 'email', 'phone_number',
-            'department_id', 'department_name', 'department_code', 'designation',
+            'first_name', 'last_name', 'full_name', 'email', 'user', 'role', 'hierarchy_level', 'phone_number',
+            'department', 'department_id', 'department_name', 'department_code', 'designation',
             'status', 'must_change_password', 'permissions_count', 'created_at', 'updated_at'
         )
+
+    def get_department(self, obj):
+        if obj.department:
+            return {
+                'id': obj.department.id,
+                'code': obj.department.code,
+                'name': obj.department.name
+            }
+        return None
+
+    def get_user(self, obj):
+        return {
+            'id': obj.user.id,
+            'username': obj.user.username,
+            'email': obj.user.email,
+            'role': obj.user.role,
+            'first_name': obj.user.first_name,
+            'last_name': obj.user.last_name
+        }
 
     def get_full_name(self, obj):
         name = f"{obj.user.first_name} {obj.user.last_name}".strip()

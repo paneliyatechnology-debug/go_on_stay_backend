@@ -250,6 +250,36 @@
           ]
         },
         {
+          "name": "POST 2c. Manager & Admin MFA Verify (TOTP Challenge)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"temp_token\": \"{{temp_token}}\",\n    \"totp_code\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/staff/mfa/verify/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "mfa",
+                "verify",
+                ""
+              ]
+            },
+            "description": "Completes login when Admin or Manager credentials return mfa_required=true."
+          }
+        },
+        {
           "name": "4. Host Login (Dedicated Host Portal)",
           "request": {
             "method": "POST",

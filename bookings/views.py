@@ -70,11 +70,32 @@ class BookingListCreateView(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN
             )
 
+        # Early Occupancy Validation across all 3 parts (Adults, Children, Rooms)
+        from util.validators import validate_occupancy
+        try:
+            cleaned_occ = validate_occupancy(
+                adults=request.data.get('adults'),
+                children=request.data.get('children'),
+                rooms=request.data.get('number_of_rooms') or request.data.get('rooms', 1),
+                total_guests=request.data.get('number_of_guests') or request.data.get('guests'),
+                room=None
+            )
+            requested_rooms = cleaned_occ['rooms']
+        except Exception as e:
+            err_detail = getattr(e, 'detail', str(e))
+            if isinstance(err_detail, dict):
+                first_k = next(iter(err_detail))
+                err_msg = str(err_detail[first_k][0] if isinstance(err_detail[first_k], list) else err_detail[first_k])
+            elif isinstance(err_detail, list):
+                err_msg = str(err_detail[0])
+            else:
+                err_msg = str(err_detail)
+            return Response({"error": err_msg, "details": err_detail}, status=status.HTTP_400_BAD_REQUEST)
+
         # Concurrency & Overselling Prevention (select_for_update lock & global mutex)
         room_id = request.data.get('room') or request.data.get('room_id')
         check_in = request.data.get('check_in')
         check_out = request.data.get('check_out')
-        requested_rooms = int(request.data.get('number_of_rooms') or 1)
 
         from rooms.models import Room
         from rooms.utils import auto_update_past_checkout_bookings, get_available_room_count, _ROOM_ALLOCATION_LOCK

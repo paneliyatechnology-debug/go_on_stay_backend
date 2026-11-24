@@ -128,6 +128,66 @@ class StaffLoginView(APIView):
 
         user = user_obj
 
+        # Check Hierarchy Level & MFA enforcement for Level 2, 3, 4 (Dept Manager, Main Manager, Admin)
+        from .services import get_user_hierarchy_level, log_hierarchy_audit
+        from .models import ManagerMFAProfile, HierarchyAuditLog
+        from util.totp import verify_totp_code, generate_totp_secret, get_provisioning_uri
+        from django.core.signing import TimestampSigner
+
+        actor_level = get_user_hierarchy_level(user)
+        if actor_level >= 2:
+            mfa_profile, _ = ManagerMFAProfile.objects.get_or_create(
+                user=user,
+                defaults={'totp_secret': generate_totp_secret()}
+            )
+            supplied_code = request.data.get('totp_code') or request.data.get('otp')
+            if supplied_code:
+                if verify_totp_code(mfa_profile.totp_secret, supplied_code):
+                    if not mfa_profile.is_enrolled:
+                        mfa_profile.is_enrolled = True
+                        mfa_profile.is_mfa_enabled = True
+                        mfa_profile.save()
+                    log_hierarchy_audit(
+                        actor_user=user,
+                        action_type=HierarchyAuditLog.ACTION_LOGIN_MFA_SUCCESS,
+                        target_user=user,
+                        description="Manager logged in with TOTP code.",
+                        request=request
+                    )
+                else:
+                    log_hierarchy_audit(
+                        actor_user=user,
+                        action_type=HierarchyAuditLog.ACTION_LOGIN_MFA_FAILED,
+                        target_user=user,
+                        description="Failed TOTP verification on manager login.",
+                        request=request
+                    )
+                    return Response({
+                        "success": False,
+                        "code": "INVALID_MFA_CODE",
+                        "error": "Invalid multi-factor authentication code."
+                    }, status=status.HTTP_401_UNAUTHORIZED)
+            elif mfa_profile.is_mfa_enabled:
+                signer = TimestampSigner()
+                temp_token = signer.sign(f"mfa:{user.id}")
+                return Response({
+                    "success": True,
+                    "mfa_required": True,
+                    "temp_token": temp_token,
+                    "message": "Multi-Factor Authentication code required."
+                }, status=status.HTTP_200_OK)
+            elif not mfa_profile.is_enrolled and not getattr(settings, 'BYPASS_MFA_ENROLLMENT_IN_TESTS', False):
+                signer = TimestampSigner()
+                temp_token = signer.sign(f"mfa_enroll:{user.id}")
+                return Response({
+                    "success": True,
+                    "mfa_enrollment_required": True,
+                    "temp_token": temp_token,
+                    "secret": mfa_profile.totp_secret,
+                    "provisioning_uri": get_provisioning_uri(mfa_profile.totp_secret, user.username),
+                    "message": "Manager accounts require Multi-Factor Authentication. Please enroll your authenticator app."
+                }, status=status.HTTP_200_OK)
+
         # Generate JWT Tokens
         refresh = RefreshToken.for_user(user)
         access_token = str(refresh.access_token)

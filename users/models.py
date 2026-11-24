@@ -12,6 +12,8 @@ class User(AbstractUser):
     ROLE_SUPER_ADMIN = 'SUPER_ADMIN'
     ROLE_SUPPORT_AGENT = 'SUPPORT_AGENT'
     ROLE_STAFF = 'STAFF'
+    ROLE_DEPARTMENT_STAFF_MANAGER = 'DEPARTMENT_STAFF_MANAGER'
+    ROLE_MAIN_MANAGER = 'MAIN_MANAGER'
 
     ROLE_CHOICES = (
         (ROLE_CUSTOMER, 'Customer / Guest'),
@@ -21,6 +23,8 @@ class User(AbstractUser):
         (ROLE_SUPER_ADMIN, 'Super Admin'),
         (ROLE_SUPPORT_AGENT, 'Support Agent'),
         (ROLE_STAFF, 'GoOnStay Staff'),
+        (ROLE_DEPARTMENT_STAFF_MANAGER, 'Department Staff Manager'),
+        (ROLE_MAIN_MANAGER, 'Main Manager'),
     )
 
     LANG_EN = 'en'
@@ -58,7 +62,7 @@ class User(AbstractUser):
     )
 
     email = models.EmailField(unique=True)
-    role = models.CharField(max_length=25, choices=ROLE_CHOICES, default=ROLE_CUSTOMER, db_index=True)
+    role = models.CharField(max_length=30, choices=ROLE_CHOICES, default=ROLE_CUSTOMER, db_index=True)
     subscription_tier = models.CharField(max_length=20, choices=TIER_CHOICES, default=TIER_SILVER)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     dob = models.DateField(blank=True, null=True)

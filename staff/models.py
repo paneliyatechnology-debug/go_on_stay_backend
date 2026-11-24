@@ -81,6 +81,8 @@ class StaffPermission(models.Model):
     name = models.CharField(max_length=100)
     department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='permissions', null=True, blank=True)
     action = models.CharField(max_length=50, choices=ACTION_CHOICES, default=ACTION_VIEW)
+    category = models.CharField(max_length=50, default='GENERAL', db_index=True)
+    is_sensitive = models.BooleanField(default=False, db_index=True)
     description = models.TextField(blank=True, default='')
 
     class Meta:
@@ -104,9 +106,10 @@ class StaffProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='staff_profile')
     employee_id = models.CharField(max_length=50, unique=True, db_index=True)
     login_id = models.CharField(max_length=50, unique=True, db_index=True)
-    department = models.ForeignKey(Department, on_delete=models.PROTECT, related_name='staff_members')
+    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True, related_name='staff_members')
     permissions = models.ManyToManyField(StaffPermission, blank=True, related_name='staff_profiles')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_ACTIVE, db_index=True)
+    is_manager = models.BooleanField(default=False, db_index=True)
     must_change_password = models.BooleanField(default=True)
     designation = models.CharField(max_length=100, blank=True, default='')
     phone_number = models.CharField(max_length=20, blank=True, default='')
@@ -118,7 +121,21 @@ class StaffProfile(models.Model):
         ordering = ['employee_id']
 
     def __str__(self):
-        return f"{self.employee_id} - {self.login_id} ({self.department.name})"
+        dept_name = self.department.name if self.department else 'Executive / All Departments'
+        return f"{self.employee_id} - {self.login_id} ({dept_name})"
+
+    @property
+    def hierarchy_level(self):
+        role = getattr(self.user, 'role', '')
+        if role in ['ADMIN', 'SUPER_ADMIN'] or getattr(self.user, 'is_superuser', False):
+            return 4
+        if role == 'MAIN_MANAGER':
+            return 3
+        if role == 'DEPARTMENT_STAFF_MANAGER':
+            return 2
+        if role == 'STAFF':
+            return 1
+        return 0
 
     @property
     def is_active_account(self):
@@ -324,3 +341,105 @@ class StaffAssignment(models.Model):
 
     def __str__(self):
         return f"{self.staff.employee_id} -> {self.entity_type} #{self.entity_id}"
+
+
+class DepartmentManagerAssignment(models.Model):
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='manager_assignments')
+    manager = models.ForeignKey(StaffProfile, on_delete=models.CASCADE, related_name='department_assignments')
+    assigned_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_department_managers')
+    is_active = models.BooleanField(default=True, db_index=True)
+    assigned_at = models.DateTimeField(auto_now_add=True)
+    revoked_at = models.DateTimeField(null=True, blank=True)
+    revoked_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='revoked_department_managers')
+
+    class Meta:
+        ordering = ['-assigned_at']
+        indexes = [
+            models.Index(fields=['department', 'is_active']),
+            models.Index(fields=['manager', 'is_active']),
+        ]
+
+    def __str__(self):
+        return f"{self.manager.employee_id} -> {self.department.code} (Active: {self.is_active})"
+
+
+class PermissionDelegationPolicy(models.Model):
+    ROLE_MAIN_MANAGER = 'MAIN_MANAGER'
+    ROLE_DEPARTMENT_STAFF_MANAGER = 'DEPARTMENT_STAFF_MANAGER'
+
+    TARGET_ROLES = (
+        (ROLE_MAIN_MANAGER, 'Main Manager'),
+        (ROLE_DEPARTMENT_STAFF_MANAGER, 'Department Staff Manager'),
+    )
+
+    role = models.CharField(max_length=50, choices=TARGET_ROLES, unique=True)
+    allowed_permissions = models.ManyToManyField(StaffPermission, blank=True, related_name='delegation_policies')
+    allow_sensitive_permissions = models.BooleanField(default=False)
+    updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Delegation Policy for {self.role} (Sensitive: {self.allow_sensitive_permissions})"
+
+
+class ManagerMFAProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='mfa_profile')
+    totp_secret = models.CharField(max_length=128)
+    is_mfa_enabled = models.BooleanField(default=False, db_index=True)
+    is_enrolled = models.BooleanField(default=False)
+    backup_codes_hash = models.TextField(blank=True, default='')
+    last_verified_at = models.DateTimeField(null=True, blank=True)
+    failed_attempts = models.PositiveIntegerField(default=0)
+    locked_until = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"MFA Profile for {self.user.username} (Enabled: {self.is_mfa_enabled})"
+
+
+class HierarchyAuditLog(models.Model):
+    ACTION_STAFF_CREATE = 'STAFF_CREATE'
+    ACTION_MANAGER_CREATE = 'MANAGER_CREATE'
+    ACTION_ROLE_CHANGE = 'ROLE_CHANGE'
+    ACTION_DEPARTMENT_CHANGE = 'DEPARTMENT_CHANGE'
+    ACTION_PERMISSION_ASSIGN = 'PERMISSION_ASSIGN'
+    ACTION_PERMISSION_REVOKE = 'PERMISSION_REVOKE'
+    ACTION_STATUS_CHANGE = 'STATUS_CHANGE'
+    ACTION_MFA_ENROLL = 'MFA_ENROLL'
+    ACTION_MFA_DISABLE = 'MFA_DISABLE'
+    ACTION_SESSION_REVOKE = 'SESSION_REVOKE'
+    ACTION_DELEGATION_POLICY_UPDATE = 'DELEGATION_POLICY_UPDATE'
+    ACTION_LOGIN_MFA_SUCCESS = 'LOGIN_MFA_SUCCESS'
+    ACTION_LOGIN_MFA_FAILED = 'LOGIN_MFA_FAILED'
+
+    actor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='hierarchy_audit_actions')
+    actor_username = models.CharField(max_length=150, db_index=True)
+    actor_role = models.CharField(max_length=50, db_index=True)
+
+    target_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='hierarchy_audit_targets')
+    target_username = models.CharField(max_length=150, blank=True, default='', db_index=True)
+    target_role = models.CharField(max_length=50, blank=True, default='')
+
+    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True, related_name='hierarchy_audit_logs')
+    department_code = models.CharField(max_length=50, blank=True, default='')
+
+    action_type = models.CharField(max_length=50, db_index=True)
+    previous_state = models.JSONField(default=dict, blank=True)
+    new_state = models.JSONField(default=dict, blank=True)
+    description = models.TextField(blank=True, default='')
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.CharField(max_length=255, blank=True, default='')
+    timestamp = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ['-timestamp']
+        indexes = [
+            models.Index(fields=['actor_role', 'action_type']),
+            models.Index(fields=['department_code', 'action_type']),
+            models.Index(fields=['timestamp', 'action_type']),
+        ]
+
+    def __str__(self):
+        return f"[{self.timestamp}] {self.actor_username} ({self.actor_role}) -> {self.action_type} on {self.target_username}"
+

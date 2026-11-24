@@ -239,6 +239,27 @@ class LoginView(APIView):
                 "error": "Your account has been blocked by the Administrator."
             }, status=status.HTTP_403_FORBIDDEN)
 
+        # Check Manager / Admin MFA if enrolled
+        if hasattr(user, 'mfa_profile') and user.mfa_profile.is_mfa_enabled:
+            supplied_code = request.data.get('totp_code') or request.data.get('otp')
+            from util.totp import verify_totp_code
+            from django.core.signing import TimestampSigner
+            if supplied_code:
+                if not verify_totp_code(user.mfa_profile.totp_secret, supplied_code):
+                    return Response({
+                        "error": "Invalid multi-factor authentication code.",
+                        "code": "INVALID_MFA_CODE"
+                    }, status=status.HTTP_401_UNAUTHORIZED)
+            else:
+                signer = TimestampSigner()
+                temp_token = signer.sign(f"mfa:{user.id}")
+                return Response({
+                    "success": True,
+                    "mfa_required": True,
+                    "temp_token": temp_token,
+                    "message": "Multi-Factor Authentication code required."
+                }, status=status.HTTP_200_OK)
+
         refresh = RefreshToken.for_user(user)
         access_token = str(refresh.access_token)
         refresh_token = str(refresh)

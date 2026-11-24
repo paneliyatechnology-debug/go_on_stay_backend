@@ -286,6 +286,36 @@
           ]
         },
         {
+          "name": "POST 2c. Manager & Admin MFA Verify (TOTP Challenge)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"temp_token\": \"{{temp_token}}\",\n    \"totp_code\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/staff/mfa/verify/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "mfa",
+                "verify",
+                ""
+              ]
+            },
+            "description": "Completes login when Admin or Manager credentials return mfa_required=true."
+          }
+        },
+        {
           "name": "Staff Forgot Password",
           "request": {
             "method": "POST",
@@ -477,6 +507,363 @@
             },
             "description": "Admin creates staff member. Returns sequential GOS-EMP-XXX, Login ID, and one-time plain temporary password."
           }
+        },
+        {
+          "name": "2b. Level 3 - Main Manager Operations",
+          "description": "Cross-department operational oversight: view all departments, create/assign Department Staff Managers, and view all operational staff.",
+          "item": [
+            {
+              "name": "1. View All Departments & Staff Counts",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{main_mgr_access_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/staff/main-manager/departments/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "staff",
+                    "main-manager",
+                    "departments",
+                    ""
+                  ]
+                },
+                "description": "Main Manager views all active departments, currently assigned managers, and staff counts."
+              }
+            },
+            {
+              "name": "2. Create Department Staff Manager (Level 2)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{main_mgr_access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"username\": \"priya_reservation_mgr\",\n    \"email\": \"priya.mgr@goonstay.com\",\n    \"department_id\": 1,\n    \"first_name\": \"Priya\",\n    \"last_name\": \"Patel\",\n    \"designation\": \"Reservation Department Manager\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/staff/main-manager/dept-managers/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "staff",
+                    "main-manager",
+                    "dept-managers",
+                    ""
+                  ]
+                },
+                "description": "Main Manager creates a Level 2 Department Staff Manager."
+              }
+            },
+            {
+              "name": "3. List Department Staff Managers",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{main_mgr_access_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/staff/main-manager/dept-managers/?department_id=1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "staff",
+                    "main-manager",
+                    "dept-managers",
+                    ""
+                  ],
+                  "query": [
+                    {
+                      "key": "department_id",
+                      "value": "1"
+                    }
+                  ]
+                },
+                "description": "Lists all Level 2 Department Staff Managers."
+              }
+            },
+            {
+              "name": "4. Assign / Reassign Department Manager",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{main_mgr_access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"manager_id\": 1,\n    \"department_id\": 1,\n    \"reassign_existing\": true\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/staff/main-manager/dept-managers/assign/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "staff",
+                    "main-manager",
+                    "dept-managers",
+                    "assign",
+                    ""
+                  ]
+                },
+                "description": "Assigns or reassigns manager to a department."
+              }
+            },
+            {
+              "name": "5. View All Operational Staff Across All Departments",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{main_mgr_access_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/staff/main-manager/staff/?status=ACTIVE",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "staff",
+                    "main-manager",
+                    "staff",
+                    ""
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "ACTIVE"
+                    }
+                  ]
+                },
+                "description": "Main Manager views all operational staff with search & filter."
+              }
+            }
+          ]
+        },
+        {
+          "name": "2c. Level 2 - Department Staff Manager Operations",
+          "description": "Department-specific management: manage staff strictly within assigned department, server-side isolation, and delegation boundaries.",
+          "item": [
+            {
+              "name": "1. View Assigned Department Staff (Isolated)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{dept_mgr_access_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/staff/dept-manager/staff/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "staff",
+                    "dept-manager",
+                    "staff",
+                    ""
+                  ]
+                },
+                "description": "Lists staff strictly belonging to the manager's assigned department."
+              }
+            },
+            {
+              "name": "2. Create Staff Member within Department",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{dept_mgr_access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"username\": \"rahul_res_agent\",\n    \"email\": \"rahul.agent@goonstay.com\",\n    \"first_name\": \"Rahul\",\n    \"last_name\": \"Verma\",\n    \"department_id\": 1,\n    \"designation\": \"Reservation Officer\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/staff/dept-manager/staff/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "staff",
+                    "dept-manager",
+                    "staff",
+                    ""
+                  ]
+                },
+                "description": "Creates a Level 1 operational staff member inside the manager's assigned department."
+              }
+            },
+            {
+              "name": "3. Get Staff Detail (IDOR Protected)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{dept_mgr_access_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/staff/dept-manager/staff/1/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "staff",
+                    "dept-manager",
+                    "staff",
+                    "1",
+                    ""
+                  ]
+                },
+                "description": "View staff details. Returns 403 Forbidden if staff belongs to another department."
+              }
+            },
+            {
+              "name": "4. Update Staff Details / Status",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{dept_mgr_access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"status\": \"ACTIVE\",\n    \"designation\": \"Senior Reservation Associate\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/staff/dept-manager/staff/1/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "staff",
+                    "dept-manager",
+                    "staff",
+                    "1",
+                    ""
+                  ]
+                },
+                "description": "Updates staff status or details. Role tampering is blocked."
+              }
+            },
+            {
+              "name": "5. View Staff Assigned Permissions",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{dept_mgr_access_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/staff/dept-manager/staff/1/permissions/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "staff",
+                    "dept-manager",
+                    "staff",
+                    "1",
+                    "permissions",
+                    ""
+                  ]
+                },
+                "description": "Lists granular permissions assigned to a staff member."
+              }
+            },
+            {
+              "name": "6. Assign / Revoke Staff Permissions (Delegation Constrained)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{dept_mgr_access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"permissions\": [\"VIEW_BOOKINGS\", \"MANAGE_RESERVATIONS\"]\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/staff/dept-manager/staff/1/permissions/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "staff",
+                    "dept-manager",
+                    "staff",
+                    "1",
+                    "permissions",
+                    ""
+                  ]
+                },
+                "description": "Assigns permissions within department scope. Sensitive permissions are blocked."
+              }
+            }
+          ]
         },
         {
           "name": "List Staff Members",

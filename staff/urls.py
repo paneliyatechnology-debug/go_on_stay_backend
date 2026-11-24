@@ -48,8 +48,47 @@ from .views import (
     RefundsClaimsDashboardView, PayoutEscrowDashboardView,
     HotelVerificationDashboardView
 )
+from .mfa_views import (
+    MFASetupView, MFAEnrollVerifyView, MFAVerifyView, MFADisableView
+)
+from .hierarchy_views import (
+    AdminMainManagerListCreateView, AdminDepartmentListCreateView,
+    AdminDepartmentDetailView, AdminDelegationPolicyView,
+    AdminPermissionCatalogueView, AdminAuditLogListView,
+    AdminHierarchyOverviewView,
+    MainManagerDepartmentListView, MainManagerDeptManagerListCreateView,
+    MainManagerAssignDeptManagerView, MainManagerAllStaffListView,
+    DeptManagerStaffListCreateView, DeptManagerStaffDetailUpdateView,
+    DeptManagerStaffPermissionsView
+)
 
 urlpatterns = [
+    # 0. Multi-Factor Authentication (MFA)
+    path('mfa/setup/', MFASetupView.as_view(), name='staff-mfa-setup'),
+    path('mfa/enroll-verify/', MFAEnrollVerifyView.as_view(), name='staff-mfa-enroll-verify'),
+    path('mfa/verify/', MFAVerifyView.as_view(), name='staff-mfa-verify'),
+    path('mfa/disable/', MFADisableView.as_view(), name='staff-mfa-disable'),
+
+    # Level 4: Admin Hierarchy Management
+    path('admin/main-managers/', AdminMainManagerListCreateView.as_view(), name='staff-admin-main-managers'),
+    path('admin/departments/', AdminDepartmentListCreateView.as_view(), name='staff-admin-departments'),
+    path('admin/departments/<int:pk>/', AdminDepartmentDetailView.as_view(), name='staff-admin-department-detail'),
+    path('admin/delegation-policies/', AdminDelegationPolicyView.as_view(), name='staff-admin-delegation-policies'),
+    path('admin/permissions/', AdminPermissionCatalogueView.as_view(), name='staff-admin-permissions'),
+    path('admin/audit-logs/', AdminAuditLogListView.as_view(), name='staff-admin-audit-logs'),
+    path('admin/hierarchy-overview/', AdminHierarchyOverviewView.as_view(), name='staff-admin-hierarchy-overview'),
+
+    # Level 3: Main Manager Management
+    path('main-manager/departments/', MainManagerDepartmentListView.as_view(), name='staff-main-manager-departments'),
+    path('main-manager/dept-managers/', MainManagerDeptManagerListCreateView.as_view(), name='staff-main-manager-dept-managers'),
+    path('main-manager/dept-managers/assign/', MainManagerAssignDeptManagerView.as_view(), name='staff-main-manager-assign-manager'),
+    path('main-manager/staff/', MainManagerAllStaffListView.as_view(), name='staff-main-manager-staff-list'),
+
+    # Level 2: Department-wise Staff Manager Management
+    path('dept-manager/staff/', DeptManagerStaffListCreateView.as_view(), name='staff-dept-manager-staff-list-create'),
+    path('dept-manager/staff/<int:pk>/', DeptManagerStaffDetailUpdateView.as_view(), name='staff-dept-manager-staff-detail-update'),
+    path('dept-manager/staff/<int:pk>/permissions/', DeptManagerStaffPermissionsView.as_view(), name='staff-dept-manager-staff-permissions'),
+
     # 1. Staff Authentication
     path('login/', StaffLoginView.as_view(), name='staff-login'),
     path('me/', StaffMeView.as_view(), name='staff-me'),

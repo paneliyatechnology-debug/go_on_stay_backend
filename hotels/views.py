@@ -1,6 +1,6 @@
 import math
 from datetime import timedelta
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions, status, serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.db.models import Q, Min, Max, Avg, Count, F
@@ -681,17 +681,39 @@ def execute_hotel_search(params, request=None, is_near_me=False, default_radius_
                 }
             }, status=status.HTTP_400_BAD_REQUEST)
 
+    from util.validators import validate_occupancy
+    adults_param = params.get('adults')
+    children_param = params.get('children')
+    guests_param = params.get('guests')
+    rooms_param = params.get('rooms', 1)
+
     try:
-        guests = int(params.get('guests', 1))
-        rooms = int(params.get('rooms', 1))
-        if guests < 1 or rooms < 1:
-            raise ValueError()
-    except ValueError:
+        cleaned_occ = validate_occupancy(
+            adults=adults_param,
+            children=children_param,
+            rooms=rooms_param,
+            total_guests=guests_param,
+            room=None
+        )
+        adults = cleaned_occ['adults']
+        children = cleaned_occ['children']
+        guests = cleaned_occ['total_guests']
+        rooms = cleaned_occ['rooms']
+    except serializers.ValidationError as e:
+        err_detail = e.detail
+        if isinstance(err_detail, dict):
+            first_k = next(iter(err_detail))
+            err_msg = str(err_detail[first_k][0] if isinstance(err_detail[first_k], list) else err_detail[first_k])
+        elif isinstance(err_detail, list):
+            err_msg = str(err_detail[0])
+        else:
+            err_msg = str(err_detail)
         return Response({
             "success": False,
             "error": {
                 "code": "INVALID_OCCUPANCY",
-                "message": "guests and rooms must be positive integers."
+                "message": err_msg,
+                "details": err_detail
             }
         }, status=status.HTTP_400_BAD_REQUEST)
 
@@ -818,12 +840,15 @@ def execute_hotel_search(params, request=None, is_near_me=False, default_radius_
                 continue
 
             req_cap_per_room = max(1, (guests + rooms - 1) // rooms)
+            req_adults_per_room = max(1, (adults + rooms - 1) // rooms)
 
             if cin and cout:
                 eligible_rooms = []
                 for rm in hotel_rooms:
                     total_cap = (rm.capacity_adults or 0) + (rm.capacity_children or 0)
                     if total_cap < req_cap_per_room:
+                        continue
+                    if (rm.capacity_adults or 0) < req_adults_per_room:
                         continue
 
                     avail_count = get_available_room_count(rm, cin, cout, include_holds=True)
@@ -845,10 +870,11 @@ def execute_hotel_search(params, request=None, is_near_me=False, default_radius_
                 h.starting_price = min(item[1] for item in eligible_rooms)
                 h.available_rooms_count = sum(item[2] for item in eligible_rooms)
             else:
-                if guests > 1 or rooms > 1:
+                if guests > 1 or rooms > 1 or adults > 1:
                     eligible_rooms = [
                         rm for rm in hotel_rooms
                         if ((rm.capacity_adults or 0) + (rm.capacity_children or 0)) >= req_cap_per_room
+                        and (rm.capacity_adults or 0) >= req_adults_per_room
                         and (getattr(rm, 'total_rooms', 1) or 1) >= rooms
                     ]
                     if not eligible_rooms:
@@ -937,7 +963,15 @@ def execute_hotel_search(params, request=None, is_near_me=False, default_radius_
             "results": results
         },
         "count": total_count,
-        "results": results
+        "results": results,
+        "search_criteria": {
+            "adults": adults,
+            "children": children,
+            "guests": guests,
+            "rooms": rooms,
+            "check_in": str(cin) if cin else None,
+            "check_out": str(cout) if cout else None
+        }
     }
 
     if is_near_me:

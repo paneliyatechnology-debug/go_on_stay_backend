@@ -159,12 +159,14 @@ class BookingSerializer(serializers.ModelSerializer):
 
 class BookingCreateSerializer(serializers.ModelSerializer):
     coupon_code = serializers.CharField(required=False, allow_blank=True, write_only=True)
+    adults = serializers.IntegerField(required=False, write_only=True)
+    children = serializers.IntegerField(required=False, write_only=True)
 
     class Meta:
         model = Booking
         fields = (
             'hotel', 'room', 'room_number', 'check_in', 'check_out', 'number_of_guests',
-            'number_of_rooms', 'guest_name', 'guest_email', 'guest_phone',
+            'number_of_rooms', 'adults', 'children', 'guest_name', 'guest_email', 'guest_phone',
             'meal_plan', 'estimated_arrival_time', 'special_requests', 'discount',
             'coupon_code'
         )
@@ -175,10 +177,25 @@ class BookingCreateSerializer(serializers.ModelSerializer):
         room = attrs.get('room')
         room_number = attrs.get('room_number')
         requested_rooms = attrs.get('number_of_rooms', 1)
+        number_of_guests = attrs.get('number_of_guests')
+        adults = attrs.get('adults')
+        children = attrs.get('children')
 
         # Indian Hotel Booking Rules: Check-in/Check-out Validation
-        from util.validators import validate_check_in_out_dates, clean_indian_phone, clean_email
+        from util.validators import validate_check_in_out_dates, clean_indian_phone, clean_email, validate_occupancy
         validate_check_in_out_dates(check_in, check_out)
+
+        # Occupancy Validation across all 3 parts: Adults, Children, Rooms
+        cleaned_occ = validate_occupancy(
+            adults=adults,
+            children=children,
+            rooms=requested_rooms,
+            total_guests=number_of_guests,
+            room=room
+        )
+        attrs['number_of_rooms'] = cleaned_occ['rooms']
+        attrs['number_of_guests'] = cleaned_occ['total_guests']
+        requested_rooms = cleaned_occ['rooms']
 
         # Validate Guest Indian Mobile Number
         guest_phone = attrs.get('guest_phone')
@@ -258,6 +275,8 @@ class BookingCreateSerializer(serializers.ModelSerializer):
         room = validated_data['room']
         check_in = validated_data['check_in']
         check_out = validated_data['check_out']
+        validated_data.pop('adults', None)
+        validated_data.pop('children', None)
         requested_rooms = validated_data.get('number_of_rooms', 1)
         applied_coupon_code = validated_data.pop('applied_coupon_code', None) or validated_data.pop('coupon_code', None)
         discount = Decimal(str(validated_data.get('discount', 0.00)))
