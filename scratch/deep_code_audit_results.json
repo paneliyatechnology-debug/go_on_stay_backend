@@ -1,0 +1,696 @@
+{
+  "models_audit": [
+    {
+      "app": "users",
+      "model": "User",
+      "total_fields": 63,
+      "indexed_fields": [
+        "role",
+        "created_at"
+      ],
+      "foreign_keys": [],
+      "table": "users_user"
+    },
+    {
+      "app": "users",
+      "model": "EmailOTP",
+      "total_fields": 6,
+      "indexed_fields": [
+        "email"
+      ],
+      "foreign_keys": [],
+      "table": "users_emailotp"
+    },
+    {
+      "app": "hotels",
+      "model": "Country",
+      "total_fields": 7,
+      "indexed_fields": [
+        "name",
+        "code"
+      ],
+      "foreign_keys": [],
+      "table": "hotels_country"
+    },
+    {
+      "app": "hotels",
+      "model": "State",
+      "total_fields": 8,
+      "indexed_fields": [
+        "country",
+        "name"
+      ],
+      "foreign_keys": [
+        "country"
+      ],
+      "table": "hotels_state"
+    },
+    {
+      "app": "hotels",
+      "model": "City",
+      "total_fields": 9,
+      "indexed_fields": [
+        "state",
+        "name"
+      ],
+      "foreign_keys": [
+        "state"
+      ],
+      "table": "hotels_city"
+    },
+    {
+      "app": "hotels",
+      "model": "Area",
+      "total_fields": 9,
+      "indexed_fields": [
+        "city",
+        "name"
+      ],
+      "foreign_keys": [
+        "city"
+      ],
+      "table": "hotels_area"
+    },
+    {
+      "app": "hotels",
+      "model": "Amenity",
+      "total_fields": 6,
+      "indexed_fields": [],
+      "foreign_keys": [],
+      "table": "hotels_amenity"
+    },
+    {
+      "app": "hotels",
+      "model": "Hotel",
+      "total_fields": 52,
+      "indexed_fields": [
+        "owner",
+        "city",
+        "status",
+        "is_approved",
+        "is_active",
+        "deleted_by",
+        "rejected_by",
+        "country_rel",
+        "state_rel",
+        "city_rel",
+        "area_rel",
+        "created_at"
+      ],
+      "foreign_keys": [
+        "owner",
+        "deleted_by",
+        "rejected_by",
+        "country_rel",
+        "state_rel",
+        "city_rel",
+        "area_rel"
+      ],
+      "table": "hotels_hotel"
+    },
+    {
+      "app": "hotels",
+      "model": "HotelImage",
+      "total_fields": 7,
+      "indexed_fields": [
+        "hotel"
+      ],
+      "foreign_keys": [
+        "hotel"
+      ],
+      "table": "hotels_hotelimage"
+    },
+    {
+      "app": "hotels",
+      "model": "HotelVerificationDocument",
+      "total_fields": 8,
+      "indexed_fields": [
+        "hotel"
+      ],
+      "foreign_keys": [
+        "hotel"
+      ],
+      "table": "hotels_hotelverificationdocument"
+    },
+    {
+      "app": "hotels",
+      "model": "HotelStaff",
+      "total_fields": 8,
+      "indexed_fields": [
+        "hotel",
+        "user"
+      ],
+      "foreign_keys": [
+        "hotel",
+        "user"
+      ],
+      "table": "hotels_hotelstaff"
+    },
+    {
+      "app": "hotels",
+      "model": "DeletedHotelArchive",
+      "total_fields": 19,
+      "indexed_fields": [
+        "hotel",
+        "owner",
+        "deleted_by",
+        "restored_by"
+      ],
+      "foreign_keys": [
+        "owner",
+        "deleted_by",
+        "restored_by"
+      ],
+      "table": "hotels_deletedhotelarchive"
+    },
+    {
+      "app": "rooms",
+      "model": "Room",
+      "total_fields": 27,
+      "indexed_fields": [
+        "hotel",
+        "room_type",
+        "created_at"
+      ],
+      "foreign_keys": [
+        "hotel"
+      ],
+      "table": "rooms_room"
+    },
+    {
+      "app": "rooms",
+      "model": "RoomImage",
+      "total_fields": 6,
+      "indexed_fields": [
+        "room"
+      ],
+      "foreign_keys": [
+        "room"
+      ],
+      "table": "rooms_roomimage"
+    },
+    {
+      "app": "rooms",
+      "model": "RoomCalendarBlock",
+      "total_fields": 6,
+      "indexed_fields": [
+        "room",
+        "date"
+      ],
+      "foreign_keys": [
+        "room"
+      ],
+      "table": "rooms_roomcalendarblock"
+    },
+    {
+      "app": "bookings",
+      "model": "Booking",
+      "total_fields": 57,
+      "indexed_fields": [
+        "booking_id",
+        "customer",
+        "hotel",
+        "room",
+        "check_in",
+        "check_out",
+        "payment_status",
+        "booking_status",
+        "razorpay_order_id",
+        "confirmation_email_sent",
+        "action_by_staff",
+        "created_at"
+      ],
+      "foreign_keys": [
+        "customer",
+        "hotel",
+        "room",
+        "action_by_staff"
+      ],
+      "table": "bookings_booking"
+    },
+    {
+      "app": "bookings",
+      "model": "CancellationPolicyRule",
+      "total_fields": 11,
+      "indexed_fields": [],
+      "foreign_keys": [],
+      "table": "bookings_cancellationpolicyrule"
+    },
+    {
+      "app": "bookings",
+      "model": "BookingEmailLog",
+      "total_fields": 8,
+      "indexed_fields": [
+        "booking"
+      ],
+      "foreign_keys": [
+        "booking"
+      ],
+      "table": "bookings_bookingemaillog"
+    },
+    {
+      "app": "payments",
+      "model": "Payment",
+      "total_fields": 18,
+      "indexed_fields": [
+        "booking",
+        "user",
+        "razorpay_order_id",
+        "razorpay_payment_id",
+        "status",
+        "is_duplicate_captured",
+        "created_at"
+      ],
+      "foreign_keys": [
+        "booking",
+        "user"
+      ],
+      "table": "payments_payment"
+    },
+    {
+      "app": "payments",
+      "model": "Refund",
+      "total_fields": 29,
+      "indexed_fields": [
+        "booking",
+        "payment",
+        "razorpay_refund_id",
+        "payout_reference_id",
+        "idempotency_key",
+        "status",
+        "processed_by",
+        "created_at"
+      ],
+      "foreign_keys": [
+        "booking",
+        "payment",
+        "processed_by"
+      ],
+      "table": "payments_refund"
+    },
+    {
+      "app": "payments",
+      "model": "WebhookEvent",
+      "total_fields": 7,
+      "indexed_fields": [
+        "event_id"
+      ],
+      "foreign_keys": [],
+      "table": "payments_webhookevent"
+    },
+    {
+      "app": "payments",
+      "model": "HostPayoutAccount",
+      "total_fields": 17,
+      "indexed_fields": [
+        "user"
+      ],
+      "foreign_keys": [],
+      "table": "payments_hostpayoutaccount"
+    },
+    {
+      "app": "payments",
+      "model": "HostEarning",
+      "total_fields": 20,
+      "indexed_fields": [
+        "host",
+        "booking",
+        "payout",
+        "status",
+        "hold_until",
+        "is_disputed",
+        "created_at"
+      ],
+      "foreign_keys": [
+        "host",
+        "payout"
+      ],
+      "table": "payments_hostearning"
+    },
+    {
+      "app": "payments",
+      "model": "HostPayout",
+      "total_fields": 19,
+      "indexed_fields": [
+        "payout_id",
+        "idempotency_key",
+        "host",
+        "payout_account",
+        "status",
+        "provider_payout_id",
+        "processed_by",
+        "created_at"
+      ],
+      "foreign_keys": [
+        "host",
+        "payout_account",
+        "processed_by"
+      ],
+      "table": "payments_hostpayout"
+    },
+    {
+      "app": "payments",
+      "model": "PlatformSetting",
+      "total_fields": 12,
+      "indexed_fields": [],
+      "foreign_keys": [],
+      "table": "payments_platformsetting"
+    },
+    {
+      "app": "payments",
+      "model": "SupportTicket",
+      "total_fields": 18,
+      "indexed_fields": [
+        "ticket_number",
+        "user",
+        "booking",
+        "hotel",
+        "room",
+        "status",
+        "assigned_agent",
+        "created_at"
+      ],
+      "foreign_keys": [
+        "user",
+        "booking",
+        "hotel",
+        "room",
+        "assigned_agent"
+      ],
+      "table": "payments_supportticket"
+    },
+    {
+      "app": "payments",
+      "model": "TicketMessage",
+      "total_fields": 7,
+      "indexed_fields": [
+        "ticket",
+        "sender"
+      ],
+      "foreign_keys": [
+        "ticket",
+        "sender"
+      ],
+      "table": "payments_ticketmessage"
+    },
+    {
+      "app": "payments",
+      "model": "CustomerHotelMessage",
+      "total_fields": 7,
+      "indexed_fields": [
+        "booking",
+        "sender",
+        "receiver"
+      ],
+      "foreign_keys": [
+        "booking",
+        "sender",
+        "receiver"
+      ],
+      "table": "payments_customerhotelmessage"
+    },
+    {
+      "app": "payments",
+      "model": "AuditLog",
+      "total_fields": 9,
+      "indexed_fields": [
+        "user"
+      ],
+      "foreign_keys": [
+        "user"
+      ],
+      "table": "payments_auditlog"
+    },
+    {
+      "app": "reviews",
+      "model": "Review",
+      "total_fields": 17,
+      "indexed_fields": [
+        "booking",
+        "hotel",
+        "user",
+        "status",
+        "created_at"
+      ],
+      "foreign_keys": [
+        "hotel",
+        "user"
+      ],
+      "table": "reviews_review"
+    },
+    {
+      "app": "wishlist",
+      "model": "Wishlist",
+      "total_fields": 4,
+      "indexed_fields": [
+        "user",
+        "hotel"
+      ],
+      "foreign_keys": [
+        "user",
+        "hotel"
+      ],
+      "table": "wishlist_wishlist"
+    },
+    {
+      "app": "coupons",
+      "model": "Coupon",
+      "total_fields": 22,
+      "indexed_fields": [],
+      "foreign_keys": [],
+      "table": "coupons_coupon"
+    },
+    {
+      "app": "coupons",
+      "model": "CouponUsage",
+      "total_fields": 6,
+      "indexed_fields": [
+        "coupon",
+        "user",
+        "booking"
+      ],
+      "foreign_keys": [
+        "coupon",
+        "user",
+        "booking"
+      ],
+      "table": "coupons_couponusage"
+    },
+    {
+      "app": "notifications",
+      "model": "Notification",
+      "total_fields": 8,
+      "indexed_fields": [
+        "recipient",
+        "booking",
+        "is_read",
+        "created_at"
+      ],
+      "foreign_keys": [
+        "recipient",
+        "booking"
+      ],
+      "table": "notifications_notification"
+    },
+    {
+      "app": "staff",
+      "model": "Department",
+      "total_fields": 12,
+      "indexed_fields": [
+        "code"
+      ],
+      "foreign_keys": [],
+      "table": "staff_department"
+    },
+    {
+      "app": "staff",
+      "model": "StaffPermission",
+      "total_fields": 10,
+      "indexed_fields": [
+        "code",
+        "department",
+        "category",
+        "is_sensitive"
+      ],
+      "foreign_keys": [
+        "department"
+      ],
+      "table": "staff_staffpermission"
+    },
+    {
+      "app": "staff",
+      "model": "StaffProfile",
+      "total_fields": 20,
+      "indexed_fields": [
+        "user",
+        "employee_id",
+        "login_id",
+        "department",
+        "status",
+        "is_manager",
+        "created_by"
+      ],
+      "foreign_keys": [
+        "department",
+        "created_by"
+      ],
+      "table": "staff_staffprofile"
+    },
+    {
+      "app": "staff",
+      "model": "StaffPasswordResetToken",
+      "total_fields": 7,
+      "indexed_fields": [
+        "staff_profile",
+        "token_hash"
+      ],
+      "foreign_keys": [
+        "staff_profile"
+      ],
+      "table": "staff_staffpasswordresettoken"
+    },
+    {
+      "app": "staff",
+      "model": "StaffTicketNote",
+      "total_fields": 6,
+      "indexed_fields": [
+        "ticket",
+        "staff"
+      ],
+      "foreign_keys": [
+        "ticket",
+        "staff"
+      ],
+      "table": "staff_staffticketnote"
+    },
+    {
+      "app": "staff",
+      "model": "StaffNotification",
+      "total_fields": 10,
+      "indexed_fields": [
+        "recipient",
+        "department"
+      ],
+      "foreign_keys": [
+        "recipient",
+        "department"
+      ],
+      "table": "staff_staffnotification"
+    },
+    {
+      "app": "staff",
+      "model": "StaffActivityLog",
+      "total_fields": 11,
+      "indexed_fields": [
+        "staff",
+        "employee_id",
+        "action",
+        "timestamp"
+      ],
+      "foreign_keys": [
+        "staff"
+      ],
+      "table": "staff_staffactivitylog"
+    },
+    {
+      "app": "staff",
+      "model": "StaffAssignment",
+      "total_fields": 8,
+      "indexed_fields": [
+        "staff",
+        "entity_type",
+        "entity_id",
+        "assigned_by"
+      ],
+      "foreign_keys": [
+        "staff",
+        "assigned_by"
+      ],
+      "table": "staff_staffassignment"
+    },
+    {
+      "app": "staff",
+      "model": "DepartmentManagerAssignment",
+      "total_fields": 8,
+      "indexed_fields": [
+        "department",
+        "manager",
+        "assigned_by",
+        "is_active",
+        "revoked_by"
+      ],
+      "foreign_keys": [
+        "department",
+        "manager",
+        "assigned_by",
+        "revoked_by"
+      ],
+      "table": "staff_departmentmanagerassignment"
+    },
+    {
+      "app": "staff",
+      "model": "PermissionDelegationPolicy",
+      "total_fields": 6,
+      "indexed_fields": [
+        "updated_by"
+      ],
+      "foreign_keys": [
+        "updated_by"
+      ],
+      "table": "staff_permissiondelegationpolicy"
+    },
+    {
+      "app": "staff",
+      "model": "ManagerMFAProfile",
+      "total_fields": 11,
+      "indexed_fields": [
+        "user",
+        "is_mfa_enabled"
+      ],
+      "foreign_keys": [],
+      "table": "staff_managermfaprofile"
+    },
+    {
+      "app": "staff",
+      "model": "HierarchyAuditLog",
+      "total_fields": 16,
+      "indexed_fields": [
+        "actor",
+        "actor_username",
+        "actor_role",
+        "target_user",
+        "target_username",
+        "department",
+        "action_type",
+        "timestamp"
+      ],
+      "foreign_keys": [
+        "actor",
+        "target_user",
+        "department"
+      ],
+      "table": "staff_hierarchyauditlog"
+    }
+  ],
+  "views_audit": [],
+  "serializers_audit": [],
+  "idor_findings": [],
+  "n_plus_one_findings": [],
+  "sensitive_exposure_findings": [
+    {
+      "file": ".\\users\\serializers.py",
+      "field": "password",
+      "issue": "Password field defined without write_only=True in serializer definition."
+    },
+    {
+      "file": ".\\users\\serializers.py",
+      "field": "password",
+      "issue": "Password field defined without write_only=True in serializer definition."
+    },
+    {
+      "file": ".\\users\\serializers.py",
+      "field": "password",
+      "issue": "Password field defined without write_only=True in serializer definition."
+    }
+  ]
+}

@@ -2,6 +2,7 @@ import re
 import secrets
 from decimal import Decimal
 from datetime import timedelta
+from django.conf import settings
 from django.utils import timezone
 from django.db import transaction
 from django.db.models import Q, Count, Sum

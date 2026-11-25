@@ -8038,3 +8038,456 @@ django.db.utils.IntegrityError: UNIQUE constraint failed: users_user.phone_numbe
 2026-11-24 18:08:06 [INFO] [django.server] "GET /api/staff/admin/hierarchy-overview/ HTTP/1.1" 200 736
 2026-11-24 18:08:47 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\views.py changed, reloading.
 2026-11-24 18:08:48 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-25 13:56:32 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-25 13:56:38 [WARNING] [django.request] Unauthorized: /api/staff/main-manager/dept-managers/
+2026-11-25 13:56:38 [WARNING] [django.server] "POST /api/staff/main-manager/dept-managers/ HTTP/1.1" 401 300
+2026-11-25 13:57:40 [WARNING] [django.request] Bad Request: /api/users/token/refresh/
+2026-11-25 13:57:40 [WARNING] [django.server] "POST /api/users/token/refresh/ HTTP/1.1" 400 273
+2026-11-25 13:57:45 [WARNING] [django.request] Bad Request: /api/users/token/refresh/
+2026-11-25 13:57:45 [WARNING] [django.server] "POST /api/users/token/refresh/ HTTP/1.1" 400 273
+2026-11-25 13:58:09 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-25 13:58:18 [WARNING] [django.request] Unauthorized: /api/staff/mfa/verify/
+2026-11-25 13:58:18 [WARNING] [django.server] "POST /api/staff/mfa/verify/ HTTP/1.1" 401 104
+2026-11-25 13:58:49 [WARNING] [django.request] Unauthorized: /api/staff/main-manager/dept-managers/
+2026-11-25 13:58:49 [WARNING] [django.server] "POST /api/staff/main-manager/dept-managers/ HTTP/1.1" 401 300
+2026-11-25 14:00:08 [WARNING] [django.request] Bad Request: /api/staff/login/
+2026-11-25 14:00:08 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 400 250
+2026-11-25 14:01:28 [WARNING] [django.request] Bad Request: /api/staff/admin/departments/
+2026-11-25 14:01:28 [WARNING] [django.server] "POST /api/staff/admin/departments/ HTTP/1.1" 400 307
+2026-11-25 14:01:44 [WARNING] [django.request] Bad Request: /api/staff/admin/departments/
+2026-11-25 14:01:44 [WARNING] [django.server] "POST /api/staff/admin/departments/ HTTP/1.1" 400 317
+2026-11-25 14:02:25 [WARNING] [django.request] Bad Request: /api/staff/admin/main-managers/
+2026-11-25 14:02:25 [WARNING] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 400 442
+2026-11-25 14:02:33 [INFO] [django.server] "GET /api/staff/admin/main-managers/ HTTP/1.1" 200 737
+2026-11-25 14:05:15 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-25 14:05:15 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 401 83
+2026-11-25 14:05:31 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-25 14:05:31 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 401 83
+2026-11-25 14:05:45 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-25 14:05:45 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 401 83
+2026-11-25 14:06:00 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-25 14:06:00 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 401 83
+2026-11-25 14:07:00 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-25 14:07:00 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 401 83
+2026-11-25 14:08:30 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-25 14:08:30 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 401 83
+2026-11-25 14:08:47 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-25 14:08:47 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 401 83
+2026-11-25 14:09:01 [WARNING] [django.request] Unauthorized: /api/staff/me/
+2026-11-25 14:09:01 [WARNING] [django.server] "GET /api/staff/me/ HTTP/1.1" 401 300
+2026-11-25 14:09:34 [WARNING] [django.request] Bad Request: /api/staff/create/
+2026-11-25 14:09:34 [WARNING] [django.server] "POST /api/staff/create/ HTTP/1.1" 400 399
+2026-11-25 14:10:15 [INFO] [django.server] "GET /api/staff/?department=RESERVATION&status=ACTIVE HTTP/1.1" 200 1617
+2026-11-25 14:11:03 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-25 14:11:03 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 401 83
+2026-11-25 14:11:35 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-25 14:11:35 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 401 83
+2026-11-25 14:14:41 [ERROR] [core.exceptions] Unhandled server error: name 'settings' is not defined
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\views.py", line 523, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\staff\views.py", line 179, in post
+    elif not mfa_profile.is_enrolled and not getattr(settings, 'BYPASS_MFA_ENROLLMENT_IN_TESTS', False):
+                                                     ^^^^^^^^
+NameError: name 'settings' is not defined. Did you mean: 'self.settings'?
+2026-11-25 14:14:41 [ERROR] [django.request] Internal Server Error: /api/staff/login/
+2026-11-25 14:14:41 [ERROR] [django.server] "POST /api/staff/login/ HTTP/1.1" 500 216
+2026-11-25 14:15:01 [ERROR] [core.exceptions] Unhandled server error: name 'settings' is not defined
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\views.py", line 523, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\staff\views.py", line 179, in post
+    elif not mfa_profile.is_enrolled and not getattr(settings, 'BYPASS_MFA_ENROLLMENT_IN_TESTS', False):
+                                                     ^^^^^^^^
+NameError: name 'settings' is not defined. Did you mean: 'self.settings'?
+2026-11-25 14:15:01 [ERROR] [django.request] Internal Server Error: /api/staff/login/
+2026-11-25 14:15:01 [ERROR] [django.server] "POST /api/staff/login/ HTTP/1.1" 500 216
+2026-11-25 14:15:17 [ERROR] [core.exceptions] Unhandled server error: name 'settings' is not defined
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\views.py", line 523, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\staff\views.py", line 179, in post
+    elif not mfa_profile.is_enrolled and not getattr(settings, 'BYPASS_MFA_ENROLLMENT_IN_TESTS', False):
+                                                     ^^^^^^^^
+NameError: name 'settings' is not defined. Did you mean: 'self.settings'?
+2026-11-25 14:20:05 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\views.py changed, reloading.
+2026-11-25 14:20:07 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-25 14:24:41 [WARNING] [django.request] Bad Request: /api/users/login/
+2026-11-25 14:24:41 [WARNING] [django.server] "POST /api/users/login/ HTTP/1.1" 400 354
+2026-11-25 14:24:41 [INFO] [django.server] - Broken pipe from ('127.0.0.1', 52436)
+2026-11-25 14:25:05 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-25 14:25:30 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 415
+2026-11-25 14:31:52 [WARNING] [django.request] Unauthorized: /api/staff/mfa/verify/
+2026-11-25 14:31:52 [WARNING] [django.server] "POST /api/staff/mfa/verify/ HTTP/1.1" 401 104
+2026-11-25 14:32:00 [WARNING] [django.request] Unauthorized: /api/staff/mfa/setup/
+2026-11-25 14:32:00 [WARNING] [django.server] "POST /api/staff/mfa/setup/ HTTP/1.1" 401 110
+2026-11-25 14:33:32 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-25 14:33:42 [WARNING] [django.request] Unauthorized: /api/staff/mfa/verify/
+2026-11-25 14:33:42 [WARNING] [django.server] "POST /api/staff/mfa/verify/ HTTP/1.1" 401 104
+2026-11-25 14:34:12 [WARNING] [django.request] Bad Request: /api/staff/admin/main-managers/
+2026-11-25 14:34:12 [WARNING] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 400 442
+2026-11-25 14:34:21 [WARNING] [django.request] Bad Request: /api/staff/admin/main-managers/
+2026-11-25 14:34:21 [WARNING] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 400 442
+2026-11-25 14:39:13 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-25 14:39:13 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 401 83
+2026-11-25 14:43:17 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\config\settings.py changed, reloading.
+2026-11-25 14:43:18 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-25 14:43:29 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\views.py changed, reloading.
+2026-11-25 14:43:30 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-25 14:43:41 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\views.py changed, reloading.
+2026-11-25 14:43:42 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-25 14:45:25 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 415
+2026-11-25 14:45:27 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 430
+2026-11-25 14:45:28 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 436
+2026-11-25 14:45:30 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 5496
+2026-11-25 14:47:27 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 415
+2026-11-25 14:47:43 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 415
+2026-11-25 14:48:20 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 415
+2026-11-25 14:51:08 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 3270
+2026-11-25 14:51:08 [INFO] [django.server] "GET /api/staff/admin/hierarchy-overview/ HTTP/1.1" 200 736
+2026-11-25 14:51:38 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 3270
+2026-11-25 14:51:38 [INFO] [django.server] "GET /api/staff/admin/hierarchy-overview/ HTTP/1.1" 200 736
+2026-11-25 14:53:23 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 3270
+2026-11-25 14:53:23 [INFO] [django.server] "GET /api/staff/admin/hierarchy-overview/ HTTP/1.1" 200 736
+2026-11-25 14:53:24 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 4716
+2026-11-25 14:53:24 [INFO] [django.server] "GET /api/staff/main-manager/staff/ HTTP/1.1" 200 8842
+2026-11-25 14:53:26 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 5196
+2026-11-25 14:53:26 [INFO] [django.server] "GET /api/staff/dept-manager/staff/ HTTP/1.1" 200 1602
+2026-11-25 14:53:27 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 5536
+2026-11-25 14:53:27 [INFO] [django.server] "GET /api/staff/me/ HTTP/1.1" 200 1464
+2026-11-25 14:53:43 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 5536
+2026-11-25 14:53:43 [INFO] [django.server] "GET /api/staff/me/ HTTP/1.1" 200 1464
+2026-11-25 15:01:32 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-25 15:01:42 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-25 15:08:03 [WARNING] [django.request] Method Not Allowed: /api/users/login/
+2026-11-25 15:08:03 [WARNING] [django.server] "GET /api/users/login/ HTTP/1.1" 405 225
+2026-11-25 15:08:32 [WARNING] [django.request] Bad Request: /api/users/login/
+2026-11-25 15:08:32 [WARNING] [django.server] "POST /api/users/login/ HTTP/1.1" 400 486
+2026-11-25 15:08:44 [WARNING] [django.request] Bad Request: /api/users/login/
+2026-11-25 15:08:44 [WARNING] [django.server] "POST /api/users/login/ HTTP/1.1" 400 382
+2026-11-25 15:09:40 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-25 15:09:40 [INFO] [django.server] - Broken pipe from ('127.0.0.1', 61726)
+2026-11-25 15:09:59 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-25 15:10:00 [INFO] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 201 854
+2026-11-25 15:10:00 [INFO] [django.server] - Broken pipe from ('127.0.0.1', 61729)
+2026-11-25 15:10:36 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 422
+2026-11-25 15:10:36 [INFO] [django.server] "POST /api/staff/mfa/enroll-verify/ HTTP/1.1" 200 2263
+2026-11-25 15:10:36 [INFO] [django.server] - Broken pipe from ('127.0.0.1', 49780)
+2026-11-25 15:10:57 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 165
+2026-11-25 15:10:58 [WARNING] [django.request] Unauthorized: /api/staff/mfa/verify/
+2026-11-25 15:10:58 [WARNING] [django.server] "POST /api/staff/mfa/verify/ HTTP/1.1" 401 80
+2026-11-25 15:10:58 [WARNING] [django.request] Unauthorized: /api/staff/main-manager/dept-managers/
+2026-11-25 15:10:58 [WARNING] [django.server] "POST /api/staff/main-manager/dept-managers/ HTTP/1.1" 401 300
+2026-11-25 15:10:58 [INFO] [django.server] - Broken pipe from ('127.0.0.1', 57619)
+2026-11-25 15:13:07 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-25 15:13:14 [INFO] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 201 871
+2026-11-25 15:13:24 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 426
+2026-11-25 15:13:58 [INFO] [django.server] "POST /api/staff/mfa/enroll-verify/ HTTP/1.1" 200 2279
+2026-11-25 15:14:09 [INFO] [django.server] "POST /api/staff/create/ HTTP/1.1" 201 8048
+2026-11-25 15:14:18 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-25 15:14:18 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 401 83
+2026-11-25 15:15:57 [WARNING] [django.request] Method Not Allowed: /api/users/login/
+2026-11-25 15:15:57 [WARNING] [django.server] "GET /api/users/login/ HTTP/1.1" 405 225
+2026-11-25 15:16:28 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-25 15:16:28 [ERROR] [core.exceptions] Unhandled server error: UNIQUE constraint failed: users_user.phone_number
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\sqlite3\base.py", line 359, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: UNIQUE constraint failed: users_user.phone_number
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\views.py", line 523, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\staff\hierarchy_views.py", line 76, in post
+    profile = serializer.save()
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\serializers.py", line 210, in save
+    self.instance = self.create(validated_data)
+                    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\contextlib.py", line 85, in inner
+    return func(*args, **kwds)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\staff\hierarchy_serializers.py", line 113, in create
+    user = User.objects.create_user(
+        username=validated_data['username'],
+    ...<6 lines>...
+        is_active=True
+    )
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\contrib\auth\models.py", line 180, in create_user
+    return self._create_user(username, email, password, **extra_fields)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\contrib\auth\models.py", line 168, in _create_user
+    user.save(using=self._db)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\contrib\auth\base_user.py", line 62, in save
+    super().save(**kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 904, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 996, in save_base
+    updated = self._save_table(
+        raw,
+    ...<4 lines>...
+        update_fields,
+    )
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 1201, in _save_table
+    results = self._do_insert(
+        cls._base_manager, using, insert_fields, returning_fields, raw
+    )
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 1253, in _do_insert
+    return manager._insert(
+           ~~~~~~~~~~~~~~~^
+        [self],
+        ^^^^^^^
+    ...<3 lines>...
+        raw=raw,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\query.py", line 2166, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\sql\compiler.py", line 1954, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\sqlite3\base.py", line 359, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: UNIQUE constraint failed: users_user.phone_number
+2026-11-25 15:16:28 [ERROR] [django.request] Internal Server Error: /api/staff/admin/main-managers/
+2026-11-25 15:16:28 [ERROR] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 500 216
+2026-11-25 15:16:28 [INFO] [django.server] - Broken pipe from ('127.0.0.1', 57844)
+2026-11-25 15:16:50 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\hierarchy_serializers.py changed, reloading.
+2026-11-25 15:16:51 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-25 15:18:12 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-25 15:18:13 [INFO] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 201 881
+2026-11-25 15:18:14 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 426
+2026-11-25 15:18:14 [INFO] [django.server] "POST /api/staff/mfa/enroll-verify/ HTTP/1.1" 200 2294
+2026-11-25 15:18:15 [INFO] [django.server] "POST /api/staff/create/ HTTP/1.1" 201 8085
+2026-11-25 15:18:15 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-25 15:18:15 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 401 83
+2026-11-25 15:18:15 [INFO] [django.server] - Broken pipe from ('127.0.0.1', 54909)
+2026-11-25 15:19:13 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-25 15:19:14 [INFO] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 201 881
+2026-11-25 15:19:14 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 426
+2026-11-25 15:19:14 [INFO] [django.server] "POST /api/staff/mfa/enroll-verify/ HTTP/1.1" 200 2294
+2026-11-25 15:19:15 [INFO] [django.server] "POST /api/staff/create/ HTTP/1.1" 201 8085
+2026-11-25 15:19:16 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 8132
+2026-11-25 15:19:16 [INFO] [django.server] - Broken pipe from ('127.0.0.1', 54917)
+2026-11-25 15:22:06 [WARNING] [django.request] Bad Request: /api/staff/login/
+2026-11-25 15:22:06 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 400 360
+2026-11-25 16:49:15 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\users\serializers.py changed, reloading.
+2026-11-25 16:49:17 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-25 16:49:27 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\config\settings.py changed, reloading.
+2026-11-25 16:49:28 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-25 16:50:08 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\mfa_views.py changed, reloading.
+2026-11-25 16:50:09 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-25 16:50:14 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\mfa_views.py changed, reloading.
+2026-11-25 16:50:17 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-25 16:50:34 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\mfa_views.py changed, reloading.
+2026-11-25 16:50:37 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-25 16:50:52 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\mfa_views.py changed, reloading.
+2026-11-25 16:50:56 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-25 16:51:42 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\users\views.py changed, reloading.
+2026-11-25 16:51:43 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-25 16:52:00 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\users\views.py changed, reloading.
+2026-11-25 16:52:01 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-25 16:52:51 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py changed, reloading.
+2026-11-25 16:52:53 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-25 17:05:02 [WARNING] [django.request] Unauthorized: /api/users/login/
+2026-11-25 17:05:38 [WARNING] [django.request] Bad Request: /api/users/change-password/
+2026-11-25 17:05:49 [WARNING] [django.request] Unauthorized: /api/payments/support-tickets/1/
+2026-11-25 17:06:01 [WARNING] [django.request] Unauthorized: /api/payments/support-tickets/1/
+2026-11-25 17:06:21 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\users\views.py changed, reloading.
+2026-11-25 17:06:23 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-25 17:06:25 [WARNING] [django.request] Unauthorized: /api/payments/support-tickets/1/
+2026-11-25 17:06:44 [WARNING] [django.request] Unauthorized: /api/payments/support-tickets/2/
+2026-11-25 17:10:59 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py changed, reloading.
+2026-11-25 17:11:02 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-25 17:11:06 [WARNING] [django.request] Unauthorized: /api/users/login/
+2026-11-25 17:11:51 [WARNING] [django.request] Not Found: /api/payments/support-tickets/1/
+2026-11-25 17:12:09 [WARNING] [django.request] Forbidden: /api/payments/support-tickets/1/
+2026-11-25 17:12:17 [WARNING] [django.request] Not Found: /api/payments/support-tickets/2/
+2026-11-25 17:13:15 [WARNING] [django.request] Bad Request: /api/staff/mfa/enroll-verify/
+2026-11-25 17:13:15 [WARNING] [django.request] Bad Request: /api/staff/mfa/enroll-verify/
+2026-11-25 17:13:15 [WARNING] [django.request] Bad Request: /api/staff/mfa/enroll-verify/
+2026-11-25 17:13:15 [WARNING] [django.request] Bad Request: /api/staff/mfa/enroll-verify/
+2026-11-25 17:13:15 [WARNING] [django.request] Bad Request: /api/staff/mfa/enroll-verify/
+2026-11-25 17:13:15 [WARNING] [django.request] Too Many Requests: /api/staff/mfa/enroll-verify/
+2026-11-25 17:13:41 [WARNING] [django.request] Not Found: /api/payments/support-tickets/2/messages/
+2026-11-25 17:15:00 [WARNING] [django.request] Unauthorized: /api/users/login/
+2026-11-25 17:15:31 [WARNING] [django.request] Too Many Requests: /api/users/login/
+2026-11-25 17:15:40 [WARNING] [django.request] Not Found: /api/payments/support-tickets/1/
+2026-11-25 17:16:08 [WARNING] [django.request] Forbidden: /api/payments/support-tickets/1/
+2026-11-25 17:16:21 [WARNING] [django.request] Not Found: /api/payments/support-tickets/2/
+2026-11-25 17:17:54 [WARNING] [django.request] Too Many Requests: /api/staff/mfa/enroll-verify/
+2026-11-25 17:18:03 [WARNING] [django.request] Bad Request: /api/staff/mfa/enroll-verify/
+2026-11-25 17:18:03 [WARNING] [django.request] Bad Request: /api/staff/mfa/enroll-verify/
+2026-11-25 17:18:03 [WARNING] [django.request] Bad Request: /api/staff/mfa/enroll-verify/
+2026-11-25 17:18:03 [WARNING] [django.request] Bad Request: /api/staff/mfa/enroll-verify/
+2026-11-25 17:18:03 [WARNING] [django.request] Too Many Requests: /api/staff/mfa/enroll-verify/
+2026-11-25 17:18:51 [WARNING] [django.request] Not Found: /api/payments/support-tickets/2/messages/
+2026-11-25 17:20:46 [ERROR] [core.exceptions] Unhandled server error: name 'Q' is not defined
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\views.py", line 523, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\users\views.py", line 354, in post
+    candidate = user_obj or User.objects.filter(Q(username__iexact=username) | Q(email__iexact=username)).first()
+                                                ^
+NameError: name 'Q' is not defined
+2026-11-25 17:20:46 [ERROR] [django.request] Internal Server Error: /api/users/host-login/
+2026-11-25 17:21:13 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\users\views.py changed, reloading.
+2026-11-25 17:21:14 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-25 17:21:33 [WARNING] [django.request] Unauthorized: /api/users/host-login/
+2026-11-25 17:21:50 [WARNING] [django.request] Unauthorized: /api/users/login/
+2026-11-25 17:22:43 [WARNING] [django.request] Unauthorized: /api/users/login/
+2026-11-25 17:23:50 [WARNING] [django.request] Unauthorized: /api/users/login/
+2026-11-25 17:24:16 [WARNING] [django.request] Unauthorized: /api/users/host-login/
+2026-11-25 17:24:51 [WARNING] [django.request] Unauthorized: /api/users/login/
+2026-11-25 17:27:58 [WARNING] [django.request] Unauthorized: /api/users/login/
+2026-11-25 17:28:51 [WARNING] [django.request] Not Found: /api/payments/support-tickets/1/
+2026-11-25 17:29:09 [WARNING] [django.request] Forbidden: /api/payments/support-tickets/1/
+2026-11-25 17:29:18 [WARNING] [django.request] Not Found: /api/payments/support-tickets/2/
+2026-11-25 17:30:17 [WARNING] [django.request] Too Many Requests: /api/staff/mfa/enroll-verify/
+2026-11-25 17:30:26 [WARNING] [django.request] Bad Request: /api/staff/mfa/enroll-verify/
+2026-11-25 17:30:26 [WARNING] [django.request] Bad Request: /api/staff/mfa/enroll-verify/
+2026-11-25 17:30:26 [WARNING] [django.request] Bad Request: /api/staff/mfa/enroll-verify/
+2026-11-25 17:30:26 [WARNING] [django.request] Bad Request: /api/staff/mfa/enroll-verify/
+2026-11-25 17:30:26 [WARNING] [django.request] Bad Request: /api/staff/mfa/enroll-verify/
+2026-11-25 17:30:26 [WARNING] [django.request] Too Many Requests: /api/staff/mfa/enroll-verify/
+2026-11-25 17:30:55 [WARNING] [django.request] Not Found: /api/payments/support-tickets/2/messages/
+2026-11-25 17:32:11 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/4/
+2026-11-25 17:32:11 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/4/
+2026-11-25 17:32:16 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/3/
+2026-11-25 17:32:22 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/3/permissions/
+2026-11-25 17:32:28 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/1/
+2026-11-25 17:32:45 [WARNING] [django.request] Forbidden: /api/staff/admin/main-managers/
+2026-11-25 17:32:51 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/3/permissions/
+2026-11-25 17:32:58 [WARNING] [django.request] Unauthorized: /api/staff/mfa/verify/
+2026-11-25 17:32:58 [WARNING] [django.request] Unauthorized: /api/staff/mfa/verify/
+2026-11-25 17:33:04 [WARNING] [django.request] Forbidden: /api/staff/admin/main-managers/
+2026-11-25 17:33:04 [WARNING] [django.request] Forbidden: /api/staff/admin/hierarchy-overview/
+2026-11-25 17:33:04 [WARNING] [django.request] Forbidden: /api/staff/admin/audit-logs/
+2026-11-25 17:33:10 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/
+2026-11-25 17:33:10 [WARNING] [django.request] Forbidden: /api/staff/main-manager/departments/
+2026-11-25 17:33:10 [WARNING] [django.request] Forbidden: /api/staff/admin/hierarchy-overview/
+2026-11-25 17:33:22 [WARNING] [django.request] Bad Request: /api/payments/payouts/customer/
+2026-11-25 17:33:28 [WARNING] [django.request] Forbidden: /api/payments/payouts/customer/
+2026-11-25 17:33:33 [WARNING] [django.request] Forbidden: /api/payments/payouts/customer/
+2026-11-25 17:33:44 [WARNING] [django.request] Bad Request: /api/payments/payouts/customer/
+2026-11-25 17:33:51 [WARNING] [django.request] Bad Request: /api/payments/payouts/customer/
+2026-11-25 17:33:58 [WARNING] [django.request] Forbidden: /api/payments/payouts/customer/
+2026-11-25 17:34:15 [WARNING] [django.request] Bad Request: /api/rooms/1/
+2026-11-25 17:34:15 [WARNING] [django.request] Bad Request: /api/rooms/2/
+2026-11-25 17:34:26 [WARNING] [django.request] Bad Request: /api/users/3/delete/
+2026-11-25 17:35:30 [WARNING] [django.request] Unauthorized: /api/notifications/send-test/
+2026-11-25 17:35:40 [WARNING] [django.request] Forbidden: /api/notifications/send-test/
+2026-11-25 17:36:56 [WARNING] [django.request] Unauthorized: /api/staff/mfa/verify/
+2026-11-25 17:36:56 [WARNING] [django.server] "POST /api/staff/mfa/verify/ HTTP/1.1" 401 104
+2026-11-25 17:37:14 [WARNING] [django.request] Unauthorized: /api/staff/me/
+2026-11-25 17:37:14 [WARNING] [django.server] "GET /api/staff/me/ HTTP/1.1" 401 300
+2026-11-25 17:37:25 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-25 17:37:25 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 401 83
+2026-11-25 17:37:52 [WARNING] [django.request] Bad Request: /api/staff/admin/main-managers/
+2026-11-25 17:37:52 [WARNING] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 400 572
+2026-11-25 17:38:06 [WARNING] [django.request] Bad Request: /api/staff/admin/main-managers/
+2026-11-25 17:38:06 [WARNING] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 400 368
+2026-11-25 17:38:16 [INFO] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 201 884
+2026-11-25 17:38:27 [INFO] [django.server] "GET /api/staff/admin/main-managers/ HTTP/1.1" 200 4239
+2026-11-25 17:38:52 [WARNING] [django.request] Forbidden: /api/payments/support-tickets/1/
+2026-11-25 17:39:01 [WARNING] [django.request] Bad Request: /api/staff/admin/departments/
+2026-11-25 17:39:01 [WARNING] [django.server] "POST /api/staff/admin/departments/ HTTP/1.1" 400 307
+2026-11-25 17:39:08 [WARNING] [django.request] Forbidden: /api/payments/support-tickets/1/
+2026-11-25 17:39:25 [WARNING] [django.request] Not Found: /api/payments/support-tickets/1/
+2026-11-25 17:39:41 [WARNING] [django.request] Forbidden: /api/payments/support-tickets/1/
+2026-11-25 17:39:53 [WARNING] [django.request] Forbidden: /api/payments/support-tickets/1/
+2026-11-25 17:39:58 [INFO] [django.server] "GET /api/staff/admin/departments/ HTTP/1.1" 200 1485
+2026-11-25 17:40:09 [WARNING] [django.request] Forbidden: /api/payments/support-tickets/1/
+2026-11-25 17:40:14 [INFO] [django.server] "PATCH /api/staff/admin/departments/1/ HTTP/1.1" 200 289
+2026-11-25 17:40:25 [INFO] [django.server] "POST /api/staff/admin/delegation-policies/ HTTP/1.1" 200 337
+2026-11-25 17:40:26 [WARNING] [django.request] Forbidden: /api/payments/support-tickets/1/
+2026-11-25 17:40:42 [WARNING] [django.request] Not Found: /api/payments/support-tickets/2/
+2026-11-25 17:40:48 [INFO] [django.server] "GET /api/staff/admin/delegation-policies/ HTTP/1.1" 200 274
+2026-11-25 17:40:59 [INFO] [django.server] "GET /api/staff/admin/permissions/ HTTP/1.1" 200 5794
+2026-11-25 17:41:28 [INFO] [django.server] "GET /api/staff/admin/audit-logs/?action_type=MANAGER_CREATE HTTP/1.1" 200 2106
+2026-11-25 17:41:59 [WARNING] [django.request] Unauthorized: /api/staff/main-manager/dept-managers/
+2026-11-25 17:41:59 [WARNING] [django.server] "POST /api/staff/main-manager/dept-managers/ HTTP/1.1" 401 300
+2026-11-25 17:42:05 [WARNING] [django.request] Bad Request: /api/payments/support-tickets/
+2026-11-25 17:42:09 [WARNING] [django.request] Unauthorized: /api/staff/main-manager/dept-managers/
+2026-11-25 17:42:09 [WARNING] [django.server] "GET /api/staff/main-manager/dept-managers/?department_id=1 HTTP/1.1" 401 300
+2026-11-25 17:42:22 [WARNING] [django.request] Bad Request: /api/payments/support-tickets/
+2026-11-25 17:42:33 [WARNING] [django.request] Unauthorized: /api/staff/dashboard/
+2026-11-25 17:42:33 [WARNING] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 401 300
+2026-11-25 17:42:39 [WARNING] [django.request] Bad Request: /api/payments/support-tickets/
+2026-11-25 17:42:51 [INFO] [django.server] "POST /api/staff/mfa/setup/ HTTP/1.1" 200 468
+2026-11-25 17:42:56 [WARNING] [django.request] Not Found: /api/payments/support-tickets/2/
+2026-11-25 17:43:05 [WARNING] [django.request] Unauthorized: /api/staff/mfa/enroll-verify/
+2026-11-25 17:43:05 [WARNING] [django.server] "POST /api/staff/mfa/enroll-verify/ HTTP/1.1" 401 110
+2026-11-25 17:43:13 [WARNING] [django.request] Too Many Requests: /api/payments/support-tickets/
+2026-11-25 17:43:16 [WARNING] [django.request] Unauthorized: /api/staff/mfa/verify/
+2026-11-25 17:43:16 [WARNING] [django.server] "POST /api/staff/mfa/verify/ HTTP/1.1" 401 104
+2026-11-25 17:43:30 [WARNING] [django.request] Too Many Requests: /api/payments/support-tickets/1/messages/
+2026-11-25 17:43:48 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 436
+2026-11-25 17:44:07 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 415
+2026-11-25 17:44:25 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 5624
+2026-11-25 17:44:45 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 430
+2026-11-25 17:45:10 [WARNING] [django.request] Unauthorized: /api/staff/main-manager/dept-managers/
+2026-11-25 17:45:10 [WARNING] [django.server] "GET /api/staff/main-manager/dept-managers/?department_id=1 HTTP/1.1" 401 300
+2026-11-25 17:45:28 [WARNING] [django.request] Unauthorized: /api/staff/main-manager/staff/
+2026-11-25 17:45:28 [WARNING] [django.server] "GET /api/staff/main-manager/staff/?department_id=1&status=ACTIVE HTTP/1.1" 401 300
+2026-11-25 17:45:42 [WARNING] [django.request] Unauthorized: /api/staff/dept-manager/staff/
+2026-11-25 17:45:42 [WARNING] [django.server] "GET /api/staff/dept-manager/staff/ HTTP/1.1" 401 300
+2026-11-25 17:45:52 [WARNING] [django.request] Unauthorized: /api/staff/dept-manager/staff/1/permissions/
+2026-11-25 17:45:52 [WARNING] [django.server] "GET /api/staff/dept-manager/staff/1/permissions/ HTTP/1.1" 401 300
+2026-11-25 17:46:53 [WARNING] [django.request] Forbidden: /api/staff/dashboard/
+2026-11-25 17:46:53 [WARNING] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 403 337
+2026-11-25 17:47:35 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 5624
+2026-11-25 17:47:47 [INFO] [django.server] "GET /api/staff/me/ HTTP/1.1" 200 1528
+2026-11-25 17:48:02 [WARNING] [django.request] Bad Request: /api/staff/change-password/
+2026-11-25 17:48:02 [WARNING] [django.server] "POST /api/staff/change-password/ HTTP/1.1" 400 101
+2026-11-25 17:48:57 [INFO] [django.server] "POST /api/staff/change-password/ HTTP/1.1" 200 100
+2026-11-25 17:49:17 [INFO] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 200 735
+2026-11-25 17:51:25 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 436
+2026-11-25 17:51:40 [WARNING] [django.request] Unauthorized: /api/staff/dept-manager/staff/
+2026-11-25 17:51:40 [WARNING] [django.server] "GET /api/staff/dept-manager/staff/ HTTP/1.1" 401 300
+2026-11-25 17:51:52 [WARNING] [django.request] Unauthorized: /api/staff/dept-manager/staff/
+2026-11-25 17:51:52 [WARNING] [django.server] "POST /api/staff/dept-manager/staff/ HTTP/1.1" 401 300
+2026-11-25 17:52:22 [WARNING] [django.request] Unauthorized: /api/staff/dept-manager/staff/
+2026-11-25 17:52:22 [WARNING] [django.server] "POST /api/staff/dept-manager/staff/ HTTP/1.1" 401 300
+2026-11-25 17:57:06 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\users\views.py changed, reloading.
+2026-11-25 17:57:08 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader

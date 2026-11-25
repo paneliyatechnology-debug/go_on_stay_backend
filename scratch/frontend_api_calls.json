@@ -1,0 +1,14 @@
+[
+  {
+    "file": "components/AdminStaffManagement.jsx",
+    "line": 1031,
+    "url": "Reset Staff Password (POST /api/staff/{id}/reset-password/)",
+    "context": "title=\"Reset Staff Password (POST /api/staff/{id}/reset-password/)\""
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 1578,
+    "url": "API 4 GET /api/payments/refunds/{booking_id}/ notice:",
+    "context": "console.warn('API 4 GET /api/payments/refunds/{booking_id}/ notice:', api4Err);"
+  }
+]

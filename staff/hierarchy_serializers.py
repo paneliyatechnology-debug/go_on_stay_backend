@@ -105,6 +105,12 @@ class MainManagerCreateSerializer(serializers.Serializer):
             raise serializers.ValidationError("A user with this email already exists.")
         return val
 
+    def validate_phone_number(self, value):
+        val = str(value).strip()
+        if val and User.objects.filter(phone_number=val).exists():
+            raise serializers.ValidationError("A user with this phone number already exists.")
+        return val
+
     @transaction.atomic
     def create(self, validated_data):
         admin_user = self.context.get('request').user if self.context.get('request') else None
@@ -173,6 +179,12 @@ class DepartmentStaffManagerCreateSerializer(serializers.Serializer):
         val = str(value).strip().lower()
         if User.objects.filter(email__iexact=val).exists():
             raise serializers.ValidationError("A user with this email already exists.")
+        return val
+
+    def validate_phone_number(self, value):
+        val = str(value).strip()
+        if val and User.objects.filter(phone_number=val).exists():
+            raise serializers.ValidationError("A user with this phone number already exists.")
         return val
 
     def validate_department_id(self, value):

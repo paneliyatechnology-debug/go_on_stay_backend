@@ -7,6 +7,303 @@
   },
   "item": [
     {
+      "name": "00. \u26a1 Quick 4-Level Direct Logins (Zero Friction)",
+      "description": "Direct 1-step login for all 4 hierarchy levels without MFA barrier. 365-day tokens automatically saved to collection variables.",
+      "item": [
+        {
+          "name": "1. Level 4 - Platform Admin Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var json = pm.response.json();",
+                  "pm.test(\"Status code is 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "if (json.access) {",
+                  "    pm.collectionVariables.set(\"admin_access_token\", json.access);",
+                  "    pm.collectionVariables.set(\"access_token\", json.access);",
+                  "    pm.collectionVariables.set(\"token\", json.access);",
+                  "    console.log(\"Saved admin_access_token\");",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"identifier\": \"admin@bookmyroom.com\",\n    \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/staff/login/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "login",
+                ""
+              ]
+            },
+            "description": "Logs in as Level 4 Platform Admin. Sets {{admin_access_token}} and {{access_token}}."
+          }
+        },
+        {
+          "name": "2. Level 3 - Main Manager Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var json = pm.response.json();",
+                  "pm.test(\"Status code is 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "if (json.access) {",
+                  "    pm.collectionVariables.set(\"main_mgr_access_token\", json.access);",
+                  "    console.log(\"Saved main_mgr_access_token\");",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"identifier\": \"director@goonstay.com\",\n    \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/staff/login/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "login",
+                ""
+              ]
+            },
+            "description": "Logs in as Level 3 Main Manager (Director). Sets {{main_mgr_access_token}}."
+          }
+        },
+        {
+          "name": "3. Level 2 - Dept Manager Login (Reservation)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var json = pm.response.json();",
+                  "pm.test(\"Status code is 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "if (json.access) {",
+                  "    pm.collectionVariables.set(\"dept_mgr_access_token\", json.access);",
+                  "    console.log(\"Saved dept_mgr_access_token\");",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"identifier\": \"deptmanager.reservation@goonstay.com\",\n    \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/staff/login/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "login",
+                ""
+              ]
+            },
+            "description": "Logs in as Level 2 Department Manager (Reservation Dept). Sets {{dept_mgr_access_token}}."
+          }
+        },
+        {
+          "name": "4. Level 1 - Operational Staff Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var json = pm.response.json();",
+                  "pm.test(\"Status code is 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "if (json.access) {",
+                  "    pm.collectionVariables.set(\"staff_access_token\", json.access);",
+                  "    console.log(\"Saved staff_access_token\");",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"identifier\": \"dormammu@goonstay.com\",\n    \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/staff/login/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "login",
+                ""
+              ]
+            },
+            "description": "Logs in as Level 1 Staff. Sets {{staff_access_token}}."
+          }
+        }
+      ]
+    },
+    {
+      "name": "01. \ud83d\udd0d Quick 4-Level Flow Verifications",
+      "description": "Test operational permissions for each level using the tokens obtained from Quick Logins.",
+      "item": [
+        {
+          "name": "1. Check Level 4 Admin - Hierarchy Overview & Metrics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/staff/admin/hierarchy-overview/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "admin",
+                "hierarchy-overview",
+                ""
+              ]
+            },
+            "description": "Admin views system-wide counts of Admins, Main Managers, Dept Managers, and Staff."
+          }
+        },
+        {
+          "name": "2. Check Level 3 Main Manager - View All Staff Across All Departments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{main_mgr_access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/staff/main-manager/staff/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "main-manager",
+                "staff",
+                ""
+              ]
+            },
+            "description": "Main Manager views company-wide staff across all 5 operational departments."
+          }
+        },
+        {
+          "name": "3. Check Level 2 Dept Manager - View Reservation Staff",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{dept_mgr_access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/staff/dept-manager/staff/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "dept-manager",
+                "staff",
+                ""
+              ]
+            },
+            "description": "Dept Manager views staff strictly confined to the Reservation department."
+          }
+        },
+        {
+          "name": "4. Check Level 1 Staff - View Own Profile & Portal Info",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staff_access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/staff/me/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "staff",
+                "me",
+                ""
+              ]
+            },
+            "description": "Staff views their own profile, assigned department, and functional permissions."
+          }
+        }
+      ]
+    },
+    {
       "name": "01. \ud83d\udee1\ufe0f Multi-Factor Authentication (MFA Engine)",
       "description": "Mandatory TOTP MFA for Level 2 (Dept Manager), Level 3 (Main Manager), and Level 4 (Admin). Zero external dependencies, RFC 6238 compliant.",
       "item": [
@@ -1084,6 +1381,33 @@
           }
         }
       ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000",
+      "type": "string"
+    },
+    {
+      "key": "admin_token",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzk1NjA5MjYwLCJpYXQiOjE3OTU1MjI4NjAsImp0aSI6ImNjMjFhZTg1YWJlOTRlMWQ4NzMxNWZkYTUzYTVmYjBmIiwidXNlcl9pZCI6IjEifQ.tsBJx_A9b2JM0HJB-eoihilI6SXmj4jO6JiiwmsvGAg",
+      "type": "string"
+    },
+    {
+      "key": "admin_access_token",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzk1NjA5MjYwLCJpYXQiOjE3OTU1MjI4NjAsImp0aSI6ImNjMjFhZTg1YWJlOTRlMWQ4NzMxNWZkYTUzYTVmYjBmIiwidXNlcl9pZCI6IjEifQ.tsBJx_A9b2JM0HJB-eoihilI6SXmj4jO6JiiwmsvGAg",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzk1NjA5MjYwLCJpYXQiOjE3OTU1MjI4NjAsImp0aSI6ImNjMjFhZTg1YWJlOTRlMWQ4NzMxNWZkYTUzYTVmYjBmIiwidXNlcl9pZCI6IjEifQ.tsBJx_A9b2JM0HJB-eoihilI6SXmj4jO6JiiwmsvGAg",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzk1NjA5MjYwLCJpYXQiOjE3OTU1MjI4NjAsImp0aSI6ImNjMjFhZTg1YWJlOTRlMWQ4NzMxNWZkYTUzYTVmYjBmIiwidXNlcl9pZCI6IjEifQ.tsBJx_A9b2JM0HJB-eoihilI6SXmj4jO6JiiwmsvGAg",
+      "type": "string"
     }
   ]
 }

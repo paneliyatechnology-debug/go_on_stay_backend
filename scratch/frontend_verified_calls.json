@@ -1,0 +1,688 @@
+[
+  {
+    "file": "components/DeletedHotelsManagement.jsx",
+    "line": 172,
+    "method": "GET",
+    "path": "/rooms/hotel/${hotel.id}/",
+    "raw": "const res = await api.get(`/rooms/hotel/${hotel.id}/`);"
+  },
+  {
+    "file": "components/DeletedHotelsManagement.jsx",
+    "line": 200,
+    "method": "PATCH",
+    "path": "/hotels/${hotel.id}/",
+    "raw": "await api.patch(`/hotels/${hotel.id}/`, {"
+  },
+  {
+    "file": "components/NotificationBell.jsx",
+    "line": 22,
+    "method": "GET",
+    "path": "/notifications/unread-count/",
+    "raw": "globalUnreadPromise = api.get('/notifications/unread-count/')"
+  },
+  {
+    "file": "components/NotificationBell.jsx",
+    "line": 224,
+    "method": "GET",
+    "path": "/notifications/",
+    "raw": "const listRes = await api.get('/notifications/');"
+  },
+  {
+    "file": "components/NotificationBell.jsx",
+    "line": 243,
+    "method": "GET",
+    "path": "/notifications/",
+    "raw": "const res = await api.get('/notifications/');"
+  },
+  {
+    "file": "components/NotificationBell.jsx",
+    "line": 266,
+    "method": "POST",
+    "path": "/notifications/${id}/read/",
+    "raw": "await api.post(`/notifications/${id}/read/`);"
+  },
+  {
+    "file": "components/NotificationBell.jsx",
+    "line": 276,
+    "method": "POST",
+    "path": "/notifications/read-all/",
+    "raw": "await api.post('/notifications/read-all/');"
+  },
+  {
+    "file": "components/SupportTicketsManagement.jsx",
+    "line": 43,
+    "method": "GET",
+    "path": "/payments/support-tickets/",
+    "raw": "const res = await api.get('/payments/support-tickets/');"
+  },
+  {
+    "file": "components/SupportTicketsManagement.jsx",
+    "line": 64,
+    "method": "GET",
+    "path": "/payments/support-tickets/${ticket.id}/",
+    "raw": "const res = await api.get(`/payments/support-tickets/${ticket.id}/`);"
+  },
+  {
+    "file": "components/SupportTicketsManagement.jsx",
+    "line": 83,
+    "method": "GET",
+    "path": "/bookings/${bookingIdOrPk}/",
+    "raw": "const res = await api.get(`/bookings/${bookingIdOrPk}/`);"
+  },
+  {
+    "file": "components/SupportTicketsManagement.jsx",
+    "line": 106,
+    "method": "POST",
+    "path": "/payments/support-tickets/${selectedTicket.id}/messages/",
+    "raw": "const res = await api.post(`/payments/support-tickets/${selectedTicket.id}/messages/`, payload);"
+  },
+  {
+    "file": "components/SupportTicketsManagement.jsx",
+    "line": 113,
+    "method": "GET",
+    "path": "/payments/support-tickets/${selectedTicket.id}/",
+    "raw": "const ticketRes = await api.get(`/payments/support-tickets/${selectedTicket.id}/`);"
+  },
+  {
+    "file": "components/SupportTicketsManagement.jsx",
+    "line": 131,
+    "method": "PATCH",
+    "path": "/payments/support-tickets/${selectedTicket.id}/",
+    "raw": "const res = await api.patch(`/payments/support-tickets/${selectedTicket.id}/`, fields);"
+  },
+  {
+    "file": "context/AuthContext.jsx",
+    "line": 89,
+    "method": "GET",
+    "path": "/users/profile/",
+    "raw": "const res = await api.get('/users/profile/');"
+  },
+  {
+    "file": "context/AuthContext.jsx",
+    "line": 160,
+    "method": "POST",
+    "path": "/users/login/",
+    "raw": "const res = await api.post('/users/login/', { username: cleanId, password });"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 268,
+    "method": "GET",
+    "path": "/bookings/?page_size=1000",
+    "raw": "api.get('/bookings/?page_size=1000').then((res) => {"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 277,
+    "method": "GET",
+    "path": "/hotels/?page_size=1000&sort_by=newest",
+    "raw": "api.get('/hotels/?page_size=1000&sort_by=newest').then((res) => {"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 285,
+    "method": "GET",
+    "path": "/payments/settlements/",
+    "raw": "api.get('/payments/settlements/').then((res) => {"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 301,
+    "method": "GET",
+    "path": "/payments/admin/all/?page_size=1000",
+    "raw": "api.get('/payments/admin/all/?page_size=1000').then((res) => {"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 320,
+    "method": "GET",
+    "path": "/users/all/",
+    "raw": "api.get('/users/all/'),"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 321,
+    "method": "GET",
+    "path": "/hotels/?page_size=1000&sort_by=newest",
+    "raw": "api.get('/hotels/?page_size=1000&sort_by=newest'),"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 322,
+    "method": "GET",
+    "path": "/bookings/?page_size=1000",
+    "raw": "api.get('/bookings/?page_size=1000'),"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 323,
+    "method": "GET",
+    "path": "/payments/admin/all/?page_size=1000",
+    "raw": "api.get('/payments/admin/all/?page_size=1000'),"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 324,
+    "method": "GET",
+    "path": "/coupons/",
+    "raw": "api.get('/coupons/'),"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 325,
+    "method": "GET",
+    "path": "/payments/settlements/",
+    "raw": "api.get('/payments/settlements/'),"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 326,
+    "method": "GET",
+    "path": "/payments/admin/provider-setup-status/",
+    "raw": "api.get('/payments/admin/provider-setup-status/'),"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 327,
+    "method": "GET",
+    "path": "/payments/settings/",
+    "raw": "api.get('/payments/settings/')"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 413,
+    "method": "GET",
+    "path": "/payments/admin/refunds/?${refundQueryParams.toString()}",
+    "raw": "const aRefundsRes = await api.get(`/payments/admin/refunds/?${refundQueryParams.toString()}`);"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 450,
+    "method": "PUT",
+    "path": "/payments/settings/",
+    "raw": "const res = await api.put('/payments/settings/', { payout_hold_days: days });"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 467,
+    "method": "POST",
+    "path": "/payments/admin/payouts/initiate/",
+    "raw": "const res = await api.post('/payments/admin/payouts/initiate/', {"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 556,
+    "method": "POST",
+    "path": "/payments/admin/payouts/initiate/",
+    "raw": "const res = await api.post('/payments/admin/payouts/initiate/', {"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 582,
+    "method": "POST",
+    "path": "/payments/payout-account/",
+    "raw": "await api.post('/payments/payout-account/', payload);"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 597,
+    "method": "GET",
+    "path": "/payments/settlements/",
+    "raw": "const res = await api.get('/payments/settlements/');"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 615,
+    "method": "POST",
+    "path": "/payments/admin/earnings/toggle-dispute/",
+    "raw": "const res = await api.post('/payments/admin/earnings/toggle-dispute/', {"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 656,
+    "method": "POST",
+    "path": "/users/${userId}/toggle-block/",
+    "raw": "const res = await api.post(`/users/${userId}/toggle-block/`);"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 679,
+    "method": "POST",
+    "path": "/users/${selectedUserForRole.id}/change-role/",
+    "raw": "const res = await api.post(`/users/${selectedUserForRole.id}/change-role/`, { role: newRoleInput });"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 692,
+    "method": "DELETE",
+    "path": "/users/${userId}/delete/",
+    "raw": "await api.delete(`/users/${userId}/delete/`);"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 706,
+    "method": "POST",
+    "path": "/hotels/${hotelId}/approval/",
+    "raw": "const res = await api.post(`/hotels/${hotelId}/approval/`, {"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 725,
+    "method": "POST",
+    "path": "/hotels/${hotelId}/approval/",
+    "raw": "const res = await api.post(`/hotels/${hotelId}/approval/`, {"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 765,
+    "method": "PATCH",
+    "path": "/hotels/${hotelId}/",
+    "raw": "await api.patch(`/hotels/${hotelId}/`, {"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 803,
+    "method": "POST",
+    "path": "/coupons/",
+    "raw": "const res = await api.post('/coupons/', couponForm);"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 825,
+    "method": "DELETE",
+    "path": "/coupons/${id}/",
+    "raw": "await api.delete(`/coupons/${id}/`);"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 835,
+    "method": "POST",
+    "path": "/notifications/simulate-payout-due/",
+    "raw": "const res = await api.post('/notifications/simulate-payout-due/', {"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 1235,
+    "method": "POST",
+    "path": "/payments/refund/",
+    "raw": "res = await api.post('/payments/refund/', payload);"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 1238,
+    "method": "POST",
+    "path": "/payments/refund/",
+    "raw": "res = await api.post('/payments/refund/', {"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 1325,
+    "method": "GET",
+    "path": "/payments/refunds/${bId}/status/?sync=true",
+    "raw": "const res = await api.get(`/payments/refunds/${bId}/status/?sync=true`);"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 1344,
+    "method": "GET",
+    "path": "/payments/payouts/customer/${encodeURIComponent(bId)}/?sync=true",
+    "raw": "const res = await api.get(`/payments/payouts/customer/${encodeURIComponent(bId)}/?sync=true`);"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 1387,
+    "method": "POST",
+    "path": "/payments/refunds/${bId}/retry/",
+    "raw": "const res = await api.post(`/payments/refunds/${bId}/retry/`);"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 1413,
+    "method": "GET",
+    "path": "/payments/admin/refunds/?${refundQueryParams.toString()}",
+    "raw": "const aRefundsRes = await api.get(`/payments/admin/refunds/?${refundQueryParams.toString()}`);"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 1472,
+    "method": "GET",
+    "path": "/payments/refunds/${primaryLookup}/",
+    "raw": "refRes = await api.get(`/payments/refunds/${primaryLookup}/`);"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 1476,
+    "method": "GET",
+    "path": "/payments/refunds/${encodeURIComponent(String(targetBooking.id).replace(/^#/, ",
+    "raw": "refRes = await api.get(`/payments/refunds/${encodeURIComponent(String(targetBooking.id).replace(/^#/, ''))}/`);"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 2268,
+    "method": "GET",
+    "path": "/hotels/?page_size=1000&sort_by=newest",
+    "raw": "const res = await api.get('/hotels/?page_size=1000&sort_by=newest');"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 2271,
+    "method": "GET",
+    "path": "/users/all/",
+    "raw": "const res = await api.get('/users/all/');"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 2274,
+    "method": "GET",
+    "path": "/bookings/?page_size=1000",
+    "raw": "const res = await api.get('/bookings/?page_size=1000');"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 2277,
+    "method": "GET",
+    "path": "/payments/settlements/",
+    "raw": "const res = await api.get('/payments/settlements/');"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 2283,
+    "method": "GET",
+    "path": "/payments/admin/all/?page_size=1000",
+    "raw": "const res = await api.get('/payments/admin/all/?page_size=1000');"
+  },
+  {
+    "file": "pages/AdminDashboard.jsx",
+    "line": 2286,
+    "method": "GET",
+    "path": "/coupons/",
+    "raw": "const res = await api.get('/coupons/');"
+  },
+  {
+    "file": "services/adminStaffService.js",
+    "line": 31,
+    "method": "POST",
+    "path": "/users/login/",
+    "raw": "const response = await api.post('/users/login/', payload);"
+  },
+  {
+    "file": "services/adminStaffService.js",
+    "line": 65,
+    "method": "POST",
+    "path": "/staff/create/",
+    "raw": "const response = await api.post('/staff/create/', payload);"
+  },
+  {
+    "file": "services/adminStaffService.js",
+    "line": 103,
+    "method": "GET",
+    "path": "/staff/${staffId}/",
+    "raw": "const response = await api.get(`/staff/${staffId}/`);"
+  },
+  {
+    "file": "services/adminStaffService.js",
+    "line": 127,
+    "method": "PATCH",
+    "path": "/staff/${staffId}/update/",
+    "raw": "const response = await api.patch(`/staff/${staffId}/update/`, payload);"
+  },
+  {
+    "file": "services/adminStaffService.js",
+    "line": 139,
+    "method": "PATCH",
+    "path": "/staff/${staffId}/status/",
+    "raw": "const response = await api.patch(`/staff/${staffId}/status/`, {"
+  },
+  {
+    "file": "services/adminStaffService.js",
+    "line": 151,
+    "method": "GET",
+    "path": "/staff/departments/",
+    "raw": "const response = await api.get('/staff/departments/');"
+  },
+  {
+    "file": "services/adminStaffService.js",
+    "line": 160,
+    "method": "GET",
+    "path": "/staff/${staffId}/permissions/",
+    "raw": "const response = await api.get(`/staff/${staffId}/permissions/`);"
+  },
+  {
+    "file": "services/adminStaffService.js",
+    "line": 172,
+    "method": "PUT",
+    "path": "/staff/${staffId}/permissions/update/",
+    "raw": "const response = await api.put(`/staff/${staffId}/permissions/update/`, payload);"
+  },
+  {
+    "file": "services/adminStaffService.js",
+    "line": 182,
+    "method": "POST",
+    "path": "/staff/${staffId}/reset-password/",
+    "raw": "const response = await api.post(`/staff/${staffId}/reset-password/`);"
+  },
+  {
+    "file": "services/adminStaffService.js",
+    "line": 219,
+    "method": "DELETE",
+    "path": "/users/${targetUserId}/delete/",
+    "raw": "const response = await api.delete(`/users/${targetUserId}/delete/`);"
+  },
+  {
+    "file": "services/adminStaffService.js",
+    "line": 223,
+    "method": "DELETE",
+    "path": "/staff/${staffId}/",
+    "raw": "const res2 = await api.delete(`/staff/${staffId}/`);"
+  },
+  {
+    "file": "services/api.js",
+    "line": 65,
+    "method": "POST",
+    "path": "${API_BASE_URL}/users/token/refresh/",
+    "raw": "const res = await axios.post(`${API_BASE_URL}/users/token/refresh/`, {"
+  },
+  {
+    "file": "services/staffAuthService.js",
+    "line": 135,
+    "method": "POST",
+    "path": "/staff/login/",
+    "raw": "const response = await api.post('/staff/login/', payload);"
+  },
+  {
+    "file": "services/staffAuthService.js",
+    "line": 145,
+    "method": "GET",
+    "path": "/staff/me/",
+    "raw": "const response = await api.get('/staff/me/');"
+  },
+  {
+    "file": "services/staffAuthService.js",
+    "line": 168,
+    "method": "POST",
+    "path": "/staff/change-password/",
+    "raw": "const response = await api.post('/staff/change-password/', payload);"
+  },
+  {
+    "file": "services/staffAuthService.js",
+    "line": 173,
+    "method": "POST",
+    "path": "/users/change-password/",
+    "raw": "const response = await api.post('/users/change-password/', {"
+  },
+  {
+    "file": "services/staffAuthService.js",
+    "line": 206,
+    "method": "POST",
+    "path": "/staff/forgot-password/",
+    "raw": "const response = await api.post('/staff/forgot-password/', payload);"
+  },
+  {
+    "file": "services/staffAuthService.js",
+    "line": 222,
+    "method": "POST",
+    "path": "/staff/reset-password/",
+    "raw": "const response = await api.post('/staff/reset-password/', payload);"
+  },
+  {
+    "file": "services/staffAuthService.js",
+    "line": 235,
+    "method": "POST",
+    "path": "/staff/logout/",
+    "raw": "const response = await api.post('/staff/logout/', { refresh: token });"
+  },
+  {
+    "file": "services/staffOperationsService.js",
+    "line": 47,
+    "method": "GET",
+    "path": "/staff/dashboard/",
+    "raw": "const response = await api.get('/staff/dashboard/');"
+  },
+  {
+    "file": "services/staffOperationsService.js",
+    "line": 60,
+    "method": "GET",
+    "path": "/staff/bookings/",
+    "raw": "const response = await api.get('/staff/bookings/', { params });"
+  },
+  {
+    "file": "services/staffOperationsService.js",
+    "line": 70,
+    "method": "GET",
+    "path": "/staff/bookings/${id}/",
+    "raw": "const response = await api.get(`/staff/bookings/${id}/`);"
+  },
+  {
+    "file": "services/staffOperationsService.js",
+    "line": 83,
+    "method": "GET",
+    "path": "/staff/refunds/",
+    "raw": "const response = await api.get('/staff/refunds/', { params });"
+  },
+  {
+    "file": "services/staffOperationsService.js",
+    "line": 93,
+    "method": "GET",
+    "path": "/staff/refunds/${id}/",
+    "raw": "const response = await api.get(`/staff/refunds/${id}/`);"
+  },
+  {
+    "file": "services/staffOperationsService.js",
+    "line": 104,
+    "method": "POST",
+    "path": "/staff/refunds/${id}/process/",
+    "raw": "const response = await api.post(`/staff/refunds/${id}/process/`, { notes });"
+  },
+  {
+    "file": "services/staffOperationsService.js",
+    "line": 113,
+    "method": "GET",
+    "path": "/staff/refunds/history/",
+    "raw": "const response = await api.get('/staff/refunds/history/', { params });"
+  },
+  {
+    "file": "services/staffOperationsService.js",
+    "line": 126,
+    "method": "GET",
+    "path": "/staff/payouts/",
+    "raw": "const response = await api.get('/staff/payouts/', { params });"
+  },
+  {
+    "file": "services/staffOperationsService.js",
+    "line": 136,
+    "method": "GET",
+    "path": "/staff/payouts/${id}/",
+    "raw": "const response = await api.get(`/staff/payouts/${id}/`);"
+  },
+  {
+    "file": "services/staffOperationsService.js",
+    "line": 147,
+    "method": "POST",
+    "path": "/staff/payouts/${id}/process/",
+    "raw": "const response = await api.post(`/staff/payouts/${id}/process/`, {"
+  },
+  {
+    "file": "services/staffOperationsService.js",
+    "line": 159,
+    "method": "GET",
+    "path": "/staff/payouts/history/",
+    "raw": "const response = await api.get('/staff/payouts/history/', { params });"
+  },
+  {
+    "file": "services/staffOperationsService.js",
+    "line": 172,
+    "method": "GET",
+    "path": "/staff/support/",
+    "raw": "const response = await api.get('/staff/support/', { params });"
+  },
+  {
+    "file": "services/staffOperationsService.js",
+    "line": 182,
+    "method": "GET",
+    "path": "/staff/support/${id}/",
+    "raw": "const response = await api.get(`/staff/support/${id}/`);"
+  },
+  {
+    "file": "services/staffOperationsService.js",
+    "line": 193,
+    "method": "PATCH",
+    "path": "/staff/support/${id}/update/",
+    "raw": "const response = await api.patch(`/staff/support/${id}/update/`, {"
+  },
+  {
+    "file": "services/staffOperationsService.js",
+    "line": 207,
+    "method": "POST",
+    "path": "/staff/support/${id}/notes/",
+    "raw": "const response = await api.post(`/staff/support/${id}/notes/`, { note });"
+  },
+  {
+    "file": "services/staffOperationsService.js",
+    "line": 220,
+    "method": "GET",
+    "path": "/staff/verifications/",
+    "raw": "const response = await api.get('/staff/verifications/', { params });"
+  },
+  {
+    "file": "services/staffOperationsService.js",
+    "line": 230,
+    "method": "GET",
+    "path": "/staff/verifications/${id}/",
+    "raw": "const response = await api.get(`/staff/verifications/${id}/`);"
+  },
+  {
+    "file": "services/staffOperationsService.js",
+    "line": 241,
+    "method": "POST",
+    "path": "/staff/verifications/${id}/approve/",
+    "raw": "const response = await api.post(`/staff/verifications/${id}/approve/`, { notes });"
+  },
+  {
+    "file": "services/staffOperationsService.js",
+    "line": 252,
+    "method": "POST",
+    "path": "/staff/verifications/${id}/reject/",
+    "raw": "const response = await api.post(`/staff/verifications/${id}/reject/`, { reason });"
+  },
+  {
+    "file": "services/staffOperationsService.js",
+    "line": 265,
+    "method": "GET",
+    "path": "/staff/notifications/",
+    "raw": "const response = await api.get('/staff/notifications/', { params });"
+  },
+  {
+    "file": "services/staffOperationsService.js",
+    "line": 275,
+    "method": "POST",
+    "path": "/staff/notifications/${id}/read/",
+    "raw": "const response = await api.post(`/staff/notifications/${id}/read/`);"
+  },
+  {
+    "file": "services/staffOperationsService.js",
+    "line": 284,
+    "method": "POST",
+    "path": "/staff/notifications/read-all/",
+    "raw": "const response = await api.post('/staff/notifications/read-all/');"
+  }
+]
