@@ -98,10 +98,68 @@ class BookingListCreateView(generics.ListCreateAPIView):
         check_out = request.data.get('check_out')
 
         from rooms.models import Room
-        from rooms.utils import auto_update_past_checkout_bookings, get_available_room_count, _ROOM_ALLOCATION_LOCK
+        from rooms.utils import (
+            auto_update_past_checkout_bookings, get_available_room_count,
+            _ROOM_ALLOCATION_LOCK, get_payment_hold_duration, release_temporary_hold
+        )
         from util.validators import parse_flexible_date
 
+        cin = parse_flexible_date(check_in) if check_in else None
+        cout = parse_flexible_date(check_out) if check_out else None
+
         with _ROOM_ALLOCATION_LOCK:
+            # ---------------------------------------------------------------------
+            # IDEMPOTENCY & PENDING BOOKING REUSE
+            # Prevents duplicate bookings from browser refresh, network lag, or rapid clicks.
+            # 1. If an explicit Idempotency-Key header is supplied, reuse matching booking.
+            # 2. If the same guest already holds an active, unexpired PENDING_PAYMENT booking
+            #    for this exact room and dates with the same room count, reuse and return it.
+            # ---------------------------------------------------------------------
+            idempotency_key = (
+                request.headers.get('Idempotency-Key')
+                or request.headers.get('X-Idempotency-Key')
+                or request.data.get('idempotency_key')
+            )
+            if idempotency_key:
+                idempotency_key = str(idempotency_key).strip()
+                existing_by_key = Booking.objects.filter(
+                    customer=request.user,
+                    price_snapshot__idempotency_key=idempotency_key
+                ).order_by('-created_at').first()
+
+                if existing_by_key:
+                    is_valid_replay = (
+                        existing_by_key.booking_status == Booking.STATUS_CONFIRMED or (
+                            existing_by_key.booking_status == Booking.STATUS_PENDING_PAYMENT and
+                            existing_by_key.expires_at and existing_by_key.expires_at > timezone.now()
+                        )
+                    )
+                    if is_valid_replay:
+                        resp = Response(BookingSerializer(existing_by_key).data, status=status.HTTP_200_OK)
+                        resp['X-Idempotent-Replay'] = 'true'
+                        return resp
+
+            # Check for active unexpired PENDING_PAYMENT booking for same customer, room, and dates
+            if room_id and cin and cout:
+                active_pending = Booking.objects.filter(
+                    customer=request.user,
+                    room_id=room_id,
+                    check_in=cin,
+                    check_out=cout,
+                    booking_status=Booking.STATUS_PENDING_PAYMENT,
+                    payment_status=Booking.PAYMENT_PENDING,
+                    expires_at__gt=timezone.now()
+                ).order_by('-created_at').first()
+
+                if active_pending:
+                    if active_pending.number_of_rooms == requested_rooms:
+                        resp = Response(BookingSerializer(active_pending).data, status=status.HTTP_200_OK)
+                        resp['X-Idempotent-Replay'] = 'true'
+                        return resp
+                    else:
+                        # User requested different room count -> safely release old hold first
+                        release_temporary_hold(active_pending, reason="REPLACED_BY_NEW_RESERVATION")
+
             if room_id:
                 try:
                     # Lock the room inventory row during reservation
@@ -109,34 +167,30 @@ class BookingListCreateView(generics.ListCreateAPIView):
                 except Room.DoesNotExist:
                     return Response({"error": "Room not found."}, status=status.HTTP_404_NOT_FOUND)
 
-                if check_in and check_out:
-                    cin = parse_flexible_date(check_in)
-                    cout = parse_flexible_date(check_out)
+                if cin and cout and cout > cin:
+                    auto_update_past_checkout_bookings()
+                    # Escalate write lock in SQLite/PostgreSQL to prevent race condition during reservation
+                    Room.objects.filter(id=room_locked.id).update(updated_at=timezone.now())
 
-                    if cin and cout and cout > cin:
-                        auto_update_past_checkout_bookings()
-                        # Escalate write lock in SQLite/PostgreSQL to prevent race condition during reservation
-                        Room.objects.filter(id=room_locked.id).update(updated_at=timezone.now())
+                    available_count = get_available_room_count(room_locked, cin, cout, include_holds=True)
+                    all_nums = room_locked.get_all_room_numbers() if hasattr(room_locked, 'get_all_room_numbers') else []
+                    total_units = len(all_nums) if all_nums else (getattr(room_locked, 'total_rooms', 1) or 1)
 
-                        available_count = get_available_room_count(room_locked, cin, cout, include_holds=True)
-                        all_nums = room_locked.get_all_room_numbers() if hasattr(room_locked, 'get_all_room_numbers') else []
-                        total_units = len(all_nums) if all_nums else (getattr(room_locked, 'total_rooms', 1) or 1)
-
-                        if requested_rooms > available_count:
-                            return Response(
-                                {
-                                    "success": False,
-                                    "code": "ROOMS_SOLD_OUT",
-                                    "message": "All rooms are booked for your selected dates. Please select different dates or another room category.",
-                                    "available_rooms": available_count,
-                                    "requested_rooms": requested_rooms,
-                                    # Backwards compatibility fields
-                                    "error": "All rooms are booked for your selected dates. Please select different dates or another room category.",
-                                    "available_count": available_count,
-                                    "total_units": total_units
-                                },
-                                status=status.HTTP_409_CONFLICT
-                            )
+                    if requested_rooms > available_count:
+                        return Response(
+                            {
+                                "success": False,
+                                "code": "ROOMS_SOLD_OUT",
+                                "message": "All rooms are booked for your selected dates. Please select different dates or another room category.",
+                                "available_rooms": available_count,
+                                "requested_rooms": requested_rooms,
+                                # Backwards compatibility fields
+                                "error": "All rooms are booked for your selected dates. Please select different dates or another room category.",
+                                "available_count": available_count,
+                                "total_units": total_units
+                            },
+                            status=status.HTTP_409_CONFLICT
+                        )
 
             serializer = self.get_serializer(data=request.data, context={'request': request})
             serializer.is_valid(raise_exception=True)
@@ -152,9 +206,9 @@ class BookingListCreateView(generics.ListCreateAPIView):
             if coupon_code_used:
                 coupon_code_used = str(coupon_code_used).strip().upper()
 
-            from rooms.utils import get_payment_hold_duration
             booking.expires_at = timezone.now() + get_payment_hold_duration()
             booking.price_snapshot = {
+                'idempotency_key': idempotency_key if idempotency_key else None,
                 'price_per_night': float(booking.price_per_night),
                 'number_of_nights': booking.number_of_nights,
                 'number_of_rooms': booking.number_of_rooms,

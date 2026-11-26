@@ -8491,3 +8491,467 @@ NameError: name 'Q' is not defined
 2026-11-25 17:52:22 [WARNING] [django.server] "POST /api/staff/dept-manager/staff/ HTTP/1.1" 401 300
 2026-11-25 17:57:06 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\users\views.py changed, reloading.
 2026-11-25 17:57:08 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-25 17:59:33 [WARNING] [django.request] Unauthorized: /api/staff/dept-manager/staff/
+2026-11-25 17:59:34 [WARNING] [django.server] "GET /api/staff/dept-manager/staff/ HTTP/1.1" 401 300
+2026-11-25 18:00:00 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 436
+2026-11-25 18:00:13 [WARNING] [django.request] Unauthorized: /api/staff/dept-manager/staff/
+2026-11-25 18:00:13 [WARNING] [django.server] "GET /api/staff/dept-manager/staff/ HTTP/1.1" 401 300
+2026-11-25 18:01:09 [WARNING] [django.request] Unauthorized: /api/staff/dept-manager/staff/
+2026-11-25 18:01:09 [WARNING] [django.server] "POST /api/staff/dept-manager/staff/ HTTP/1.1" 401 300
+2026-11-25 18:02:14 [WARNING] [django.request] Unauthorized: /api/staff/dept-manager/staff/
+2026-11-25 18:02:14 [WARNING] [django.server] "POST /api/staff/dept-manager/staff/ HTTP/1.1" 401 300
+2026-11-25 18:02:37 [WARNING] [django.request] Unauthorized: /api/staff/main-manager/dept-managers/
+2026-11-25 18:02:37 [WARNING] [django.server] "POST /api/staff/main-manager/dept-managers/ HTTP/1.1" 401 300
+2026-11-25 18:02:56 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-25 18:02:56 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 401 83
+2026-11-25 18:03:25 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-25 18:03:42 [WARNING] [django.request] Bad Request: /api/staff/create/
+2026-11-25 18:03:42 [WARNING] [django.server] "POST /api/staff/create/ HTTP/1.1" 400 399
+2026-11-25 18:03:55 [INFO] [django.server] "GET /api/staff/?department=RESERVATION&status=ACTIVE HTTP/1.1" 200 4961
+2026-11-25 18:04:11 [WARNING] [django.request] Not Found: /api/staff/1/
+2026-11-25 18:04:11 [WARNING] [django.server] "GET /api/staff/1/ HTTP/1.1" 404 268
+2026-11-25 18:04:48 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1596
+2026-11-25 18:05:09 [WARNING] [django.request] Not Found: /api/staff/1/permissions/update/
+2026-11-25 18:05:09 [WARNING] [django.server] "PUT /api/staff/1/permissions/update/ HTTP/1.1" 404 268
+2026-11-25 18:06:37 [WARNING] [django.request] Bad Request: /api/staff/admin/main-managers/
+2026-11-25 18:06:37 [WARNING] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 400 442
+2026-11-25 18:07:19 [WARNING] [django.request] Unauthorized: /api/staff/main-manager/dept-managers/
+2026-11-25 18:07:19 [WARNING] [django.server] "POST /api/staff/main-manager/dept-managers/ HTTP/1.1" 401 300
+2026-11-25 18:07:41 [INFO] [django.server] "GET /api/staff/admin/main-managers/ HTTP/1.1" 200 4239
+2026-11-25 18:07:56 [WARNING] [django.request] Unauthorized: /api/staff/main-manager/dept-managers/
+2026-11-25 18:07:56 [WARNING] [django.server] "POST /api/staff/main-manager/dept-managers/ HTTP/1.1" 401 300
+2026-11-25 18:09:28 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-25 18:09:59 [WARNING] [django.request] Bad Request: /api/staff/admin/main-managers/
+2026-11-25 18:09:59 [WARNING] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 400 340
+2026-11-25 18:10:09 [WARNING] [django.request] Bad Request: /api/staff/admin/main-managers/
+2026-11-25 18:10:09 [WARNING] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 400 340
+2026-11-25 18:10:25 [WARNING] [django.request] Bad Request: /api/staff/admin/main-managers/
+2026-11-25 18:10:25 [WARNING] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 400 340
+2026-11-25 18:10:50 [INFO] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 201 858
+2026-11-25 18:11:39 [WARNING] [django.request] Unauthorized: /api/staff/main-manager/dept-managers/
+2026-11-25 18:11:39 [WARNING] [django.server] "POST /api/staff/main-manager/dept-managers/ HTTP/1.1" 401 300
+2026-11-25 18:12:37 [WARNING] [django.request] Unauthorized: /api/staff/main-manager/dept-managers/
+2026-11-25 18:12:37 [WARNING] [django.server] "GET /api/staff/main-manager/dept-managers/?department_id=1 HTTP/1.1" 401 300
+2026-11-25 18:12:50 [WARNING] [django.request] Unauthorized: /api/staff/main-manager/departments/
+2026-11-25 18:12:50 [WARNING] [django.server] "GET /api/staff/main-manager/departments/ HTTP/1.1" 401 300
+2026-11-25 18:13:03 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-25 18:13:09 [WARNING] [django.request] Unauthorized: /api/staff/main-manager/departments/
+2026-11-25 18:13:09 [WARNING] [django.server] "GET /api/staff/main-manager/departments/ HTTP/1.1" 401 300
+2026-11-25 18:14:09 [INFO] [django.server] "GET /api/staff/main-manager/departments/ HTTP/1.1" 200 1324
+2026-11-25 18:14:38 [INFO] [django.server] "POST /api/staff/main-manager/dept-managers/ HTTP/1.1" 201 2691
+2026-11-25 18:15:08 [INFO] [django.server] "GET /api/staff/main-manager/dept-managers/?department_id=1 HTTP/1.1" 200 3454
+2026-11-25 18:15:52 [WARNING] [django.request] Bad Request: /api/staff/main-manager/dept-managers/assign/
+2026-11-25 18:15:52 [WARNING] [django.server] "POST /api/staff/main-manager/dept-managers/assign/ HTTP/1.1" 400 80
+2026-11-25 18:16:13 [INFO] [django.server] "GET /api/staff/main-manager/staff/?status=ACTIVE HTTP/1.1" 200 10498
+2026-11-25 18:16:53 [WARNING] [django.request] Unauthorized: /api/staff/dept-manager/staff/
+2026-11-25 18:16:53 [WARNING] [django.server] "POST /api/staff/dept-manager/staff/ HTTP/1.1" 401 300
+2026-11-25 18:17:12 [INFO] [django.server] "POST /api/staff/dept-manager/staff/ HTTP/1.1" 201 2682
+2026-11-25 18:17:48 [WARNING] [django.request] Not Found: /api/staff/dept-manager/staff/1/
+2026-11-25 18:17:48 [WARNING] [django.server] "GET /api/staff/dept-manager/staff/1/ HTTP/1.1" 404 204
+2026-11-25 18:18:09 [WARNING] [django.request] Not Found: /api/staff/dept-manager/staff/1/permissions/
+2026-11-25 18:18:09 [WARNING] [django.server] "GET /api/staff/dept-manager/staff/1/permissions/ HTTP/1.1" 404 204
+2026-11-25 18:18:35 [WARNING] [django.request] Not Found: /api/staff/dept-manager/staff/1/
+2026-11-25 18:18:35 [WARNING] [django.server] "GET /api/staff/dept-manager/staff/1/ HTTP/1.1" 404 204
+2026-11-25 18:18:56 [WARNING] [django.request] Bad Request: /api/staff/main-manager/dept-managers/assign/
+2026-11-25 18:18:56 [WARNING] [django.server] "POST /api/staff/main-manager/dept-managers/assign/ HTTP/1.1" 400 80
+2026-11-25 18:19:15 [INFO] [django.server] "POST /api/staff/admin/delegation-policies/ HTTP/1.1" 200 337
+2026-11-25 18:38:48 [INFO] [django.server] "POST /api/staff/create/ HTTP/1.1" 201 8437
+2026-11-26 15:21:39 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-26 15:22:44 [WARNING] [django.request] Unauthorized: /api/staff/admin/main-managers/
+2026-11-26 15:22:44 [WARNING] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 401 512
+2026-11-26 15:24:00 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-26 15:24:14 [ERROR] [core.exceptions] Unhandled server error: name 'Q' is not defined
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\views.py", line 523, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\users\views.py", line 316, in post
+    candidate = user_obj or User.objects.filter(Q(username__iexact=username) | Q(email__iexact=username)).first()
+                                                ^
+NameError: name 'Q' is not defined
+2026-11-26 15:24:14 [ERROR] [django.request] Internal Server Error: /api/users/host/login/
+2026-11-26 15:24:14 [ERROR] [django.server] "POST /api/users/host/login/ HTTP/1.1" 500 216
+2026-11-26 15:27:27 [WARNING] [django.request] Unauthorized: /api/users/me/
+2026-11-26 15:27:27 [WARNING] [django.server] "PATCH /api/users/me/ HTTP/1.1" 401 300
+2026-11-26 15:28:31 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 415
+2026-11-26 15:28:43 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 430
+2026-11-26 15:28:54 [INFO] [django.server] "POST /api/staff/login/ HTTP/1.1" 200 436
+2026-11-26 15:29:09 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-26 15:29:09 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 401 83
+2026-11-26 15:30:30 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-26 15:30:30 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 401 83
+2026-11-26 15:31:53 [WARNING] [django.request] Bad Request: /api/staff/login/
+2026-11-26 15:31:53 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 400 360
+2026-11-26 15:35:22 [WARNING] [django.request] Bad Request: /api/staff/login/
+2026-11-26 15:35:22 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 400 360
+2026-11-26 15:39:29 [INFO] [django.server] "GET /api/staff/me/ HTTP/1.1" 200 1530
+2026-11-26 15:39:47 [WARNING] [django.request] Bad Request: /api/staff/dept-manager/staff/
+2026-11-26 15:39:47 [WARNING] [django.server] "POST /api/staff/dept-manager/staff/ HTTP/1.1" 400 69
+2026-11-26 15:40:23 [INFO] [django.server] "POST /api/staff/dept-manager/staff/ HTTP/1.1" 201 2695
+2026-11-26 15:40:34 [WARNING] [django.request] Not Found: /api/staff/dept-manager/staff/1/
+2026-11-26 15:40:34 [WARNING] [django.server] "GET /api/staff/dept-manager/staff/1/ HTTP/1.1" 404 204
+2026-11-26 15:40:53 [WARNING] [django.request] Not Found: /api/staff/dept-manager/staff/1/permissions/
+2026-11-26 15:40:53 [WARNING] [django.server] "GET /api/staff/dept-manager/staff/1/permissions/ HTTP/1.1" 404 204
+2026-11-26 15:42:57 [INFO] [django.server] "GET /api/staff/?department=RESERVATION&status=ACTIVE HTTP/1.1" 200 8146
+2026-11-26 15:43:06 [WARNING] [django.request] Not Found: /api/staff/dept-manager/staff/1/
+2026-11-26 15:43:06 [WARNING] [django.server] "GET /api/staff/dept-manager/staff/1/ HTTP/1.1" 404 204
+2026-11-26 15:43:15 [WARNING] [django.request] Not Found: /api/staff/1/
+2026-11-26 15:43:15 [WARNING] [django.server] "GET /api/staff/1/ HTTP/1.1" 404 268
+2026-11-26 15:43:21 [WARNING] [django.request] Bad Request: /api/staff/create/
+2026-11-26 15:43:21 [WARNING] [django.server] "POST /api/staff/create/ HTTP/1.1" 400 399
+2026-11-26 15:43:33 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1597
+2026-11-26 15:44:30 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1597
+2026-11-26 15:44:38 [INFO] [django.server] "GET /api/staff/admin/main-managers/ HTTP/1.1" 200 4928
+2026-11-26 15:44:44 [INFO] [django.server] "GET /api/staff/admin/audit-logs/?action_type=MANAGER_CREATE HTTP/1.1" 200 2820
+2026-11-26 15:47:36 [INFO] [django.server] "GET /api/staff/admin/hierarchy-overview/ HTTP/1.1" 200 752
+2026-11-26 16:00:46 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\serializers.py changed, reloading.
+2026-11-26 16:00:48 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-26 16:01:14 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\views.py changed, reloading.
+2026-11-26 16:01:15 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-26 16:02:52 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-26 16:02:52 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-26 16:02:52 [WARNING] [django.request] Bad Request: /api/staff/login/
+2026-11-26 16:02:53 [WARNING] [django.request] Bad Request: /api/staff/login/
+2026-11-26 16:02:53 [WARNING] [django.request] Bad Request: /api/staff/login/
+2026-11-26 16:02:53 [WARNING] [django.request] Bad Request: /api/staff/login/
+2026-11-26 16:02:53 [WARNING] [django.request] Bad Request: /api/staff/login/
+2026-11-26 16:02:53 [WARNING] [django.request] Bad Request: /api/staff/login/
+2026-11-26 16:02:53 [WARNING] [django.request] Bad Request: /api/staff/login/
+2026-11-26 16:02:53 [WARNING] [django.request] Bad Request: /api/staff/login/
+2026-11-26 16:02:53 [WARNING] [django.request] Bad Request: /api/staff/login/
+2026-11-26 16:02:54 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-26 16:02:55 [WARNING] [django.request] Forbidden: /api/staff/login/
+2026-11-26 16:02:57 [WARNING] [django.request] Forbidden: /api/staff/login/
+2026-11-26 16:02:59 [WARNING] [django.request] Forbidden: /api/staff/login/
+2026-11-26 16:03:04 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-26 16:03:04 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-26 16:03:04 [WARNING] [django.request] Unauthorized: /api/staff/me/
+2026-11-26 16:03:04 [WARNING] [django.request] Unauthorized: /api/staff/me/
+2026-11-26 16:03:04 [WARNING] [django.request] Forbidden: /api/staff/refunds/
+2026-11-26 16:03:05 [WARNING] [django.request] Bad Request: /api/staff/login/
+2026-11-26 16:04:16 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/4/
+2026-11-26 16:04:17 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/4/
+2026-11-26 16:04:25 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/3/
+2026-11-26 16:04:32 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/3/permissions/
+2026-11-26 16:04:40 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/1/
+2026-11-26 16:05:03 [WARNING] [django.request] Forbidden: /api/staff/admin/main-managers/
+2026-11-26 16:05:09 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/3/permissions/
+2026-11-26 16:05:17 [WARNING] [django.request] Unauthorized: /api/staff/mfa/verify/
+2026-11-26 16:05:17 [WARNING] [django.request] Unauthorized: /api/staff/mfa/verify/
+2026-11-26 16:05:23 [WARNING] [django.request] Forbidden: /api/staff/admin/main-managers/
+2026-11-26 16:05:23 [WARNING] [django.request] Forbidden: /api/staff/admin/hierarchy-overview/
+2026-11-26 16:05:23 [WARNING] [django.request] Forbidden: /api/staff/admin/audit-logs/
+2026-11-26 16:05:30 [WARNING] [django.request] Forbidden: /api/staff/dept-manager/staff/
+2026-11-26 16:05:30 [WARNING] [django.request] Forbidden: /api/staff/main-manager/departments/
+2026-11-26 16:05:30 [WARNING] [django.request] Forbidden: /api/staff/admin/hierarchy-overview/
+2026-11-26 16:05:44 [WARNING] [django.request] Forbidden: /api/staff/dashboard/
+2026-11-26 16:05:44 [WARNING] [django.request] Forbidden: /api/staff/bookings/
+2026-11-26 16:05:50 [WARNING] [django.request] Forbidden: /api/staff/refunds/1/process/
+2026-11-26 16:05:50 [WARNING] [django.request] Forbidden: /api/staff/dashboard/
+2026-11-26 16:05:51 [WARNING] [django.request] Forbidden: /api/staff/login/
+2026-11-26 16:05:51 [WARNING] [django.request] Forbidden: /api/staff/create/
+2026-11-26 16:05:53 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-26 16:05:56 [WARNING] [django.request] Unauthorized: /api/staff/me/
+2026-11-26 16:06:22 [WARNING] [django.request] Forbidden: /api/staff/create/
+2026-11-26 16:06:22 [WARNING] [django.request] Forbidden: /api/staff/create/
+2026-11-26 16:06:25 [WARNING] [django.request] Forbidden: /api/staff/create/
+2026-11-26 16:06:44 [WARNING] [django.request] Bad Request: /api/staff/reset-password/
+2026-11-26 16:06:58 [WARNING] [django.request] Forbidden: /api/staff/login/
+2026-11-26 16:07:16 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-26 16:07:30 [WARNING] [django.request] Forbidden: /api/staff/bookings/
+2026-11-26 16:08:02 [WARNING] [django.request] Bad Request: /api/staff/verifications/2/reject/
+2026-11-26 16:08:06 [WARNING] [django.request] Bad Request: /api/staff/payouts/1/process/
+2026-11-26 16:08:30 [WARNING] [django.request] Forbidden: /api/staff/refunds/
+2026-11-26 16:08:30 [WARNING] [django.request] Forbidden: /api/staff/payouts/
+2026-11-26 16:08:30 [WARNING] [django.request] Forbidden: /api/staff/verifications/
+2026-11-26 16:08:38 [WARNING] [django.request] Forbidden: /api/staff/bookings/
+2026-11-26 16:08:38 [WARNING] [django.request] Forbidden: /api/staff/dashboard/
+2026-11-26 16:08:38 [WARNING] [django.request] Forbidden: /api/staff/bookings/
+2026-11-26 16:08:38 [WARNING] [django.request] Forbidden: /api/staff/dashboard/
+2026-11-26 16:08:53 [WARNING] [django.request] Forbidden: /api/staff/refunds/1/process/
+2026-11-26 16:09:25 [WARNING] [django.request] Forbidden: /api/staff/bookings/
+2026-11-26 16:09:58 [WARNING] [django.request] Forbidden: /api/staff/bookings/
+2026-11-26 16:09:58 [WARNING] [django.request] Forbidden: /api/staff/refunds/
+2026-11-26 16:09:58 [WARNING] [django.request] Forbidden: /api/staff/payouts/
+2026-11-26 16:09:58 [WARNING] [django.request] Forbidden: /api/staff/verifications/
+2026-11-26 16:10:18 [WARNING] [django.request] Forbidden: /api/staff/refunds/
+2026-11-26 16:10:18 [WARNING] [django.request] Forbidden: /api/staff/payouts/
+2026-11-26 16:10:39 [WARNING] [django.request] Forbidden: /api/staff/refunds/1/process/
+2026-11-26 16:11:02 [WARNING] [django.request] Forbidden: /api/staff/refunds/
+2026-11-26 16:11:02 [WARNING] [django.request] Forbidden: /api/staff/bookings/
+2026-11-26 16:11:14 [WARNING] [django.request] Forbidden: /api/staff/payouts/
+2026-11-26 16:11:14 [WARNING] [django.request] Forbidden: /api/staff/verifications/
+2026-11-26 16:12:07 [WARNING] [django.request] Forbidden: /api/staff/refunds/
+2026-11-26 16:12:07 [WARNING] [django.request] Forbidden: /api/staff/payouts/
+2026-11-26 16:12:07 [WARNING] [django.request] Forbidden: /api/staff/support/
+2026-11-26 16:12:07 [WARNING] [django.request] Forbidden: /api/staff/verifications/
+2026-11-26 16:12:19 [WARNING] [django.request] Forbidden: /api/staff/1/update/
+2026-11-26 16:36:25 [WARNING] [django.request] Bad Request: /api/staff/admin/main-managers/
+2026-11-26 16:36:25 [WARNING] [django.server] "POST /api/staff/admin/main-managers/ HTTP/1.1" 400 442
+2026-11-26 16:36:32 [INFO] [django.server] "GET /api/staff/admin/main-managers/ HTTP/1.1" 200 4928
+2026-11-26 17:21:40 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\staff\serializers.py changed, reloading.
+2026-11-26 17:21:41 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-26 17:22:43 [INFO] [django.server] "GET /api/staff/admin/main-managers/ HTTP/1.1" 200 4928
+2026-11-26 17:25:23 [INFO] [django.server] "GET /api/staff/main-manager/staff/ HTTP/1.1" 200 13721
+2026-11-26 17:25:29 [INFO] [django.server] "GET /api/staff/dept-manager/staff/ HTTP/1.1" 200 13706
+2026-11-26 17:25:36 [INFO] [django.server] "GET /api/staff/admin/hierarchy-overview/ HTTP/1.1" 200 752
+2026-11-26 17:25:46 [INFO] [django.server] "GET /api/staff/me/ HTTP/1.1" 200 1530
+2026-11-26 18:02:28 [WARNING] [django.request] Bad Request: /api/users/register/
+2026-11-26 18:02:28 [WARNING] [django.server] "POST /api/users/register/ HTTP/1.1" 400 309
+2026-11-26 18:02:53 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1359
+2026-11-26 18:03:22 [INFO] [django.server] "GET /api/users/me/ HTTP/1.1" 200 545
+2026-11-26 18:37:54 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\bookings\views.py changed, reloading.
+2026-11-26 18:37:56 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-26 18:39:59 [WARNING] [django.request] Conflict: /api/bookings/
+2026-11-26 18:40:27 [INFO] [rooms.utils] [release_temporary_hold] Successfully released temporary hold for booking KH-HOLD-002. Room inventory restored. Reason: Customer clicked Cancel in checkout modal.
+2026-11-26 18:40:31 [INFO] [rooms.utils] [release_temporary_hold] Successfully released temporary hold for booking KH-HOLD-003. Room inventory restored. Reason: Payment Failed [BAD_REQUEST_ERROR]: Payment was declined by issuing bank.
+2026-11-26 18:40:34 [INFO] [rooms.utils] [release_temporary_hold] Successfully released temporary hold for booking KH-HOLD-004. Room inventory restored. Reason: modal.ondismiss event received.
+2026-11-26 18:40:41 [INFO] [rooms.utils] [release_temporary_hold] Successfully released temporary hold for booking KH-HOLD-006. Room inventory restored. Reason: Hold expired (fallback timer).
+2026-11-26 18:40:45 [INFO] [rooms.utils] [RoomAllocation] Successfully allocated Room 101 to Booking KH-HOLD-007 for 2026-12-01 to 2026-12-02.
+2026-11-26 18:40:45 [INFO] [services.booking_email_service] [BookingEmail] SUCCESS: Confirmation email with PDF sent to cust_a_ph@example.com for booking KH-HOLD-007
+2026-11-26 18:40:45 [INFO] [payments.views] [VerifyPaymentView] Confirmation email result for KH-HOLD-007: {'success': True, 'status': 'sent', 'recipient': 'cust_a_ph@example.com', 'booking_id': 'KH-HOLD-007'}
+2026-11-26 18:40:49 [ERROR] [rooms.utils] [RoomAllocation] OVERBOOKING DETECTED for booking KH-HOLD-008-A: Requested 1 room(s), but only 0 unit(s) available for 2026-12-01 to 2026-12-02. Refusing to double-allocate occupied rooms.
+2026-11-26 18:40:49 [ERROR] [payments.views] [VerifyPaymentView] CRITICAL OVERBOOKING: Booking KH-HOLD-008-A paid via payment pay_delayed_008, but no physical rooms remain available. Initiating automatic full refund.
+2026-11-26 18:40:49 [WARNING] [django.request] Conflict: /api/payments/verify/
+2026-11-26 18:40:53 [ERROR] [rooms.utils] [RoomAllocation] OVERBOOKING DETECTED for booking KH-HOLD-009-A: Requested 1 room(s), but only 0 unit(s) available for 2026-12-01 to 2026-12-02. Refusing to double-allocate occupied rooms.
+2026-11-26 18:40:53 [ERROR] [payments.views] [VerifyPaymentView] CRITICAL OVERBOOKING: Booking KH-HOLD-009-A paid via payment pay_steal_009, but no physical rooms remain available. Initiating automatic full refund.
+2026-11-26 18:40:53 [WARNING] [django.request] Conflict: /api/payments/verify/
+2026-11-26 18:40:57 [INFO] [rooms.utils] [RoomAllocation] Successfully allocated Room 101 to Booking KH-HOLD-010 for 2026-12-01 to 2026-12-02.
+2026-11-26 18:40:57 [INFO] [services.booking_email_service] [BookingEmail] SUCCESS: Confirmation email with PDF sent to cust_a_ph@example.com for booking KH-HOLD-010
+2026-11-26 18:41:02 [ERROR] [core.exceptions] Unhandled server error: database table is locked: bookings_booking
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\sqlite3\base.py", line 359, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: database table is locked: bookings_booking
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\views.py", line 523, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\generics.py", line 246, in post
+    return self.create(request, *args, **kwargs)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\contextlib.py", line 85, in inner
+    return func(*args, **kwds)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\bookings\views.py", line 197, in create
+    booking = serializer.save()
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\serializers.py", line 210, in save
+    self.instance = self.create(validated_data)
+                    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\bookings\serializers.py", line 325, in create
+    booking = Booking.objects.create(
+        customer=customer,
+    ...<9 lines>...
+        **validated_data
+    )
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\query.py", line 752, in create
+    obj.save(force_insert=True, using=self.db)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\bookings\models.py", line 130, in save
+    super().save(*args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 904, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 996, in save_base
+    updated = self._save_table(
+        raw,
+    ...<4 lines>...
+        update_fields,
+    )
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 1201, in _save_table
+    results = self._do_insert(
+        cls._base_manager, using, insert_fields, returning_fields, raw
+    )
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 1253, in _do_insert
+    return manager._insert(
+           ~~~~~~~~~~~~~~~^
+        [self],
+        ^^^^^^^
+    ...<3 lines>...
+        raw=raw,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\query.py", line 2166, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\sql\compiler.py", line 1954, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\sqlite3\base.py", line 359, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: database table is locked: bookings_booking
+2026-11-26 18:41:02 [ERROR] [django.request] Internal Server Error: /api/bookings/
+2026-11-26 18:41:06 [WARNING] [django.request] Bad Request: /api/payments/cancel-payment/
+2026-11-26 18:41:06 [WARNING] [rooms.utils] [release_temporary_hold] Rejected attempt to release hold for booking KH-HOLD-012: booking is already confirmed/paid (status=CONFIRMED, payment=PAID).
+2026-11-26 18:41:10 [WARNING] [django.request] Bad Request: /api/payments/payment-failed/
+2026-11-26 18:41:19 [INFO] [payments.views] [execute_refund_with_provider] Refund already executed for record #3 (Razorpay Refund ID: rfnd_existing_015). Skipping duplicate call.
+2026-11-26 18:41:23 [INFO] [rooms.utils] [RoomAllocation] Successfully allocated Room 101 to Booking KH-TEST-A101 for 2026-11-18 to 2026-11-19.
+2026-11-26 18:41:23 [WARNING] [payments.views] [CreateOrderView] Rejected payment order creation for booking KH-TEST-B101: only 0 room(s) available, but 1 requested.
+2026-11-26 18:41:23 [WARNING] [django.request] Conflict: /api/payments/create-order/
+2026-11-26 18:41:23 [ERROR] [rooms.utils] [RoomAllocation] OVERBOOKING DETECTED for booking KH-TEST-B101: Requested 1 room(s), but only 0 unit(s) available for 2026-11-18 to 2026-11-19. Refusing to double-allocate occupied rooms.
+2026-11-26 18:41:27 [INFO] [rooms.utils] [RoomAllocation] Successfully allocated Room 101 to Booking KH-TEST-DUAL-A for 2026-11-18 to 2026-11-19.
+2026-11-26 18:41:27 [INFO] [rooms.utils] [RoomAllocation] Successfully allocated Room 102 to Booking KH-TEST-DUAL-B for 2026-11-18 to 2026-11-19.
+2026-11-26 18:41:31 [ERROR] [rooms.utils] [RoomAllocation] OVERBOOKING DETECTED for booking KH-TEST-RACE-B: Requested 1 room(s), but only 0 unit(s) available for 2026-11-18 to 2026-11-19. Refusing to double-allocate occupied rooms.
+2026-11-26 18:41:31 [ERROR] [payments.views] [VerifyPaymentView] CRITICAL OVERBOOKING: Booking KH-TEST-RACE-B paid via payment pay_race_b_999, but no physical rooms remain available. Initiating automatic full refund.
+2026-11-26 18:41:31 [WARNING] [django.request] Conflict: /api/payments/verify/
+2026-11-26 18:41:35 [INFO] [rooms.utils] [RoomAllocation] Successfully allocated Room 101 to Booking KH-THREAD-1 for 2026-11-18 to 2026-11-19.
+2026-11-26 18:41:35 [ERROR] [rooms.utils] [RoomAllocation] OVERBOOKING DETECTED for booking KH-THREAD-2: Requested 1 room(s), but only 0 unit(s) available for 2026-11-18 to 2026-11-19. Refusing to double-allocate occupied rooms.
+2026-11-26 18:41:39 [INFO] [rooms.utils] [RoomAllocation] Successfully allocated Room 101 to Booking KH-NON-OVERLAP-A for 2026-11-18 to 2026-11-19.
+2026-11-26 18:41:39 [INFO] [rooms.utils] [RoomAllocation] Successfully allocated Room 101 to Booking KH-NON-OVERLAP-B for 2026-11-20 to 2026-11-21.
+2026-11-26 18:41:46 [WARNING] [payments.views] [CreateOrderView] Rejected payment order creation for booking BK-PEND-D: only 0 room(s) available, but 1 requested.
+2026-11-26 18:41:46 [WARNING] [django.request] Conflict: /api/payments/create-order/
+2026-11-26 18:41:59 [WARNING] [payments.views] [CreateOrderView] Rejected payment order creation for booking BK-PEND-C3: only 1 room(s) available, but 2 requested.
+2026-11-26 18:41:59 [WARNING] [django.request] Conflict: /api/payments/create-order/
+2026-11-26 18:42:07 [WARNING] [payments.views] [CreateOrderView] Rejected payment order creation for booking BK-PEND-D4: only 0 room(s) available, but 1 requested.
+2026-11-26 18:42:07 [WARNING] [django.request] Conflict: /api/payments/create-order/
+2026-11-26 18:42:32 [ERROR] [core.exceptions] Unhandled server error: database table is locked: bookings_booking
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\sqlite3\base.py", line 359, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: database table is locked: bookings_booking
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\views.py", line 523, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\generics.py", line 246, in post
+    return self.create(request, *args, **kwargs)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\contextlib.py", line 85, in inner
+    return func(*args, **kwds)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\bookings\views.py", line 151, in create
+    ).order_by('-created_at').first()
+                              ~~~~~^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\query.py", line 1228, in first
+    for obj in queryset[:1]:
+               ~~~~~~~~^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\query.py", line 473, in __iter__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\query.py", line 2287, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\query.py", line 131, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\sql\compiler.py", line 1643, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\sqlite3\base.py", line 359, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: database table is locked: bookings_booking
+2026-11-26 18:42:32 [ERROR] [django.request] Internal Server Error: /api/bookings/
+2026-11-26 18:42:38 [WARNING] [payments.views] [CreateOrderView] Rejected payment order creation for booking BK-PEND-D9: only 0 room(s) available, but 1 requested.
+2026-11-26 18:42:38 [WARNING] [django.request] Conflict: /api/payments/create-order/
+2026-11-26 18:43:15 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\bookings\views.py changed, reloading.
+2026-11-26 18:43:17 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-26 18:43:54 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\bookings\views.py changed, reloading.
+2026-11-26 18:43:55 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-26 18:44:05 [WARNING] [django.request] Conflict: /api/bookings/
+2026-11-26 18:44:14 [INFO] [rooms.utils] [release_temporary_hold] Successfully released temporary hold for booking KH-HOLD-002. Room inventory restored. Reason: Customer clicked Cancel in checkout modal.
+2026-11-26 18:44:18 [INFO] [rooms.utils] [release_temporary_hold] Successfully released temporary hold for booking KH-HOLD-003. Room inventory restored. Reason: Payment Failed [BAD_REQUEST_ERROR]: Payment was declined by issuing bank.
+2026-11-26 18:44:22 [INFO] [rooms.utils] [release_temporary_hold] Successfully released temporary hold for booking KH-HOLD-004. Room inventory restored. Reason: modal.ondismiss event received.
+2026-11-26 18:44:32 [INFO] [rooms.utils] [release_temporary_hold] Successfully released temporary hold for booking KH-HOLD-006. Room inventory restored. Reason: Hold expired (fallback timer).
+2026-11-26 18:44:36 [INFO] [rooms.utils] [RoomAllocation] Successfully allocated Room 101 to Booking KH-HOLD-007 for 2026-12-01 to 2026-12-02.
+2026-11-26 18:44:36 [INFO] [services.booking_email_service] [BookingEmail] SUCCESS: Confirmation email with PDF sent to cust_a_ph@example.com for booking KH-HOLD-007
+2026-11-26 18:44:36 [INFO] [payments.views] [VerifyPaymentView] Confirmation email result for KH-HOLD-007: {'success': True, 'status': 'sent', 'recipient': 'cust_a_ph@example.com', 'booking_id': 'KH-HOLD-007'}
+2026-11-26 18:44:39 [ERROR] [rooms.utils] [RoomAllocation] OVERBOOKING DETECTED for booking KH-HOLD-008-A: Requested 1 room(s), but only 0 unit(s) available for 2026-12-01 to 2026-12-02. Refusing to double-allocate occupied rooms.
+2026-11-26 18:44:39 [ERROR] [payments.views] [VerifyPaymentView] CRITICAL OVERBOOKING: Booking KH-HOLD-008-A paid via payment pay_delayed_008, but no physical rooms remain available. Initiating automatic full refund.
+2026-11-26 18:44:39 [WARNING] [django.request] Conflict: /api/payments/verify/
+2026-11-26 18:44:43 [ERROR] [rooms.utils] [RoomAllocation] OVERBOOKING DETECTED for booking KH-HOLD-009-A: Requested 1 room(s), but only 0 unit(s) available for 2026-12-01 to 2026-12-02. Refusing to double-allocate occupied rooms.
+2026-11-26 18:44:43 [ERROR] [payments.views] [VerifyPaymentView] CRITICAL OVERBOOKING: Booking KH-HOLD-009-A paid via payment pay_steal_009, but no physical rooms remain available. Initiating automatic full refund.
+2026-11-26 18:44:43 [WARNING] [django.request] Conflict: /api/payments/verify/
+2026-11-26 18:44:46 [INFO] [rooms.utils] [RoomAllocation] Successfully allocated Room 101 to Booking KH-HOLD-010 for 2026-12-01 to 2026-12-02.
+2026-11-26 18:44:46 [INFO] [services.booking_email_service] [BookingEmail] SUCCESS: Confirmation email with PDF sent to cust_a_ph@example.com for booking KH-HOLD-010
+2026-11-26 18:44:49 [WARNING] [django.request] Conflict: /api/bookings/
+2026-11-26 18:44:53 [WARNING] [django.request] Bad Request: /api/payments/cancel-payment/
+2026-11-26 18:44:53 [WARNING] [rooms.utils] [release_temporary_hold] Rejected attempt to release hold for booking KH-HOLD-012: booking is already confirmed/paid (status=CONFIRMED, payment=PAID).
+2026-11-26 18:44:57 [WARNING] [django.request] Bad Request: /api/payments/payment-failed/
+2026-11-26 18:45:04 [INFO] [payments.views] [execute_refund_with_provider] Refund already executed for record #3 (Razorpay Refund ID: rfnd_existing_015). Skipping duplicate call.
+2026-11-26 18:45:08 [INFO] [rooms.utils] [RoomAllocation] Successfully allocated Room 101 to Booking KH-TEST-A101 for 2026-11-18 to 2026-11-19.
+2026-11-26 18:45:08 [WARNING] [payments.views] [CreateOrderView] Rejected payment order creation for booking KH-TEST-B101: only 0 room(s) available, but 1 requested.
+2026-11-26 18:45:08 [WARNING] [django.request] Conflict: /api/payments/create-order/
+2026-11-26 18:45:08 [ERROR] [rooms.utils] [RoomAllocation] OVERBOOKING DETECTED for booking KH-TEST-B101: Requested 1 room(s), but only 0 unit(s) available for 2026-11-18 to 2026-11-19. Refusing to double-allocate occupied rooms.
+2026-11-26 18:45:12 [INFO] [rooms.utils] [RoomAllocation] Successfully allocated Room 101 to Booking KH-TEST-DUAL-A for 2026-11-18 to 2026-11-19.
+2026-11-26 18:45:12 [INFO] [rooms.utils] [RoomAllocation] Successfully allocated Room 102 to Booking KH-TEST-DUAL-B for 2026-11-18 to 2026-11-19.
+2026-11-26 18:45:16 [ERROR] [rooms.utils] [RoomAllocation] OVERBOOKING DETECTED for booking KH-TEST-RACE-B: Requested 1 room(s), but only 0 unit(s) available for 2026-11-18 to 2026-11-19. Refusing to double-allocate occupied rooms.
+2026-11-26 18:45:16 [ERROR] [payments.views] [VerifyPaymentView] CRITICAL OVERBOOKING: Booking KH-TEST-RACE-B paid via payment pay_race_b_999, but no physical rooms remain available. Initiating automatic full refund.
+2026-11-26 18:45:16 [WARNING] [django.request] Conflict: /api/payments/verify/
+2026-11-26 18:45:20 [INFO] [rooms.utils] [RoomAllocation] Successfully allocated Room 101 to Booking KH-THREAD-1 for 2026-11-18 to 2026-11-19.
+2026-11-26 18:45:20 [ERROR] [rooms.utils] [RoomAllocation] OVERBOOKING DETECTED for booking KH-THREAD-2: Requested 1 room(s), but only 0 unit(s) available for 2026-11-18 to 2026-11-19. Refusing to double-allocate occupied rooms.
+2026-11-26 18:45:25 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\bookings\views.py changed, reloading.
+2026-11-26 18:45:26 [INFO] [rooms.utils] [RoomAllocation] Successfully allocated Room 101 to Booking KH-NON-OVERLAP-A for 2026-11-18 to 2026-11-19.
+2026-11-26 18:45:26 [INFO] [rooms.utils] [RoomAllocation] Successfully allocated Room 101 to Booking KH-NON-OVERLAP-B for 2026-11-20 to 2026-11-21.
+2026-11-26 18:45:27 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-26 18:45:35 [WARNING] [payments.views] [CreateOrderView] Rejected payment order creation for booking BK-PEND-D: only 0 room(s) available, but 1 requested.
+2026-11-26 18:45:35 [WARNING] [django.request] Conflict: /api/payments/create-order/
+2026-11-26 18:45:47 [WARNING] [payments.views] [CreateOrderView] Rejected payment order creation for booking BK-PEND-C3: only 1 room(s) available, but 2 requested.
+2026-11-26 18:45:47 [WARNING] [django.request] Conflict: /api/payments/create-order/
+2026-11-26 18:45:56 [WARNING] [payments.views] [CreateOrderView] Rejected payment order creation for booking BK-PEND-D4: only 0 room(s) available, but 1 requested.
+2026-11-26 18:45:56 [WARNING] [django.request] Conflict: /api/payments/create-order/
+2026-11-26 18:46:19 [WARNING] [django.request] Conflict: /api/bookings/
+2026-11-26 18:46:25 [WARNING] [payments.views] [CreateOrderView] Rejected payment order creation for booking BK-PEND-D9: only 0 room(s) available, but 1 requested.
+2026-11-26 18:46:25 [WARNING] [django.request] Conflict: /api/payments/create-order/
+2026-11-26 18:47:20 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\bookings\views.py changed, reloading.
+2026-11-26 18:47:22 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader

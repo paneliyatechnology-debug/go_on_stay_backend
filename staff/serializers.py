@@ -301,17 +301,45 @@ class StaffPermissionsUpdateSerializer(serializers.Serializer):
 
 
 class StaffLoginSerializer(serializers.Serializer):
-    login_id = serializers.CharField(required=False, allow_blank=True, default='')
-    identifier = serializers.CharField(required=False, allow_blank=True, default='')
-    email = serializers.CharField(required=False, allow_blank=True, default='')
-    username = serializers.CharField(required=False, allow_blank=True, default='')
-    password = serializers.CharField(required=True, write_only=True)
+    identifier = serializers.CharField(
+        required=True,
+        allow_blank=False,
+        allow_null=False,
+        error_messages={
+            'required': 'This field is required.',
+            'null': 'This field may not be null.',
+            'blank': 'This field may not be blank.'
+        }
+    )
+    password = serializers.CharField(
+        required=True,
+        write_only=True,
+        allow_blank=False,
+        allow_null=False,
+        error_messages={
+            'required': 'This field is required.',
+            'null': 'This field may not be null.',
+            'blank': 'This field may not be blank.'
+        }
+    )
+
+    def to_internal_value(self, data):
+        if isinstance(data, dict):
+            # Backward compatibility for legacy clients sending login_id, email, or username
+            if 'identifier' not in data:
+                for k in ('login_id', 'email', 'username'):
+                    if k in data:
+                        data = dict(data)
+                        data['identifier'] = data[k]
+                        break
+        return super().to_internal_value(data)
 
     def validate(self, attrs):
-        ident = attrs.get('login_id') or attrs.get('identifier') or attrs.get('email') or attrs.get('username')
+        ident = attrs.get('identifier', '').strip()
         if not ident:
-            raise serializers.ValidationError({"identifier": "Login ID, email, or username is required."})
-        attrs['login_id'] = str(ident).strip()
+            raise serializers.ValidationError({"identifier": "This field may not be blank."})
+        attrs['identifier'] = ident
+        attrs['login_id'] = ident
         return attrs
 
 
