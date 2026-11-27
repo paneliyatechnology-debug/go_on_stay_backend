@@ -348,6 +348,8 @@ class HotelListView(generics.ListCreateAPIView):
         )
 
     def perform_create(self, serializer):
+        from payments.subscription_service import check_can_create_hotel
+        check_can_create_hotel(self.request.user)
         serializer.save(owner=self.request.user, status=Hotel.STATUS_SUBMITTED, is_approved=False)
 
 
@@ -1207,6 +1209,8 @@ class OwnerHotelListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         user = self.request.user
+        from payments.subscription_service import check_can_create_hotel
+        check_can_create_hotel(user)
         if getattr(user, 'role', '') == 'CUSTOMER':
             user.role = 'HOTEL_OWNER'
             user.save(update_fields=['role'])

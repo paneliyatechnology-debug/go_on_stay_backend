@@ -28,6 +28,8 @@ class RoomListView(generics.ListCreateAPIView):
         hotel = serializer.validated_data['hotel']
         if hotel.owner != self.request.user and not self.request.user.is_staff:
             raise permissions.PermissionDenied("You do not own this hotel property.")
+        from payments.subscription_service import check_can_create_room
+        check_can_create_room(self.request.user, hotel)
         serializer.save()
 
 class IsRoomOwnerOrAdminOrReadOnly(permissions.BasePermission):

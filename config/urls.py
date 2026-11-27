@@ -2,13 +2,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from payments.views import SettlementLedgerListView, AdminAuditLogListView
+from payments.views import SettlementLedgerListView, AdminAuditLogListView, HostSubscriptionView, HostSubscriptionHistoryView
 from staff.views import PortalNavigationDetailView, AdminDashboardView
 from hotels.views import AdminDeletedHotelListView, AdminDeletedHotelDetailView, AdminDeletedHotelRestoreView
 from core.cloudinary_views import CloudinarySignatureView, CloudinaryConfigCheckView
 from core.views import HealthCheckView, ReadinessCheckView
 
 urlpatterns = [
+    path('api/', HealthCheckView.as_view(), name='api-root-health'),
     path('api/health/', HealthCheckView.as_view(), name='api-health-check'),
     path('api/health/ready/', ReadinessCheckView.as_view(), name='api-health-ready'),
     path('admin/', admin.site.urls),
@@ -24,6 +25,13 @@ urlpatterns = [
     path('api/rooms/', include('rooms.urls')),
     path('api/bookings/', include('bookings.urls')),
     path('api/payments/', include('payments.urls')),
+    path('payments/', include('payments.urls')),
+    path('api/host-subscriptions/', HostSubscriptionView.as_view(), name='api-host-subscriptions-alias'),
+    path('host-subscriptions/', HostSubscriptionView.as_view(), name='host-subscriptions-alias-root'),
+    path('api/host-subscriptions/history/', HostSubscriptionHistoryView.as_view(), name='api-host-subscriptions-history-alias'),
+    path('host-subscriptions/history/', HostSubscriptionHistoryView.as_view(), name='host-subscriptions-history-alias-root'),
+    path('api/my-subscription/', HostSubscriptionView.as_view(), name='api-my-subscription-alias'),
+    path('my-subscription/', HostSubscriptionView.as_view(), name='my-subscription-alias-root'),
     path('api/host/earnings/', SettlementLedgerListView.as_view(), name='api-host-earnings'),
     path('api/admin/audit-logs/', AdminAuditLogListView.as_view(), name='api-admin-audit-logs'),
     path('api/reviews/', include('reviews.urls')),

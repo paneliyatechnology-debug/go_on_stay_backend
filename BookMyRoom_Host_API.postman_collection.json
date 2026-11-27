@@ -72,8 +72,15 @@
             },
             "url": {
               "raw": "{{base_url}}/api/users/become-host/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "users", "become-host", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "become-host",
+                ""
+              ]
             }
           }
         },
@@ -108,8 +115,16 @@
             },
             "url": {
               "raw": "{{base_url}}/api/users/host/login/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "users", "host", "login", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "host",
+                "login",
+                ""
+              ]
             }
           }
         },
@@ -143,8 +158,16 @@
             },
             "url": {
               "raw": "{{base_url}}/api/users/token/refresh/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "users", "token", "refresh", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "token",
+                "refresh",
+                ""
+              ]
             }
           }
         },
@@ -164,8 +187,15 @@
             },
             "url": {
               "raw": "{{base_url}}/api/users/logout/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "users", "logout", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "logout",
+                ""
+              ]
             }
           }
         }
@@ -186,8 +216,15 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/users/me/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "users", "me", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "me",
+                ""
+              ]
             }
           }
         },
@@ -211,8 +248,15 @@
             },
             "url": {
               "raw": "{{base_url}}/api/users/me/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "users", "me", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "me",
+                ""
+              ]
             }
           }
         },
@@ -228,8 +272,15 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/payments/payout-account/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "payments", "payout-account", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "payout-account",
+                ""
+              ]
             }
           }
         },
@@ -253,8 +304,15 @@
             },
             "url": {
               "raw": "{{base_url}}/api/payments/payout-account/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "payments", "payout-account", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "payout-account",
+                ""
+              ]
             }
           }
         },
@@ -278,8 +336,15 @@
             },
             "url": {
               "raw": "{{base_url}}/api/users/change-password/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "users", "change-password", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "change-password",
+                ""
+              ]
             }
           }
         }
@@ -300,8 +365,16 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/hotels/owner/dashboard/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "hotels", "owner", "dashboard", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "hotels",
+                "owner",
+                "dashboard",
+                ""
+              ]
             }
           }
         },
@@ -317,8 +390,16 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/hotels/owner/hotels/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "hotels", "owner", "hotels", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "hotels",
+                "owner",
+                "hotels",
+                ""
+              ]
             }
           }
         },
@@ -356,8 +437,16 @@
             },
             "url": {
               "raw": "{{base_url}}/api/hotels/owner/hotels/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "hotels", "owner", "hotels", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "hotels",
+                "owner",
+                "hotels",
+                ""
+              ]
             }
           }
         },
@@ -381,8 +470,16 @@
             },
             "url": {
               "raw": "{{base_url}}/api/hotels/{{hotel_id}}/upload-image/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "hotels", "{{hotel_id}}", "upload-image", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "hotels",
+                "{{hotel_id}}",
+                "upload-image",
+                ""
+              ]
             }
           }
         },
@@ -398,8 +495,16 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/hotels/{{hotel_id}}/submit/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "hotels", "{{hotel_id}}", "submit", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "hotels",
+                "{{hotel_id}}",
+                "submit",
+                ""
+              ]
             }
           }
         }
@@ -442,8 +547,14 @@
             },
             "url": {
               "raw": "{{base_url}}/api/rooms/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "rooms", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rooms",
+                ""
+              ]
             }
           }
         },
@@ -454,8 +565,16 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/rooms/by-hotel/{{hotel_id}}/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "rooms", "by-hotel", "{{hotel_id}}", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rooms",
+                "by-hotel",
+                "{{hotel_id}}",
+                ""
+              ]
             }
           }
         },
@@ -479,8 +598,16 @@
             },
             "url": {
               "raw": "{{base_url}}/api/rooms/{{room_id}}/calendar/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "rooms", "{{room_id}}", "calendar", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rooms",
+                "{{room_id}}",
+                "calendar",
+                ""
+              ]
             }
           }
         }
@@ -501,8 +628,14 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/bookings/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "bookings", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "bookings",
+                ""
+              ]
             }
           }
         },
@@ -518,8 +651,16 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/bookings/{{booking_id}}/check-in/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "bookings", "{{booking_id}}", "check-in", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "bookings",
+                "{{booking_id}}",
+                "check-in",
+                ""
+              ]
             }
           }
         },
@@ -535,13 +676,156 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/bookings/{{booking_id}}/check-out/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "bookings", "{{booking_id}}", "check-out", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "bookings",
+                "{{booking_id}}",
+                "check-out",
+                ""
+              ]
             }
+          }
+        }
+      ]
+    },
+    {
+      "name": "06. Host Subscription & Plan Management",
+      "item": [
+        {
+          "name": "1. Get Host Subscription Status & Plans",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{host_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/payments/host-subscriptions/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "host-subscriptions",
+                ""
+              ]
+            },
+            "description": "Fetch current subscription tier (SILVER, GOLD, PLATINUM), commission rates, and all available host upgrade plans."
+          }
+        },
+        {
+          "name": "2. Upgrade Host Subscription (Direct Plan Switch)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{host_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"upgrade\",\n  \"plan_id\": \"GOLD\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/payments/host-subscriptions/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "host-subscriptions",
+                ""
+              ]
+            },
+            "description": "Directly switch host subscription tier between SILVER (10% commission), GOLD (5% commission), or PLATINUM (0% commission)."
+          }
+        },
+        {
+          "name": "3. Create Host Subscription Razorpay Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{host_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"plan_id\": \"gold\",\n  \"amount\": 3999\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/payments/create-host-subscription-order/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "create-host-subscription-order",
+                ""
+              ]
+            },
+            "description": "Creates a Razorpay payment order for upgrading host subscription tier (Silver Rs 1999, Gold Rs 3999, Platinum Rs 7999)."
+          }
+        },
+        {
+          "name": "4. Verify Host Subscription Razorpay Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{host_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"razorpay_order_id\": \"order_placeholder\",\n  \"razorpay_payment_id\": \"pay_placeholder\",\n  \"razorpay_signature\": \"signature_placeholder\",\n  \"plan_id\": \"GOLD\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/payments/verify-host-subscription/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "verify-host-subscription",
+                ""
+              ]
+            },
+            "description": "Verifies Razorpay payment signature and upgrades the host account tier upon successful online payment."
           }
         }
       ]
     }
   ]
 }
-

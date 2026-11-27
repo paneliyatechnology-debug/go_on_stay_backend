@@ -8,6 +8,7 @@ from .views import (
     HostPayoutListCreateView, PlatformSettingsView, SupportTicketListCreateView,
     SupportTicketDetailView, TicketMessageCreateView, CustomerHotelChatView,
     AdminAuditLogListView, CreateHostSubscriptionOrderView, VerifyHostSubscriptionPaymentView,
+    HostSubscriptionView, HostSubscriptionHistoryView,
     HostPayoutAccountView, SettlementLedgerListView, SettlementStatementView,
     InitiateHostPayoutView, VerifyPayoutStatusView, ToggleDisputeHoldView,
     ProviderSetupStatusView
@@ -20,6 +21,17 @@ urlpatterns = [
     path('cancel/', CancelPaymentView.as_view(), name='payment-cancel-alias'),
     path('payment-failed/', PaymentFailureNotificationView.as_view(), name='payment-failed'),
     path('failed/', PaymentFailureNotificationView.as_view(), name='payment-failed-alias'),
+    
+    # Host Subscription Management APIs
+    path('host-subscriptions/', HostSubscriptionView.as_view(), name='host-subscriptions'),
+    path('host-subscription/', HostSubscriptionView.as_view(), name='host-subscription-alias'),
+    path('host-subscriptions/current/', HostSubscriptionView.as_view(), name='host-subscription-current'),
+    path('host-subscriptions/history/', HostSubscriptionHistoryView.as_view(), name='host-subscriptions-history'),
+    path('subscription-history/', HostSubscriptionHistoryView.as_view(), name='subscription-history'),
+    path('history/', HostSubscriptionHistoryView.as_view(), name='subscription-history-short'),
+    path('my-subscription/', HostSubscriptionView.as_view(), name='my-subscription'),
+    path('subscriptions/', HostSubscriptionView.as_view(), name='host-subscriptions-alias2'),
+    path('subscription/', HostSubscriptionView.as_view(), name='host-subscription-alias3'),
     path('create-host-subscription-order/', CreateHostSubscriptionOrderView.as_view(), name='host-subscription-create-order'),
     path('verify-host-subscription/', VerifyHostSubscriptionPaymentView.as_view(), name='host-subscription-verify'),
     path('webhook/', WebhookView.as_view(), name='payment-webhook'),

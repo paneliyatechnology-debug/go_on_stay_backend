@@ -541,3 +541,197 @@ class PlatformSettlementAndEscrowTests(TestCase):
         self.assertEqual(resp2.json()['status'], 'existing')
         self.assertEqual(resp2.json()['payout']['idempotency_key'], fixed_key)
 
+    def test_host_subscription_get_anonymous(self):
+        """Anonymous user can fetch available subscription plans and default tier."""
+        self.client.logout()
+        resp = self.client.get('/api/payments/host-subscriptions/')
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertTrue(data['success'])
+        self.assertEqual(data['subscription_tier'], 'SILVER')
+        self.assertEqual(data['commission_rate'], '10%')
+        self.assertEqual(len(data['available_plans']), 3)
+
+    def test_host_subscription_get_authenticated_owner(self):
+        """Authenticated hotel owner gets their current subscription tier and commission rate."""
+        self.owner.subscription_tier = 'GOLD'
+        self.owner.save(update_fields=['subscription_tier'])
+        self.client.force_authenticate(user=self.owner)
+
+        resp = self.client.get('/api/payments/host-subscriptions/')
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertEqual(data['subscription_tier'], 'GOLD')
+        self.assertEqual(data['commission_rate'], '5%')
+        self.assertEqual(data['commission_percentage'], 5.0)
+        self.assertEqual(data['current_subscription']['tier'], 'GOLD')
+
+    def test_host_subscription_post_direct_upgrade(self):
+        """Authenticated hotel owner can directly upgrade their subscription tier."""
+        self.client.force_authenticate(user=self.owner)
+        resp = self.client.post('/api/payments/host-subscriptions/', {
+            'action': 'upgrade',
+            'plan_id': 'PLATINUM'
+        }, format='json')
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertTrue(data['success'])
+        self.assertEqual(data['subscription_tier'], 'PLATINUM')
+
+        self.owner.refresh_from_db()
+        self.assertEqual(self.owner.subscription_tier, 'PLATINUM')
+
+    def test_host_subscription_post_invalid_plan(self):
+        """Invalid plan id returns 400 Bad Request."""
+        self.client.force_authenticate(user=self.owner)
+        resp = self.client.post('/api/payments/host-subscriptions/', {
+            'action': 'upgrade',
+            'plan_id': 'DIAMOND_UNKNOWN'
+        }, format='json')
+        self.assertEqual(resp.status_code, 400)
+        self.assertIn('Invalid plan_id', resp.json()['error'])
+
+    def test_host_subscription_post_unauthenticated_upgrade(self):
+        """Unauthenticated upgrade request returns 401 Unauthorized."""
+        self.client.logout()
+        resp = self.client.post('/api/payments/host-subscriptions/', {
+            'action': 'upgrade',
+            'plan_id': 'GOLD'
+        }, format='json')
+        self.assertEqual(resp.status_code, 401)
+
+    def test_subscription_queuing_when_active_exists(self):
+        """Ensure no 2 active subscriptions run simultaneously; new plan is queued as SCHEDULED."""
+        from payments.models import HostSubscription
+        from payments.subscription_service import get_or_sync_active_subscription
+        
+        # Ensure owner has an active SILVER plan
+        self.owner.subscription_tier = 'SILVER'
+        self.owner.save(update_fields=['subscription_tier'])
+        active_sub = get_or_sync_active_subscription(self.owner)
+        self.assertIsNotNone(active_sub)
+        self.assertEqual(active_sub.status, HostSubscription.STATUS_ACTIVE)
+        self.assertEqual(active_sub.plan_id, 'SILVER')
+
+        # Now owner subscribes to GOLD plan
+        self.client.force_authenticate(user=self.owner)
+        resp = self.client.post('/api/payments/host-subscriptions/', {
+            'action': 'upgrade',
+            'plan_id': 'GOLD'
+        }, format='json')
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        
+        # Must be queued as SCHEDULED, not replacing the active plan
+        self.assertTrue(data['is_scheduled'])
+        self.assertEqual(data['status'], HostSubscription.STATUS_SCHEDULED)
+        self.assertIn('queued as SCHEDULED', data['message'])
+
+        # Check in DB: exactly 1 ACTIVE and 1 SCHEDULED
+        all_subs = HostSubscription.objects.filter(user=self.owner)
+        self.assertEqual(all_subs.filter(status=HostSubscription.STATUS_ACTIVE).count(), 1)
+        self.assertEqual(all_subs.filter(status=HostSubscription.STATUS_SCHEDULED).count(), 1)
+
+        scheduled_sub = all_subs.get(status=HostSubscription.STATUS_SCHEDULED)
+        self.assertEqual(scheduled_sub.plan_id, 'GOLD')
+        self.assertEqual(scheduled_sub.start_date, active_sub.end_date)
+
+    def test_hotel_creation_limit_enforced_for_silver(self):
+        """Silver plan allows only 1 hotel property; second hotel creation must be blocked."""
+        from payments.subscription_service import get_or_sync_active_subscription
+        self.owner.subscription_tier = 'SILVER'
+        self.owner.save(update_fields=['subscription_tier'])
+        get_or_sync_active_subscription(self.owner)
+
+        self.client.force_authenticate(user=self.owner)
+        
+        # self.hotel already exists from setUp (1 hotel)
+        # Attempting to create a 2nd hotel must fail with 403 Forbidden
+        hotel_data = {
+            "name": "Second Hotel Unauthorized",
+            "description": "Luxury second hotel property in Mumbai.",
+            "city": "Mumbai",
+            "state": "Maharashtra",
+            "address": "Juhu Beach Road",
+            "star_rating": 4
+        }
+        resp = self.client.post('/api/hotels/owner/hotels/', data=hotel_data, format='json')
+        self.assertEqual(resp.status_code, 403)
+        self.assertIn('HOTEL_PROPERTY_LIMIT_REACHED', str(resp.content))
+
+    def test_room_category_limit_enforced_for_silver(self):
+        """Silver plan allows max 5 room categories per hotel; 6th category must be blocked."""
+        from payments.subscription_service import get_or_sync_active_subscription
+        from rooms.models import Room
+        
+        self.owner.subscription_tier = 'SILVER'
+        self.owner.save(update_fields=['subscription_tier'])
+        get_or_sync_active_subscription(self.owner)
+
+        self.client.force_authenticate(user=self.owner)
+
+        room_types = ['STANDARD', 'DELUXE', 'SUPER_DELUXE', 'EXECUTIVE', 'FAMILY']
+        # Create up to 5 rooms (room 1 already created in setUp, create remaining)
+        existing_rooms = Room.objects.filter(hotel=self.hotel).count()
+        for i in range(existing_rooms, 5):
+            Room.objects.create(
+                hotel=self.hotel,
+                room_type=room_types[i],
+                title=f'Room Category {i+1}',
+                price_per_night=Decimal('2000.00'),
+                capacity_adults=2,
+                total_rooms=5
+            )
+        self.assertEqual(Room.objects.filter(hotel=self.hotel).count(), 5)
+
+        # 6th room creation must be blocked by plan limit
+        resp = self.client.post('/api/rooms/', data={
+            "hotel": self.hotel.id,
+            "room_type": "PRESIDENTIAL",
+            "title": "Presidential Suite Extra",
+            "price_per_night": "10000.00",
+            "capacity_adults": 4,
+            "total_rooms": 1
+        }, format='json')
+        self.assertEqual(resp.status_code, 403)
+        self.assertIn('ROOM_CATEGORY_LIMIT_REACHED', str(resp.content))
+
+    def test_subscription_auto_promotes_scheduled_on_expiry(self):
+        """When an active subscription expires, the queued scheduled subscription auto-activates."""
+        from payments.models import HostSubscription
+        from payments.subscription_service import get_or_sync_active_subscription
+        
+        now = timezone.now()
+        # Create an expired active subscription
+        HostSubscription.objects.filter(user=self.owner).delete()
+        past_active = HostSubscription.objects.create(
+            user=self.owner,
+            plan_id='SILVER',
+            status=HostSubscription.STATUS_ACTIVE,
+            start_date=now - timezone.timedelta(days=366),
+            end_date=now - timezone.timedelta(hours=1),
+            amount_paid=Decimal('1999.00')
+        )
+        
+        # Create a scheduled subscription ready to take over
+        scheduled = HostSubscription.objects.create(
+            user=self.owner,
+            plan_id='PLATINUM',
+            status=HostSubscription.STATUS_SCHEDULED,
+            start_date=now - timezone.timedelta(hours=1),
+            end_date=now + timezone.timedelta(days=364),
+            amount_paid=Decimal('7999.00')
+        )
+
+        active = get_or_sync_active_subscription(self.owner)
+        self.assertIsNotNone(active)
+        self.assertEqual(active.id, scheduled.id)
+        self.assertEqual(active.status, HostSubscription.STATUS_ACTIVE)
+        self.assertEqual(active.plan_id, 'PLATINUM')
+
+        past_active.refresh_from_db()
+        self.assertEqual(past_active.status, HostSubscription.STATUS_EXPIRED)
+
+
+
+

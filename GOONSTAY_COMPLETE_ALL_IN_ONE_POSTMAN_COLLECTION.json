@@ -3140,6 +3140,142 @@
             },
             "description": "View host earnings, platform commission according to subscription tier (Silver 10%, Gold 5%, Platinum 0%), GST, and net payout status."
           }
+        },
+        {
+          "name": "06. Host Subscription & Plan Management",
+          "item": [
+            {
+              "name": "1. Get Host Subscription Status & Plans",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{host_token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/payments/host-subscriptions/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "payments",
+                    "host-subscriptions",
+                    ""
+                  ]
+                },
+                "description": "Fetch current subscription tier (SILVER, GOLD, PLATINUM), commission rates, and all available host upgrade plans."
+              }
+            },
+            {
+              "name": "2. Upgrade Host Subscription (Direct Plan Switch)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{host_token}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action\": \"upgrade\",\n  \"plan_id\": \"GOLD\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/payments/host-subscriptions/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "payments",
+                    "host-subscriptions",
+                    ""
+                  ]
+                },
+                "description": "Directly switch host subscription tier between SILVER (10% commission), GOLD (5% commission), or PLATINUM (0% commission)."
+              }
+            },
+            {
+              "name": "3. Create Host Subscription Razorpay Order",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{host_token}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"plan_id\": \"gold\",\n  \"amount\": 3999\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/payments/create-host-subscription-order/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "payments",
+                    "create-host-subscription-order",
+                    ""
+                  ]
+                },
+                "description": "Creates a Razorpay payment order for upgrading host subscription tier (Silver Rs 1999, Gold Rs 3999, Platinum Rs 7999)."
+              }
+            },
+            {
+              "name": "4. Verify Host Subscription Razorpay Payment",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{host_token}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"razorpay_order_id\": \"order_placeholder\",\n  \"razorpay_payment_id\": \"pay_placeholder\",\n  \"razorpay_signature\": \"signature_placeholder\",\n  \"plan_id\": \"GOLD\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/payments/verify-host-subscription/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "payments",
+                    "verify-host-subscription",
+                    ""
+                  ]
+                },
+                "description": "Verifies Razorpay payment signature and upgrades the host account tier upon successful online payment."
+              }
+            }
+          ]
         }
       ]
     },
@@ -4511,6 +4647,142 @@
                     ""
                   ]
                 }
+              }
+            }
+          ]
+        },
+        {
+          "name": "06. Host Subscription & Plan Management",
+          "item": [
+            {
+              "name": "1. Get Host Subscription Status & Plans",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{host_token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/payments/host-subscriptions/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "payments",
+                    "host-subscriptions",
+                    ""
+                  ]
+                },
+                "description": "Fetch current subscription tier (SILVER, GOLD, PLATINUM), commission rates, and all available host upgrade plans."
+              }
+            },
+            {
+              "name": "2. Upgrade Host Subscription (Direct Plan Switch)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{host_token}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action\": \"upgrade\",\n  \"plan_id\": \"GOLD\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/payments/host-subscriptions/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "payments",
+                    "host-subscriptions",
+                    ""
+                  ]
+                },
+                "description": "Directly switch host subscription tier between SILVER (10% commission), GOLD (5% commission), or PLATINUM (0% commission)."
+              }
+            },
+            {
+              "name": "3. Create Host Subscription Razorpay Order",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{host_token}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"plan_id\": \"gold\",\n  \"amount\": 3999\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/payments/create-host-subscription-order/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "payments",
+                    "create-host-subscription-order",
+                    ""
+                  ]
+                },
+                "description": "Creates a Razorpay payment order for upgrading host subscription tier (Silver Rs 1999, Gold Rs 3999, Platinum Rs 7999)."
+              }
+            },
+            {
+              "name": "4. Verify Host Subscription Razorpay Payment",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{host_token}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"razorpay_order_id\": \"order_placeholder\",\n  \"razorpay_payment_id\": \"pay_placeholder\",\n  \"razorpay_signature\": \"signature_placeholder\",\n  \"plan_id\": \"GOLD\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/payments/verify-host-subscription/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "payments",
+                    "verify-host-subscription",
+                    ""
+                  ]
+                },
+                "description": "Verifies Razorpay payment signature and upgrades the host account tier upon successful online payment."
               }
             }
           ]
@@ -7489,11 +7761,11 @@
       ]
     },
     {
-      "name": "16. \ud83d\udc51 4-LEVEL ADMIN & STAFF HIERARCHY SYSTEM",
+      "name": "16. 👑 4-LEVEL ADMIN & STAFF HIERARCHY SYSTEM",
       "description": "Production-grade 4-Level Authority System:\n- Level 4: Platform Administrator\n- Level 3: Main Manager\n- Level 2: Department-wise Staff Manager\n- Level 1: Operational Staff\n- Mandatory TOTP Multi-Factor Authentication (MFA)",
       "item": [
         {
-          "name": "00. \u26a1 Quick 4-Level Direct Logins (Zero Friction)",
+          "name": "00. ⚡ Quick 4-Level Direct Logins (Zero Friction)",
           "description": "Direct 1-step login for all 4 hierarchy levels without MFA barrier. 365-day tokens automatically saved to collection variables.",
           "item": [
             {
@@ -7681,7 +7953,7 @@
           ]
         },
         {
-          "name": "01. \ud83d\udd0d Quick 4-Level Flow Verifications",
+          "name": "01. 🔍 Quick 4-Level Flow Verifications",
           "description": "Test operational permissions for each level using the tokens obtained from Quick Logins.",
           "item": [
             {
@@ -7790,7 +8062,7 @@
           ]
         },
         {
-          "name": "01. \ud83d\udee1\ufe0f Multi-Factor Authentication (MFA Engine)",
+          "name": "01. 🛡️ Multi-Factor Authentication (MFA Engine)",
           "description": "Mandatory TOTP MFA for Level 2 (Dept Manager), Level 3 (Main Manager), and Level 4 (Admin). Zero external dependencies, RFC 6238 compliant.",
           "item": [
             {
@@ -8018,7 +8290,7 @@
           ]
         },
         {
-          "name": "02. \ud83c\udfdb\ufe0f Level 4 \u2014 Platform Administrator Control",
+          "name": "02. 🏛️ Level 4 — Platform Administrator Control",
           "description": "Level 4 Global Authority: Oversee entire system, create Main Managers, configure delegation policies, and audit all operations.",
           "item": [
             {
@@ -8340,7 +8612,7 @@
           ]
         },
         {
-          "name": "03. \ud83d\udc54 Level 3 \u2014 Main Manager Operations",
+          "name": "03. 👔 Level 3 — Main Manager Operations",
           "description": "Level 3 Cross-Department Authority: View all departments, create/assign Department Staff Managers, and oversee all operational staff.",
           "item": [
             {
@@ -8526,7 +8798,7 @@
           ]
         },
         {
-          "name": "04. \ud83d\udc65 Level 2 \u2014 Department Staff Manager Operations",
+          "name": "04. 👥 Level 2 — Department Staff Manager Operations",
           "description": "Level 2 Department Authority: Manage staff strictly within assigned department, server-side isolation, and delegation boundaries.",
           "item": [
             {
@@ -8735,7 +9007,7 @@
           ]
         },
         {
-          "name": "05. \ud83d\udccb Level 1 \u2014 Operational Staff (Existing Workflows)",
+          "name": "05. 📋 Level 1 — Operational Staff (Existing Workflows)",
           "description": "Level 1 Operational Staff: Direct password login, view own profile, and department operations.",
           "item": [
             {

@@ -793,6 +793,142 @@
           }
         }
       ]
+    },
+    {
+      "name": "06. Host Subscription & Plan Management",
+      "item": [
+        {
+          "name": "1. Get Host Subscription Status & Plans",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{host_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/payments/host-subscriptions/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "host-subscriptions",
+                ""
+              ]
+            },
+            "description": "Fetch current subscription tier (SILVER, GOLD, PLATINUM), commission rates, and all available host upgrade plans."
+          }
+        },
+        {
+          "name": "2. Upgrade Host Subscription (Direct Plan Switch)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{host_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"upgrade\",\n  \"plan_id\": \"GOLD\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/payments/host-subscriptions/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "host-subscriptions",
+                ""
+              ]
+            },
+            "description": "Directly switch host subscription tier between SILVER (10% commission), GOLD (5% commission), or PLATINUM (0% commission)."
+          }
+        },
+        {
+          "name": "3. Create Host Subscription Razorpay Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{host_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"plan_id\": \"gold\",\n  \"amount\": 3999\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/payments/create-host-subscription-order/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "create-host-subscription-order",
+                ""
+              ]
+            },
+            "description": "Creates a Razorpay payment order for upgrading host subscription tier (Silver Rs 1999, Gold Rs 3999, Platinum Rs 7999)."
+          }
+        },
+        {
+          "name": "4. Verify Host Subscription Razorpay Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{host_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"razorpay_order_id\": \"order_placeholder\",\n  \"razorpay_payment_id\": \"pay_placeholder\",\n  \"razorpay_signature\": \"signature_placeholder\",\n  \"plan_id\": \"GOLD\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/payments/verify-host-subscription/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "verify-host-subscription",
+                ""
+              ]
+            },
+            "description": "Verifies Razorpay payment signature and upgrades the host account tier upon successful online payment."
+          }
+        }
+      ]
     }
   ]
 }

@@ -8955,3 +8955,2148 @@ django.db.utils.OperationalError: database table is locked: bookings_booking
 2026-11-26 18:46:25 [WARNING] [django.request] Conflict: /api/payments/create-order/
 2026-11-26 18:47:20 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\bookings\views.py changed, reloading.
 2026-11-26 18:47:22 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 14:43:38 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 14:45:23 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 14:45:24 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 14:46:03 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 14:46:03 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 14:47:10 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 14:47:36 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 14:47:37 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 14:48:05 [INFO] [django.server] "GET /api/users/me/ HTTP/1.1" 200 545
+2026-11-27 14:48:17 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 14:48:18 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 14:48:51 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 14:48:55 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 14:49:27 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 14:49:28 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 14:50:05 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 14:50:06 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 14:58:53 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 15:08:31 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 15:11:07 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 15:11:35 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-27 15:15:47 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1359
+2026-11-27 15:15:59 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-27 15:17:34 [WARNING] [django.request] Not Found: /
+2026-11-27 15:17:34 [WARNING] [django.server] "GET / HTTP/1.1" 404 6828
+2026-11-27 15:17:34 [WARNING] [django.request] Not Found: /favicon.ico
+2026-11-27 15:17:34 [WARNING] [django.server] "GET /favicon.ico HTTP/1.1" 404 6879
+2026-11-27 15:19:00 [INFO] [django.server] "OPTIONS /api/users/login/ HTTP/1.1" 200 0
+2026-11-27 15:19:01 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-27 15:19:01 [INFO] [django.server] "OPTIONS /api/users/profile/ HTTP/1.1" 200 0
+2026-11-27 15:19:01 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 912
+2026-11-27 15:19:01 [INFO] [django.server] "OPTIONS /api/notifications/unread-count/ HTTP/1.1" 200 0
+2026-11-27 15:19:01 [INFO] [django.server] "OPTIONS /api/bookings/?page_size=1000 HTTP/1.1" 200 0
+2026-11-27 15:19:01 [INFO] [django.server] "OPTIONS /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 0
+2026-11-27 15:19:01 [INFO] [django.server] "OPTIONS /api/users/all/ HTTP/1.1" 200 0
+2026-11-27 15:19:01 [INFO] [django.server] "OPTIONS /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 0
+2026-11-27 15:19:01 [INFO] [django.server] "OPTIONS /api/payments/settlements/ HTTP/1.1" 200 0
+2026-11-27 15:19:01 [INFO] [django.server] "OPTIONS /api/coupons/ HTTP/1.1" 200 0
+2026-11-27 15:19:01 [INFO] [django.server] "OPTIONS /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 0
+2026-11-27 15:19:01 [INFO] [django.server] "OPTIONS /api/payments/settings/ HTTP/1.1" 200 0
+2026-11-27 15:19:01 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 15:19:02 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 15:19:02 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 15:19:02 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 5633
+2026-11-27 15:19:02 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 15:19:02 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 15:19:02 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 20468
+2026-11-27 15:19:02 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 15:19:02 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 15:19:02 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 5633
+2026-11-27 15:19:02 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 20468
+2026-11-27 15:19:03 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 15:19:04 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 15:19:05 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 15:19:05 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 15:19:05 [INFO] [django.server] "OPTIONS /api/payments/admin/refunds/? HTTP/1.1" 200 0
+2026-11-27 15:19:06 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 15:19:06 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 15:19:07 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 15:19:07 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 15:19:11 [INFO] [django.server] "OPTIONS /api/staff/?page=1 HTTP/1.1" 200 0
+2026-11-27 15:19:11 [INFO] [django.server] "OPTIONS /api/staff/dashboard/ HTTP/1.1" 200 0
+2026-11-27 15:19:11 [INFO] [django.server] "OPTIONS /api/staff/departments/ HTTP/1.1" 200 0
+2026-11-27 15:19:11 [INFO] [django.server] "GET /api/staff/?page=1 HTTP/1.1" 200 15100
+2026-11-27 15:19:11 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1597
+2026-11-27 15:19:11 [INFO] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 200 1644
+2026-11-27 15:19:14 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 5633
+2026-11-27 15:20:02 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 15:21:02 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 15:22:02 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 15:23:02 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 15:24:02 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 15:25:02 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 15:26:36 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 15:27:02 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 15:27:09 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 15:27:09 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 15:27:31 [INFO] [django.server] "OPTIONS /api/users/login/ HTTP/1.1" 200 0
+2026-11-27 15:27:32 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1359
+2026-11-27 15:27:32 [INFO] [django.server] "OPTIONS /api/notifications/unread-count/ HTTP/1.1" 200 0
+2026-11-27 15:27:32 [INFO] [django.server] "OPTIONS /api/users/profile/ HTTP/1.1" 200 0
+2026-11-27 15:27:32 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 15:27:32 [INFO] [django.server] "OPTIONS /api/wishlist/ HTTP/1.1" 200 0
+2026-11-27 15:27:32 [INFO] [django.server] "OPTIONS /api/hotels/ HTTP/1.1" 200 0
+2026-11-27 15:27:32 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 545
+2026-11-27 15:27:32 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-27 15:27:32 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 15:28:02 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 15:29:36 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 15:30:36 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 15:31:36 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 15:32:36 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 15:33:36 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 15:34:36 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 15:35:36 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 15:36:36 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 15:37:36 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 15:38:36 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 15:39:00 [INFO] [django.server] "GET /api/staff/?page=1 HTTP/1.1" 200 15100
+2026-11-27 15:39:00 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1597
+2026-11-27 15:39:00 [INFO] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 200 1644
+2026-11-27 15:39:02 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 15:39:05 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 5633
+2026-11-27 15:39:11 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1597
+2026-11-27 15:39:11 [INFO] [django.server] "GET /api/staff/?page=1 HTTP/1.1" 200 15100
+2026-11-27 15:39:11 [INFO] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 200 1644
+2026-11-27 15:39:16 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 912
+2026-11-27 15:39:16 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 15:39:16 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1597
+2026-11-27 15:39:16 [INFO] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 200 1644
+2026-11-27 15:39:16 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 5633
+2026-11-27 15:39:16 [INFO] [django.server] "GET /api/staff/?page=1 HTTP/1.1" 200 15100
+2026-11-27 15:39:16 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 15:39:16 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 15:39:16 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 15:39:16 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 20468
+2026-11-27 15:39:18 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 15:39:18 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 15:39:19 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 15:39:19 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 15:39:21 [INFO] [django.server] "OPTIONS /api/notifications/ HTTP/1.1" 200 0
+2026-11-27 15:39:21 [INFO] [django.server] "GET /api/notifications/ HTTP/1.1" 200 7545
+2026-11-27 15:39:23 [INFO] [django.server] "OPTIONS /api/notifications/864/read/ HTTP/1.1" 200 0
+2026-11-27 15:39:23 [INFO] [django.server] "POST /api/notifications/864/read/ HTTP/1.1" 200 386
+2026-11-27 15:39:23 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 15:39:23 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 15:39:23 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 5633
+2026-11-27 15:39:23 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 15:39:23 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 20468
+2026-11-27 15:39:25 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 15:39:25 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 15:39:25 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 15:39:26 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 15:39:26 [INFO] [django.server] "GET /api/notifications/ HTTP/1.1" 200 7544
+2026-11-27 15:49:13 [WARNING] [django.request] Not Found: /api/
+2026-11-27 15:49:13 [WARNING] [django.server] "GET /api/ HTTP/1.1" 404 6858
+2026-11-27 15:50:37 [INFO] [django.server] "GET /api/health/ HTTP/1.1" 200 5666
+2026-11-27 15:50:37 [INFO] [django.server] "GET /static/rest_framework/css/prettify.css HTTP/1.1" 200 817
+2026-11-27 15:50:37 [INFO] [django.server] "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 200 3426
+2026-11-27 15:50:37 [INFO] [django.server] "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 200 121457
+2026-11-27 15:50:37 [INFO] [django.server] "GET /static/rest_framework/css/default.css HTTP/1.1" 200 1152
+2026-11-27 15:50:37 [INFO] [django.server] "GET /static/rest_framework/js/default.js HTTP/1.1" 200 1268
+2026-11-27 15:50:37 [INFO] [django.server] "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 200 3796
+2026-11-27 15:50:37 [INFO] [django.server] "GET /static/rest_framework/js/csrf.js HTTP/1.1" 200 1793
+2026-11-27 15:50:37 [INFO] [django.server] "GET /static/rest_framework/img/grid.png HTTP/1.1" 200 1458
+2026-11-27 15:50:37 [INFO] [django.server] "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 200 59
+2026-11-27 15:50:37 [INFO] [django.server] "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 200 13632
+2026-11-27 15:50:37 [INFO] [django.server] "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 200 39680
+2026-11-27 15:50:37 [INFO] [django.server] "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 200 87533
+2026-11-27 15:54:15 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 15:57:51 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\config\urls.py changed, reloading.
+2026-11-27 15:57:53 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 16:01:07 [WARNING] [django.request] Not Found: /
+2026-11-27 16:01:07 [WARNING] [django.server] "GET / HTTP/1.1" 404 6999
+2026-11-27 16:01:08 [WARNING] [django.request] Not Found: /favicon.ico
+2026-11-27 16:01:08 [WARNING] [django.server] "GET /favicon.ico HTTP/1.1" 404 7050
+2026-11-27 16:01:12 [WARNING] [django.request] Not Found: /
+2026-11-27 16:01:12 [WARNING] [django.server] "GET / HTTP/1.1" 404 6999
+2026-11-27 16:01:14 [WARNING] [django.request] Not Found: /
+2026-11-27 16:01:14 [WARNING] [django.server] "GET / HTTP/1.1" 404 6999
+2026-11-27 16:01:15 [WARNING] [django.request] Not Found: /
+2026-11-27 16:01:15 [WARNING] [django.server] "GET / HTTP/1.1" 404 6999
+2026-11-27 16:01:15 [WARNING] [django.request] Not Found: /
+2026-11-27 16:01:15 [WARNING] [django.server] "GET / HTTP/1.1" 404 6999
+2026-11-27 16:02:23 [INFO] [django.server] - Broken pipe from ('192.168.1.104', 54826)
+2026-11-27 16:02:23 [INFO] [django.server] - Broken pipe from ('192.168.1.104', 59395)
+2026-11-27 16:02:23 [INFO] [django.server] - Broken pipe from ('192.168.1.104', 64237)
+2026-11-27 16:05:45 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 16:06:10 [WARNING] [django.request] Not Found: /
+2026-11-27 16:06:10 [WARNING] [django.server] "GET / HTTP/1.1" 404 6999
+2026-11-27 16:06:20 [WARNING] [django.request] Not Found: /login
+2026-11-27 16:06:20 [WARNING] [django.server] "GET /login HTTP/1.1" 404 7032
+2026-11-27 16:06:28 [WARNING] [django.request] Not Found: /auth
+2026-11-27 16:06:28 [WARNING] [django.server] "GET /auth HTTP/1.1" 404 7029
+2026-11-27 16:06:51 [WARNING] [django.request] Unauthorized: /api/users/me/
+2026-11-27 16:06:51 [WARNING] [django.server] "GET /api/users/me/ HTTP/1.1" 401 5619
+2026-11-27 16:06:51 [INFO] [django.server] "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 200 3426
+2026-11-27 16:06:51 [INFO] [django.server] "GET /static/rest_framework/css/prettify.css HTTP/1.1" 200 817
+2026-11-27 16:06:51 [INFO] [django.server] "GET /static/rest_framework/css/default.css HTTP/1.1" 200 1152
+2026-11-27 16:06:51 [INFO] [django.server] "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 200 3796
+2026-11-27 16:06:51 [INFO] [django.server] "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 200 121457
+2026-11-27 16:06:51 [INFO] [django.server] "GET /static/rest_framework/js/csrf.js HTTP/1.1" 200 1793
+2026-11-27 16:06:51 [INFO] [django.server] "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 200 39680
+2026-11-27 16:06:51 [INFO] [django.server] "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 200 87533
+2026-11-27 16:06:51 [INFO] [django.server] "GET /static/rest_framework/js/default.js HTTP/1.1" 200 1268
+2026-11-27 16:06:51 [INFO] [django.server] "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 200 13632
+2026-11-27 16:06:51 [INFO] [django.server] "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 200 59
+2026-11-27 16:06:51 [INFO] [django.server] "GET /static/rest_framework/img/grid.png HTTP/1.1" 200 1458
+2026-11-27 16:07:07 [WARNING] [django.request] Unauthorized: /api/users/me/
+2026-11-27 16:07:07 [WARNING] [django.server] "GET /api/users/me/ HTTP/1.1" 401 5619
+2026-11-27 16:08:08 [INFO] [django.server] "OPTIONS /api/users/register/ HTTP/1.1" 200 3362
+2026-11-27 16:08:32 [INFO] [django.server] - Broken pipe from ('192.168.1.104', 59226)
+2026-11-27 16:08:42 [WARNING] [django.request] Method Not Allowed: /api/users/register/
+2026-11-27 16:08:42 [WARNING] [django.server] "GET /api/users/register/ HTTP/1.1" 405 225
+2026-11-27 16:09:04 [INFO] [django.server] "OPTIONS /api/notifications/unread-count/ HTTP/1.1" 200 0
+2026-11-27 16:09:04 [INFO] [django.server] "OPTIONS /api/hotels/cities/ HTTP/1.1" 200 0
+2026-11-27 16:09:04 [INFO] [django.server] "OPTIONS /api/users/profile/ HTTP/1.1" 200 0
+2026-11-27 16:09:04 [WARNING] [django.request] Unauthorized: /api/notifications/unread-count/
+2026-11-27 16:09:04 [WARNING] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 401 217
+2026-11-27 16:09:04 [WARNING] [django.request] Unauthorized: /api/hotels/cities/
+2026-11-27 16:09:04 [WARNING] [django.request] Unauthorized: /api/users/profile/
+2026-11-27 16:09:04 [WARNING] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 401 217
+2026-11-27 16:09:04 [WARNING] [django.server] "GET /api/users/profile/ HTTP/1.1" 401 217
+2026-11-27 16:09:05 [INFO] [django.server] "OPTIONS /api/users/token/refresh/ HTTP/1.1" 200 0
+2026-11-27 16:09:05 [INFO] [django.server] "OPTIONS /api/wishlist/ HTTP/1.1" 200 0
+2026-11-27 16:09:05 [INFO] [django.server] "OPTIONS /api/hotels/ HTTP/1.1" 200 0
+2026-11-27 16:09:05 [ERROR] [core.exceptions] Unhandled server error: User matching query does not exist.
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\views.py", line 523, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework_simplejwt\views.py", line 46, in post
+    serializer.is_valid(raise_exception=True)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\serializers.py", line 225, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+                           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\serializers.py", line 459, in run_validation
+    value = self.validate(value)
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework_simplejwt\serializers.py", line 116, in validate
+    user := get_user_model().objects.get(
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        **{api_settings.USER_ID_FIELD: user_id}
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\query.py", line 722, in get
+    raise self.model.DoesNotExist(
+        "%s matching query does not exist." % self.model._meta.object_name
+    )
+users.models.User.DoesNotExist: User matching query does not exist.
+2026-11-27 16:09:05 [WARNING] [django.request] Unauthorized: /api/hotels/
+2026-11-27 16:09:05 [WARNING] [django.request] Unauthorized: /api/wishlist/
+2026-11-27 16:09:05 [WARNING] [django.server] "GET /api/hotels/ HTTP/1.1" 401 217
+2026-11-27 16:09:05 [ERROR] [django.request] Internal Server Error: /api/users/token/refresh/
+2026-11-27 16:09:05 [WARNING] [django.server] "GET /api/wishlist/ HTTP/1.1" 401 217
+2026-11-27 16:09:05 [ERROR] [django.server] "POST /api/users/token/refresh/ HTTP/1.1" 500 216
+2026-11-27 16:09:05 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:09:17 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:09:26 [WARNING] [django.request] Method Not Allowed: /api/users/register/
+2026-11-27 16:09:26 [WARNING] [django.server] "GET /api/users/register/ HTTP/1.1" 405 225
+2026-11-27 16:10:10 [INFO] [django.server] "OPTIONS /api/users/login/ HTTP/1.1" 200 0
+2026-11-27 16:10:11 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1423
+2026-11-27 16:10:11 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 629
+2026-11-27 16:10:11 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:10:11 [INFO] [django.server] "GET /media/users/avatars/WhatsApp_Image_2026-01-03_at_3.58.28_PM.jpeg HTTP/1.1" 200 83376
+2026-11-27 16:10:11 [INFO] [django.server] "GET /media/users/avatars/WhatsApp_Image_2026-01-03_at_3.58.28_PM.jpeg HTTP/1.1" 200 83376
+2026-11-27 16:10:11 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-27 16:10:11 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:10:11 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 16:10:46 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:10:47 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 16:11:41 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:11:41 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:11:41 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 629
+2026-11-27 16:11:42 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:11:42 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-27 16:11:42 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 16:11:43 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 16:12:21 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:12:22 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 16:12:41 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:13:05 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:13:23 [INFO] [django.server] "OPTIONS /api/users/login/ HTTP/1.1" 200 0
+2026-11-27 16:13:26 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-27 16:13:27 [INFO] [django.server] "OPTIONS /api/users/profile/ HTTP/1.1" 200 0
+2026-11-27 16:13:27 [INFO] [django.server] "OPTIONS /api/notifications/unread-count/ HTTP/1.1" 200 0
+2026-11-27 16:13:27 [INFO] [django.server] "OPTIONS /api/users/all/ HTTP/1.1" 200 0
+2026-11-27 16:13:27 [INFO] [django.server] "OPTIONS /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 0
+2026-11-27 16:13:27 [INFO] [django.server] "OPTIONS /api/bookings/?page_size=1000 HTTP/1.1" 200 0
+2026-11-27 16:13:27 [INFO] [django.server] "OPTIONS /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 0
+2026-11-27 16:13:27 [INFO] [django.server] "OPTIONS /api/coupons/ HTTP/1.1" 200 0
+2026-11-27 16:13:27 [INFO] [django.server] "OPTIONS /api/payments/settlements/ HTTP/1.1" 200 0
+2026-11-27 16:13:27 [INFO] [django.server] "OPTIONS /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 0
+2026-11-27 16:13:27 [INFO] [django.server] "OPTIONS /api/payments/settings/ HTTP/1.1" 200 0
+2026-11-27 16:13:27 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 912
+2026-11-27 16:13:27 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:13:27 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 16:13:27 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 16:13:27 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 16:13:27 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 5633
+2026-11-27 16:13:27 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 16:13:27 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 16:13:27 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 16:13:27 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 20468
+2026-11-27 16:13:27 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 5633
+2026-11-27 16:13:28 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 20468
+2026-11-27 16:13:30 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 16:13:31 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 16:13:31 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:13:33 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 16:13:34 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 16:13:34 [INFO] [django.server] "OPTIONS /api/payments/admin/refunds/? HTTP/1.1" 200 0
+2026-11-27 16:13:35 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 16:13:36 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 16:13:37 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 16:13:37 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 16:13:47 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:13:48 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 16:14:03 [INFO] [django.server] "OPTIONS /api/users/login/ HTTP/1.1" 200 0
+2026-11-27 16:14:06 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1627
+2026-11-27 16:14:06 [INFO] [django.server] "OPTIONS /api/notifications/unread-count/ HTTP/1.1" 200 0
+2026-11-27 16:14:06 [INFO] [django.server] "OPTIONS /api/users/profile/ HTTP/1.1" 200 0
+2026-11-27 16:14:06 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:14:06 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 815
+2026-11-27 16:14:06 [INFO] [django.server] "OPTIONS /api/payments/host-subscriptions/ HTTP/1.1" 200 0
+2026-11-27 16:14:06 [INFO] [django.server] "OPTIONS /api/bookings/?page_size=1000 HTTP/1.1" 200 0
+2026-11-27 16:14:06 [INFO] [django.server] "OPTIONS /api/hotels/owner-hotels/ HTTP/1.1" 200 0
+2026-11-27 16:14:06 [WARNING] [django.request] Not Found: /api/payments/host-subscriptions/
+2026-11-27 16:14:06 [WARNING] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 404 17787
+2026-11-27 16:14:06 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1547
+2026-11-27 16:14:07 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 214401
+2026-11-27 16:14:09 [WARNING] [django.request] Not Found: /api/payments/host-subscriptions/
+2026-11-27 16:14:09 [WARNING] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 404 17787
+2026-11-27 16:14:11 [INFO] [django.server] "OPTIONS /api/payments/settlements/ HTTP/1.1" 200 0
+2026-11-27 16:14:12 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 53131
+2026-11-27 16:14:13 [INFO] [django.server] "OPTIONS /api/rooms/by-hotel/47/ HTTP/1.1" 200 0
+2026-11-27 16:14:13 [INFO] [django.server] "GET /api/rooms/by-hotel/47/ HTTP/1.1" 200 1068
+2026-11-27 16:14:14 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:14:20 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 20468
+2026-11-27 16:14:22 [INFO] [django.server] "OPTIONS /api/staff/dashboard/ HTTP/1.1" 200 0
+2026-11-27 16:14:22 [INFO] [django.server] "OPTIONS /api/staff/departments/ HTTP/1.1" 200 0
+2026-11-27 16:14:22 [INFO] [django.server] "OPTIONS /api/staff/?page=1 HTTP/1.1" 200 0
+2026-11-27 16:14:22 [INFO] [django.server] "GET /api/staff/?page=1 HTTP/1.1" 200 15100
+2026-11-27 16:14:22 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1597
+2026-11-27 16:14:22 [INFO] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 200 1644
+2026-11-27 16:14:27 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:15:08 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 5633
+2026-11-27 16:15:10 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 20468
+2026-11-27 16:15:11 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 16:15:11 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:15:12 [WARNING] [django.request] Not Found: /api/payments/host-subscriptions/
+2026-11-27 16:15:12 [WARNING] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 404 17787
+2026-11-27 16:15:23 [INFO] [django.server] "OPTIONS /api/reviews/?owner=true HTTP/1.1" 200 0
+2026-11-27 16:15:23 [INFO] [django.server] "GET /api/reviews/?owner=true HTTP/1.1" 200 1316
+2026-11-27 16:15:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:15:29 [WARNING] [django.request] Not Found: /api/payments/host-subscriptions/
+2026-11-27 16:15:29 [WARNING] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 404 17787
+2026-11-27 16:15:44 [WARNING] [django.request] Not Found: /api/payments/host-subscriptions/
+2026-11-27 16:15:44 [WARNING] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 404 17787
+2026-11-27 16:15:55 [INFO] [django.server] "OPTIONS /api/payments/support-tickets/ HTTP/1.1" 200 0
+2026-11-27 16:15:55 [INFO] [django.server] "GET /api/payments/support-tickets/ HTTP/1.1" 200 1917
+2026-11-27 16:15:55 [INFO] [django.server] "OPTIONS /api/payments/support-tickets/4/ HTTP/1.1" 200 0
+2026-11-27 16:15:55 [INFO] [django.server] "GET /api/payments/support-tickets/4/ HTTP/1.1" 200 1865
+2026-11-27 16:15:55 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 815
+2026-11-27 16:15:56 [INFO] [django.server] "OPTIONS /api/payments/payout-account/ HTTP/1.1" 200 0
+2026-11-27 16:15:56 [INFO] [django.server] "GET /api/payments/payout-account/ HTTP/1.1" 200 591
+2026-11-27 16:16:07 [INFO] [django.server] "OPTIONS /api/rooms/by-hotel/92/ HTTP/1.1" 200 0
+2026-11-27 16:16:08 [INFO] [django.server] "GET /api/rooms/by-hotel/92/ HTTP/1.1" 200 52
+2026-11-27 16:16:16 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:16:21 [INFO] [django.server] "GET /api/payments/support-tickets/ HTTP/1.1" 200 1917
+2026-11-27 16:16:21 [INFO] [django.server] "GET /api/payments/support-tickets/4/ HTTP/1.1" 200 1865
+2026-11-27 16:16:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:17:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:17:55 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:17:55 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 16:18:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:19:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:21:10 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:21:37 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:21:42 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:21:45 [INFO] [django.server] "OPTIONS /api/payments/support-tickets/ HTTP/1.1" 200 0
+2026-11-27 16:21:45 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 16:21:45 [INFO] [django.server] "GET /api/payments/support-tickets/ HTTP/1.1" 200 3677
+2026-11-27 16:21:46 [INFO] [django.server] "GET /api/payments/support-tickets/ HTTP/1.1" 200 3677
+2026-11-27 16:21:47 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 16:21:51 [INFO] [django.server] "GET /api/staff/?page=1 HTTP/1.1" 200 15100
+2026-11-27 16:21:51 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1597
+2026-11-27 16:21:51 [INFO] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 200 1644
+2026-11-27 16:22:27 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:23:00 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 5633
+2026-11-27 16:23:01 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1597
+2026-11-27 16:23:01 [INFO] [django.server] "GET /api/staff/?page=1 HTTP/1.1" 200 15100
+2026-11-27 16:23:01 [INFO] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 200 1644
+2026-11-27 16:23:23 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:23:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:23:29 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:23:29 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 16:23:34 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:24:15 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:24:15 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 629
+2026-11-27 16:24:15 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:24:16 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-27 16:24:16 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 16:24:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:24:43 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 16:24:51 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:24:51 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:24:51 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 629
+2026-11-27 16:24:51 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-27 16:24:51 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 16:24:58 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-27 16:24:58 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 16:25:14 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:25:16 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:25:16 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 16:25:18 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:25:22 [INFO] [django.server] "OPTIONS /api/staff/?department=RESERVATION&page=1 HTTP/1.1" 200 0
+2026-11-27 16:25:22 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1597
+2026-11-27 16:25:22 [INFO] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 200 1644
+2026-11-27 16:25:22 [INFO] [django.server] "GET /api/staff/?department=RESERVATION&page=1 HTTP/1.1" 200 8146
+2026-11-27 16:25:27 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:26:24 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:26:26 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:26:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:26:28 [INFO] [django.server] "OPTIONS /api/users/login/ HTTP/1.1" 200 0
+2026-11-27 16:26:28 [WARNING] [django.request] Not Found: /api/payments/host-subscriptions/
+2026-11-27 16:26:28 [WARNING] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 404 17787
+2026-11-27 16:26:31 [WARNING] [django.request] Unauthorized: /api/users/login/
+2026-11-27 16:26:31 [WARNING] [django.server] "POST /api/users/login/ HTTP/1.1" 401 124
+2026-11-27 16:26:31 [INFO] [django.server] "OPTIONS /api/staff/login/ HTTP/1.1" 200 0
+2026-11-27 16:26:31 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-27 16:26:31 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 401 83
+2026-11-27 16:26:49 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:26:49 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 16:26:50 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-27 16:26:50 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:26:50 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 16:26:50 [WARNING] [django.request] Bad Request: /api/users/become-host/
+2026-11-27 16:26:50 [WARNING] [django.server] "POST /api/users/become-host/ HTTP/1.1" 400 309
+2026-11-27 16:27:00 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:27:03 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:27:13 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:27:13 [INFO] [django.server] "OPTIONS /api/hotels/cities/ HTTP/1.1" 200 0
+2026-11-27 16:27:13 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 815
+2026-11-27 16:27:13 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:27:13 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:27:13 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:27:13 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:27:13 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 629
+2026-11-27 16:27:14 [WARNING] [django.request] Not Found: /api/payments/host-subscriptions/
+2026-11-27 16:27:14 [WARNING] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 404 17787
+2026-11-27 16:27:14 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:27:14 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1547
+2026-11-27 16:27:14 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-27 16:27:14 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 214401
+2026-11-27 16:27:14 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 16:27:14 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 16:27:17 [INFO] [django.server] "OPTIONS /api/payments/create-host-subscription-order/ HTTP/1.1" 200 0
+2026-11-27 16:27:19 [INFO] [django.server] "POST /api/payments/create-host-subscription-order/ HTTP/1.1" 200 125
+2026-11-27 16:27:39 [INFO] [django.server] "POST /api/users/become-host/ HTTP/1.1" 201 3170
+2026-11-27 16:27:42 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:27:44 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:27:46 [INFO] [django.server] "OPTIONS /api/payments/verify-host-subscription/ HTTP/1.1" 200 0
+2026-11-27 16:27:46 [INFO] [django.server] "POST /api/payments/verify-host-subscription/ HTTP/1.1" 200 197
+2026-11-27 16:27:49 [INFO] [django.server] "OPTIONS /api/notifications/unread-count/ HTTP/1.1" 200 0
+2026-11-27 16:27:49 [INFO] [django.server] "OPTIONS /api/hotels/cities/ HTTP/1.1" 200 0
+2026-11-27 16:27:49 [INFO] [django.server] "OPTIONS /api/users/profile/ HTTP/1.1" 200 0
+2026-11-27 16:27:49 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:27:49 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:27:49 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 629
+2026-11-27 16:27:49 [INFO] [django.server] "GET /media/users/avatars/WhatsApp_Image_2026-01-03_at_3.58.28_PM.jpeg HTTP/1.1" 200 83376
+2026-11-27 16:28:09 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:28:09 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:28:09 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 629
+2026-11-27 16:28:10 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-27 16:28:10 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:28:10 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 16:28:21 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:28:27 [WARNING] [django.request] Unauthorized: /api/users/login/
+2026-11-27 16:28:27 [WARNING] [django.server] "POST /api/users/login/ HTTP/1.1" 401 124
+2026-11-27 16:28:27 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-27 16:28:27 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 401 112
+2026-11-27 16:28:37 [ERROR] [core.exceptions] Unhandled server error: name 'Q' is not defined
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\views.py", line 523, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\users\views.py", line 316, in post
+    candidate = user_obj or User.objects.filter(Q(username__iexact=username) | Q(email__iexact=username)).first()
+                                                ^
+NameError: name 'Q' is not defined
+2026-11-27 16:28:37 [ERROR] [django.request] Internal Server Error: /api/users/host/login/
+2026-11-27 16:28:37 [ERROR] [django.server] "POST /api/users/host/login/ HTTP/1.1" 500 216
+2026-11-27 16:28:56 [INFO] [django.server] "POST /api/payments/create-host-subscription-order/ HTTP/1.1" 200 123
+2026-11-27 16:29:13 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:29:26 [INFO] [django.server] "POST /api/payments/verify-host-subscription/ HTTP/1.1" 200 197
+2026-11-27 16:30:10 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:30:13 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:30:32 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:30:35 [WARNING] [django.request] Unauthorized: /api/users/login/
+2026-11-27 16:30:35 [WARNING] [django.server] "POST /api/users/login/ HTTP/1.1" 401 124
+2026-11-27 16:30:35 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-27 16:30:35 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 401 112
+2026-11-27 16:32:08 [INFO] [django.server] "POST /api/users/host/login/ HTTP/1.1" 200 1741
+2026-11-27 16:32:17 [WARNING] [django.request] Unauthorized: /api/users/login/
+2026-11-27 16:32:17 [WARNING] [django.server] "POST /api/users/login/ HTTP/1.1" 401 124
+2026-11-27 16:32:17 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-27 16:32:17 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 401 112
+2026-11-27 16:32:40 [WARNING] [django.request] Unauthorized: /api/users/login/
+2026-11-27 16:32:40 [WARNING] [django.server] "POST /api/users/login/ HTTP/1.1" 401 124
+2026-11-27 16:32:40 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-27 16:32:40 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 401 112
+2026-11-27 16:32:42 [WARNING] [django.request] Too Many Requests: /api/users/login/
+2026-11-27 16:32:42 [WARNING] [django.server] "POST /api/users/login/ HTTP/1.1" 429 332
+2026-11-27 16:32:42 [WARNING] [django.request] Too Many Requests: /api/staff/login/
+2026-11-27 16:32:42 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 429 332
+2026-11-27 16:32:46 [WARNING] [django.request] Too Many Requests: /api/users/login/
+2026-11-27 16:32:46 [WARNING] [django.server] "POST /api/users/login/ HTTP/1.1" 429 332
+2026-11-27 16:32:46 [WARNING] [django.request] Too Many Requests: /api/staff/login/
+2026-11-27 16:32:46 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 429 332
+2026-11-27 16:34:42 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1736
+2026-11-27 16:34:42 [INFO] [django.server] "OPTIONS /api/notifications/unread-count/ HTTP/1.1" 200 0
+2026-11-27 16:34:42 [INFO] [django.server] "OPTIONS /api/users/profile/ HTTP/1.1" 200 0
+2026-11-27 16:34:42 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:34:42 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 916
+2026-11-27 16:34:50 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1736
+2026-11-27 16:34:50 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 916
+2026-11-27 16:36:52 [INFO] [django.server] "OPTIONS /api/hotels/cities/ HTTP/1.1" 200 0
+2026-11-27 16:36:52 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 916
+2026-11-27 16:36:52 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:36:53 [INFO] [django.server] "OPTIONS /api/payments/host-subscriptions/ HTTP/1.1" 200 0
+2026-11-27 16:36:53 [INFO] [django.server] "OPTIONS /api/hotels/owner-hotels/ HTTP/1.1" 200 0
+2026-11-27 16:36:53 [INFO] [django.server] "OPTIONS /api/bookings/?page_size=1000 HTTP/1.1" 200 0
+2026-11-27 16:36:53 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:36:53 [WARNING] [django.request] Not Found: /api/payments/host-subscriptions/
+2026-11-27 16:36:53 [WARNING] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 404 17787
+2026-11-27 16:36:53 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 16:36:54 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1501
+2026-11-27 16:37:08 [WARNING] [django.request] Not Found: /api/payments/host-subscriptions/
+2026-11-27 16:37:08 [WARNING] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 404 17787
+2026-11-27 16:37:41 [INFO] [django.server] "OPTIONS /api/payments/create-host-subscription-order/ HTTP/1.1" 200 0
+2026-11-27 16:37:42 [INFO] [django.server] "POST /api/payments/create-host-subscription-order/ HTTP/1.1" 200 123
+2026-11-27 16:37:54 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:37:54 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 916
+2026-11-27 16:37:55 [WARNING] [django.request] Not Found: /api/payments/host-subscriptions/
+2026-11-27 16:37:55 [WARNING] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 404 17787
+2026-11-27 16:37:55 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:37:55 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 16:37:55 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1501
+2026-11-27 16:38:55 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:38:55 [INFO] [django.server] "OPTIONS /api/payments/settlements/ HTTP/1.1" 200 0
+2026-11-27 16:38:55 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 1118
+2026-11-27 16:39:04 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 916
+2026-11-27 16:39:16 [WARNING] [django.request] Not Found: /api/payments/host-subscriptions/
+2026-11-27 16:39:16 [WARNING] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 404 17787
+2026-11-27 16:40:03 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:42:08 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 16:42:11 [INFO] [django.server] "OPTIONS /api/hotels/amenities/ HTTP/1.1" 200 0
+2026-11-27 16:42:11 [INFO] [django.server] "GET /api/hotels/amenities/ HTTP/1.1" 200 820
+2026-11-27 16:42:16 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 916
+2026-11-27 16:42:16 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:42:17 [INFO] [django.server] "GET /api/hotels/amenities/ HTTP/1.1" 200 820
+2026-11-27 16:48:13 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py changed, reloading.
+2026-11-27 16:48:15 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 16:48:34 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 16:48:34 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 916
+2026-11-27 16:48:34 [INFO] [django.server] "GET /api/hotels/amenities/ HTTP/1.1" 200 820
+2026-11-27 16:50:30 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\urls.py changed, reloading.
+2026-11-27 16:50:32 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 17:00:35 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:00:35 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 916
+2026-11-27 17:00:35 [INFO] [django.server] "GET /api/hotels/amenities/ HTTP/1.1" 200 820
+2026-11-27 17:00:55 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:00:56 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:00:56 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:00:56 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 629
+2026-11-27 17:00:56 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-27 17:00:56 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 17:01:12 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:01:13 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 17:01:24 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:01:28 [WARNING] [django.request] Unauthorized: /api/users/login/
+2026-11-27 17:01:28 [WARNING] [django.server] "POST /api/users/login/ HTTP/1.1" 401 124
+2026-11-27 17:01:28 [INFO] [django.server] "OPTIONS /api/staff/login/ HTTP/1.1" 200 0
+2026-11-27 17:01:32 [WARNING] [django.request] Unauthorized: /api/staff/login/
+2026-11-27 17:01:32 [WARNING] [django.server] "POST /api/staff/login/ HTTP/1.1" 401 83
+2026-11-27 17:01:53 [INFO] [django.server] "OPTIONS /api/users/login/ HTTP/1.1" 200 0
+2026-11-27 17:01:55 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1625
+2026-11-27 17:01:55 [INFO] [django.server] "OPTIONS /api/notifications/unread-count/ HTTP/1.1" 200 0
+2026-11-27 17:01:55 [INFO] [django.server] "OPTIONS /api/users/profile/ HTTP/1.1" 200 0
+2026-11-27 17:01:55 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 813
+2026-11-27 17:01:55 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:01:55 [INFO] [django.server] "OPTIONS /api/payments/host-subscriptions/ HTTP/1.1" 200 0
+2026-11-27 17:01:55 [INFO] [django.server] "OPTIONS /api/hotels/owner-hotels/ HTTP/1.1" 200 0
+2026-11-27 17:01:55 [INFO] [django.server] "OPTIONS /api/bookings/?page_size=1000 HTTP/1.1" 200 0
+2026-11-27 17:01:55 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:01:55 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1547
+2026-11-27 17:01:55 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 214401
+2026-11-27 17:02:03 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:02:11 [INFO] [django.server] "OPTIONS /api/payments/settlements/ HTTP/1.1" 200 0
+2026-11-27 17:02:11 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 53131
+2026-11-27 17:02:13 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:02:32 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:02:45 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:02:48 [INFO] [django.server] "OPTIONS /api/rooms/by-hotel/47/ HTTP/1.1" 200 0
+2026-11-27 17:02:48 [INFO] [django.server] "GET /api/rooms/by-hotel/47/ HTTP/1.1" 200 1068
+2026-11-27 17:02:52 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:03:16 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:04:02 [WARNING] [django.request] Bad Request: /api/payments/host-subscriptions/
+2026-11-27 17:04:06 [WARNING] [django.request] Unauthorized: /api/payments/host-subscriptions/
+2026-11-27 17:08:27 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:08:30 [INFO] [django.server] "OPTIONS /api/hotels/?page_size=200 HTTP/1.1" 200 0
+2026-11-27 17:08:30 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:08:30 [INFO] [django.server] "GET /api/hotels/?page_size=200 HTTP/1.1" 200 18685
+2026-11-27 17:08:32 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:08:32 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6526
+2026-11-27 17:08:32 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 17:08:32 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1501
+2026-11-27 17:08:34 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6526
+2026-11-27 17:08:41 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-27 17:08:41 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 17:08:44 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 916
+2026-11-27 17:08:44 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:08:44 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:08:44 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6526
+2026-11-27 17:08:44 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 17:08:44 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1501
+2026-11-27 17:08:56 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:09:07 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-27 17:09:07 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 912
+2026-11-27 17:09:07 [INFO] [django.server] "OPTIONS /api/notifications/unread-count/ HTTP/1.1" 200 0
+2026-11-27 17:09:07 [INFO] [django.server] "OPTIONS /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 0
+2026-11-27 17:09:07 [INFO] [django.server] "OPTIONS /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 0
+2026-11-27 17:09:07 [INFO] [django.server] "OPTIONS /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 0
+2026-11-27 17:09:07 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 17:09:07 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 5987
+2026-11-27 17:09:07 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:09:07 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 17:09:07 [INFO] [django.server] "OPTIONS /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 0
+2026-11-27 17:09:07 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 17:09:07 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 17:09:07 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 17:09:07 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 5987
+2026-11-27 17:09:07 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 17:09:07 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 21918
+2026-11-27 17:09:08 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 21918
+2026-11-27 17:09:09 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6526
+2026-11-27 17:09:10 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 17:09:10 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 5987
+2026-11-27 17:09:11 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 17:09:13 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 17:09:13 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:09:14 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 17:09:15 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 17:09:15 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 17:09:16 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:09:17 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 17:09:17 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 17:09:28 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:09:44 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:10:05 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:10:07 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:10:11 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6526
+2026-11-27 17:10:12 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6526
+2026-11-27 17:10:30 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:11:07 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:11:25 [INFO] [django.server] "OPTIONS /api/hotels/cities/ HTTP/1.1" 200 0
+2026-11-27 17:11:25 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:11:25 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:11:25 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 813
+2026-11-27 17:11:25 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 629
+2026-11-27 17:11:25 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:11:25 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:11:25 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 916
+2026-11-27 17:11:25 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:11:25 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:11:25 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-27 17:11:25 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1547
+2026-11-27 17:11:25 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 17:11:26 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6526
+2026-11-27 17:11:26 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:11:26 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 17:11:26 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1501
+2026-11-27 17:11:26 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 214401
+2026-11-27 17:11:36 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:11:37 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:11:51 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:11:57 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 813
+2026-11-27 17:11:57 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:11:57 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:11:57 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:11:57 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 629
+2026-11-27 17:11:57 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:11:57 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:11:57 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1547
+2026-11-27 17:11:57 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:11:57 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 916
+2026-11-27 17:11:57 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-27 17:11:57 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 214401
+2026-11-27 17:11:57 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 17:11:57 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:11:57 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6526
+2026-11-27 17:11:57 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 17:11:57 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1501
+2026-11-27 17:12:07 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:12:10 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:12:27 [INFO] [django.server] "OPTIONS /api/payments/create-host-subscription-order/ HTTP/1.1" 200 0
+2026-11-27 17:12:28 [INFO] [django.server] "POST /api/payments/create-host-subscription-order/ HTTP/1.1" 200 121
+2026-11-27 17:13:07 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:13:17 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:13:21 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:13:27 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:13:33 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:13:33 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 916
+2026-11-27 17:13:33 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6526
+2026-11-27 17:13:34 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 17:13:34 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:13:34 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1501
+2026-11-27 17:13:57 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 17:13:57 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6526
+2026-11-27 17:13:57 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1501
+2026-11-27 17:13:57 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:13:57 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1547
+2026-11-27 17:13:57 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 214401
+2026-11-27 17:14:07 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:14:07 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:14:15 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:14:15 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1547
+2026-11-27 17:14:15 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 214401
+2026-11-27 17:14:16 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6526
+2026-11-27 17:14:16 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 17:14:16 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1501
+2026-11-27 17:14:23 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:14:27 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 912
+2026-11-27 17:14:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:14:28 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 17:14:29 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 17:14:29 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 5987
+2026-11-27 17:14:29 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 17:14:29 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 21918
+2026-11-27 17:14:30 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 17:14:30 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 17:14:31 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 17:14:31 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 17:14:57 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 916
+2026-11-27 17:14:57 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:14:57 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:14:57 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 813
+2026-11-27 17:14:57 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:14:57 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 629
+2026-11-27 17:14:57 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:14:58 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:14:58 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6526
+2026-11-27 17:14:58 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 17:14:58 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1501
+2026-11-27 17:14:58 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-27 17:14:58 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:14:58 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:14:58 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1547
+2026-11-27 17:14:58 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 17:14:58 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 214401
+2026-11-27 17:15:29 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:15:29 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:15:33 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:15:58 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:16:03 [INFO] [django.server] "OPTIONS /api/tasks/ HTTP/1.1" 200 0
+2026-11-27 17:16:04 [WARNING] [django.request] Not Found: /api/tasks/
+2026-11-27 17:16:04 [WARNING] [django.server] "GET /api/tasks/ HTTP/1.1" 404 7199
+2026-11-27 17:16:29 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:16:29 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6399
+2026-11-27 17:16:44 [WARNING] [django.request] Not Found: /api/tasks/
+2026-11-27 17:16:44 [WARNING] [django.server] "POST /api/tasks/ HTTP/1.1" 404 7200
+2026-11-27 17:16:52 [INFO] [django.server] "OPTIONS /api/tasks/task_1795780004056_hbgcgj/ HTTP/1.1" 200 0
+2026-11-27 17:16:52 [WARNING] [django.request] Not Found: /api/tasks/task_1795780004056_hbgcgj/
+2026-11-27 17:16:52 [WARNING] [django.server] "PATCH /api/tasks/task_1795780004056_hbgcgj/ HTTP/1.1" 404 7279
+2026-11-27 17:16:52 [WARNING] [django.request] Not Found: /api/tasks/task_1795780004056_hbgcgj/
+2026-11-27 17:16:52 [WARNING] [django.server] "PATCH /api/tasks/task_1795780004056_hbgcgj/ HTTP/1.1" 404 7279
+2026-11-27 17:16:58 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:16:58 [WARNING] [django.request] Not Found: /api/tasks/task_1795780004056_hbgcgj/
+2026-11-27 17:16:58 [WARNING] [django.server] "PATCH /api/tasks/task_1795780004056_hbgcgj/ HTTP/1.1" 404 7279
+2026-11-27 17:16:58 [WARNING] [django.request] Not Found: /api/tasks/task_1795780004056_hbgcgj/
+2026-11-27 17:16:58 [WARNING] [django.server] "PATCH /api/tasks/task_1795780004056_hbgcgj/ HTTP/1.1" 404 7279
+2026-11-27 17:17:20 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:17:22 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6399
+2026-11-27 17:17:24 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:17:25 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 53131
+2026-11-27 17:17:29 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:17:30 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:17:57 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6526
+2026-11-27 17:18:00 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:18:29 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:18:34 [INFO] [django.server] "POST /api/payments/create-host-subscription-order/ HTTP/1.1" 200 122
+2026-11-27 17:18:39 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:18:39 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:18:43 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:18:43 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 916
+2026-11-27 17:18:43 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:18:43 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 17:18:43 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6526
+2026-11-27 17:18:43 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1501
+2026-11-27 17:18:51 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 916
+2026-11-27 17:18:52 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 813
+2026-11-27 17:18:52 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 629
+2026-11-27 17:18:52 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:18:52 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:18:52 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:18:52 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:18:52 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 17:18:52 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6526
+2026-11-27 17:18:52 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:18:52 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:18:52 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-27 17:18:52 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1547
+2026-11-27 17:18:52 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1501
+2026-11-27 17:18:52 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 17:18:52 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 214401
+2026-11-27 17:19:03 [INFO] [django.server] "OPTIONS /api/notifications/ HTTP/1.1" 200 0
+2026-11-27 17:19:03 [INFO] [django.server] "GET /api/notifications/ HTTP/1.1" 200 6800
+2026-11-27 17:19:04 [WARNING] [django.request] Bad Request: /api/payments/verify-host-subscription/
+2026-11-27 17:19:04 [WARNING] [django.server] "POST /api/payments/verify-host-subscription/ HTTP/1.1" 400 68
+2026-11-27 17:19:23 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:19:23 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1547
+2026-11-27 17:19:23 [INFO] [django.server] "GET /api/notifications/ HTTP/1.1" 200 6800
+2026-11-27 17:19:23 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6526
+2026-11-27 17:19:23 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 214401
+2026-11-27 17:19:23 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 17:19:23 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1501
+2026-11-27 17:19:29 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:19:42 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:19:56 [INFO] [django.server] "POST /api/payments/create-host-subscription-order/ HTTP/1.1" 200 123
+2026-11-27 17:20:04 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6526
+2026-11-27 17:20:04 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 17:20:04 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1501
+2026-11-27 17:20:05 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:20:05 [INFO] [django.server] "GET /api/notifications/ HTTP/1.1" 200 6800
+2026-11-27 17:20:05 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1547
+2026-11-27 17:20:05 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 214401
+2026-11-27 17:20:20 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 916
+2026-11-27 17:20:20 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:20:21 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6526
+2026-11-27 17:20:21 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:20:21 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 17:20:21 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1501
+2026-11-27 17:20:21 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:20:21 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:20:21 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 629
+2026-11-27 17:20:21 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:20:21 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 813
+2026-11-27 17:20:21 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-27 17:20:21 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 17:20:22 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:20:22 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:20:22 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1547
+2026-11-27 17:20:22 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 214401
+2026-11-27 17:20:29 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:20:33 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 916
+2026-11-27 17:20:33 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:20:33 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:20:33 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6526
+2026-11-27 17:20:33 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 17:20:33 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1501
+2026-11-27 17:21:02 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:21:04 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 53131
+2026-11-27 17:21:04 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:21:18 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:21:18 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1547
+2026-11-27 17:21:18 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6526
+2026-11-27 17:21:18 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 17:21:18 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 214401
+2026-11-27 17:21:18 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1501
+2026-11-27 17:21:19 [INFO] [django.server] "POST /api/payments/create-host-subscription-order/ HTTP/1.1" 200 125
+2026-11-27 17:21:29 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:21:33 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:21:48 [INFO] [django.server] "OPTIONS /api/payments/verify-host-subscription/ HTTP/1.1" 200 0
+2026-11-27 17:21:48 [INFO] [django.server] "POST /api/payments/verify-host-subscription/ HTTP/1.1" 200 197
+2026-11-27 17:22:22 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:22:33 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:23:10 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:23:33 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:23:51 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:24:10 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:24:18 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:24:18 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 813
+2026-11-27 17:24:19 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:24:19 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:24:19 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1547
+2026-11-27 17:24:19 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 214401
+2026-11-27 17:24:38 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:24:39 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 813
+2026-11-27 17:24:39 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:24:39 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6624
+2026-11-27 17:24:40 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1547
+2026-11-27 17:24:40 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 214401
+2026-11-27 17:24:40 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:24:44 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:24:44 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:24:44 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 813
+2026-11-27 17:24:45 [INFO] [django.server] "OPTIONS /api/hotels/ HTTP/1.1" 200 0
+2026-11-27 17:24:45 [INFO] [django.server] "OPTIONS /api/wishlist/ HTTP/1.1" 200 0
+2026-11-27 17:24:45 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-27 17:24:45 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 17:24:52 [INFO] [django.server] "POST /api/payments/create-host-subscription-order/ HTTP/1.1" 200 125
+2026-11-27 17:25:10 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:25:21 [INFO] [django.server] "OPTIONS /api/payments/verify-host-subscription/ HTTP/1.1" 200 0
+2026-11-27 17:25:21 [INFO] [django.server] "POST /api/payments/verify-host-subscription/ HTTP/1.1" 200 197
+2026-11-27 17:25:28 [INFO] [django.server] "GET /api/users/check-email/?email=rutvik123%40gmail.com HTTP/1.1" 200 118
+2026-11-27 17:25:28 [INFO] [django.server] "GET /api/users/check-phone/?phone=8975122601 HTTP/1.1" 200 141
+2026-11-27 17:25:32 [INFO] [django.server] "POST /api/payments/create-host-subscription-order/ HTTP/1.1" 200 123
+2026-11-27 17:25:33 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:25:51 [INFO] [django.server] "POST /api/payments/verify-host-subscription/ HTTP/1.1" 200 197
+2026-11-27 17:26:10 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:26:32 [INFO] [django.server] "OPTIONS /api/users/become-host/ HTTP/1.1" 200 0
+2026-11-27 17:26:33 [INFO] [django.server] "POST /api/users/become-host/ HTTP/1.1" 201 1707
+2026-11-27 17:26:33 [INFO] [django.server] "OPTIONS /api/payments/payout-account/ HTTP/1.1" 200 0
+2026-11-27 17:26:33 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 911
+2026-11-27 17:26:33 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:26:33 [INFO] [django.server] "POST /api/payments/payout-account/ HTTP/1.1" 200 735
+2026-11-27 17:26:33 [WARNING] [django.request] Bad Request: /api/hotels/
+2026-11-27 17:26:33 [WARNING] [django.server] "POST /api/hotels/ HTTP/1.1" 400 348
+2026-11-27 17:26:33 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 17:26:33 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 52
+2026-11-27 17:26:33 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6513
+2026-11-27 17:26:35 [INFO] [django.server] "OPTIONS /api/hotels/amenities/ HTTP/1.1" 200 0
+2026-11-27 17:26:35 [INFO] [django.server] "GET /api/hotels/amenities/ HTTP/1.1" 200 820
+2026-11-27 17:26:43 [INFO] [django.server] "POST /api/hotels/ HTTP/1.1" 201 874
+2026-11-27 17:26:43 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6513
+2026-11-27 17:26:43 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 17:26:43 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1771
+2026-11-27 17:26:44 [INFO] [django.server] "GET /api/hotels/amenities/ HTTP/1.1" 200 820
+2026-11-27 17:26:49 [WARNING] [django.request] Bad Request: /api/hotels/
+2026-11-27 17:26:49 [WARNING] [django.server] "POST /api/hotels/ HTTP/1.1" 400 348
+2026-11-27 17:27:00 [INFO] [django.server] "POST /api/hotels/ HTTP/1.1" 201 873
+2026-11-27 17:27:00 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:27:00 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6513
+2026-11-27 17:27:00 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 3490
+2026-11-27 17:27:00 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 17:27:10 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:27:15 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:27:17 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:27:24 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:27:28 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6513
+2026-11-27 17:27:42 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 6513
+2026-11-27 17:27:49 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:27:58 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:28:04 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:28:08 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6338
+2026-11-27 17:28:14 [INFO] [django.server] "OPTIONS /api/users/233/delete/ HTTP/1.1" 200 0
+2026-11-27 17:28:14 [WARNING] [django.request] Bad Request: /api/users/233/delete/
+2026-11-27 17:28:14 [WARNING] [django.server] "DELETE /api/users/233/delete/ HTTP/1.1" 400 263
+2026-11-27 17:28:24 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 25357
+2026-11-27 17:28:27 [INFO] [django.server] "OPTIONS /api/hotels/95/ HTTP/1.1" 200 0
+2026-11-27 17:28:27 [INFO] [django.server] "PATCH /api/hotels/95/ HTTP/1.1" 200 871
+2026-11-27 17:28:27 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 25355
+2026-11-27 17:28:30 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:28:35 [INFO] [django.server] "OPTIONS /api/hotels/94/ HTTP/1.1" 200 0
+2026-11-27 17:28:35 [INFO] [django.server] "PATCH /api/hotels/94/ HTTP/1.1" 200 872
+2026-11-27 17:28:35 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 25353
+2026-11-27 17:28:38 [INFO] [django.server] "OPTIONS /api/hotels/93/ HTTP/1.1" 200 0
+2026-11-27 17:28:38 [INFO] [django.server] "PATCH /api/hotels/93/ HTTP/1.1" 200 891
+2026-11-27 17:28:38 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 25351
+2026-11-27 17:28:48 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:28:50 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 17:28:51 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 25351
+2026-11-27 17:28:53 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 17:28:53 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 25351
+2026-11-27 17:28:55 [INFO] [django.server] "OPTIONS /api/payments/settlements/ HTTP/1.1" 200 0
+2026-11-27 17:28:55 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 17:28:56 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 25351
+2026-11-27 17:28:57 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 17:29:00 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 25351
+2026-11-27 17:29:00 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:29:06 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6338
+2026-11-27 17:29:10 [WARNING] [django.request] Bad Request: /api/users/233/delete/
+2026-11-27 17:29:10 [WARNING] [django.server] "DELETE /api/users/233/delete/ HTTP/1.1" 400 263
+2026-11-27 17:29:17 [WARNING] [django.request] Bad Request: /api/users/233/delete/
+2026-11-27 17:29:17 [WARNING] [django.server] "DELETE /api/users/233/delete/ HTTP/1.1" 400 263
+2026-11-27 17:29:23 [WARNING] [django.request] Bad Request: /api/users/233/delete/
+2026-11-27 17:29:23 [WARNING] [django.server] "DELETE /api/users/233/delete/ HTTP/1.1" 400 263
+2026-11-27 17:29:27 [INFO] [django.server] "OPTIONS /api/users/233/change-role/ HTTP/1.1" 200 0
+2026-11-27 17:29:28 [INFO] [django.server] "POST /api/users/233/change-role/ HTTP/1.1" 200 79
+2026-11-27 17:29:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:29:31 [WARNING] [django.request] Bad Request: /api/users/233/delete/
+2026-11-27 17:29:31 [WARNING] [django.server] "DELETE /api/users/233/delete/ HTTP/1.1" 400 263
+2026-11-27 17:29:31 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:29:35 [INFO] [django.server] "POST /api/users/233/change-role/ HTTP/1.1" 200 85
+2026-11-27 17:29:47 [INFO] [django.server] "OPTIONS /api/staff/?page=1 HTTP/1.1" 200 0
+2026-11-27 17:29:47 [INFO] [django.server] "OPTIONS /api/staff/departments/ HTTP/1.1" 200 0
+2026-11-27 17:29:47 [INFO] [django.server] "OPTIONS /api/staff/dashboard/ HTTP/1.1" 200 0
+2026-11-27 17:29:47 [INFO] [django.server] "GET /api/staff/?page=1 HTTP/1.1" 200 15100
+2026-11-27 17:29:47 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1597
+2026-11-27 17:29:47 [INFO] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 200 1644
+2026-11-27 17:29:57 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6338
+2026-11-27 17:30:08 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 17:30:09 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 17:30:10 [INFO] [django.server] "OPTIONS /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 0
+2026-11-27 17:30:11 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 17:30:11 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 17:30:13 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1597
+2026-11-27 17:30:13 [INFO] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 200 1644
+2026-11-27 17:30:13 [INFO] [django.server] "GET /api/staff/?page=1 HTTP/1.1" 200 15100
+2026-11-27 17:30:15 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6338
+2026-11-27 17:30:28 [INFO] [django.server] "OPTIONS /api/notifications/unread-count/ HTTP/1.1" 200 0
+2026-11-27 17:30:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:30:49 [INFO] [django.server] "OPTIONS /api/users/228/delete/ HTTP/1.1" 200 0
+2026-11-27 17:30:49 [INFO] [django.server] "DELETE /api/users/228/delete/ HTTP/1.1" 200 54
+2026-11-27 17:30:52 [WARNING] [django.request] Bad Request: /api/users/233/delete/
+2026-11-27 17:30:52 [WARNING] [django.server] "DELETE /api/users/233/delete/ HTTP/1.1" 400 263
+2026-11-27 17:30:56 [INFO] [django.server] "OPTIONS /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 0
+2026-11-27 17:30:56 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 25351
+2026-11-27 17:31:09 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 17:31:09 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 17:31:10 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6355
+2026-11-27 17:31:12 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1596
+2026-11-27 17:31:12 [INFO] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 200 1644
+2026-11-27 17:31:12 [INFO] [django.server] "GET /api/staff/?page=1 HTTP/1.1" 200 15145
+2026-11-27 17:31:12 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6355
+2026-11-27 17:31:14 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:31:21 [INFO] [django.server] "OPTIONS /api/users/232/delete/ HTTP/1.1" 200 0
+2026-11-27 17:31:21 [WARNING] [django.request] Bad Request: /api/users/232/delete/
+2026-11-27 17:31:21 [WARNING] [django.server] "DELETE /api/users/232/delete/ HTTP/1.1" 400 263
+2026-11-27 17:31:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:32:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:32:33 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:32:55 [INFO] [django.server] "OPTIONS /api/users/231/delete/ HTTP/1.1" 200 0
+2026-11-27 17:32:55 [INFO] [django.server] "DELETE /api/users/231/delete/ HTTP/1.1" 200 65
+2026-11-27 17:32:57 [INFO] [django.server] "OPTIONS /api/users/230/delete/ HTTP/1.1" 200 0
+2026-11-27 17:32:57 [INFO] [django.server] "DELETE /api/users/230/delete/ HTTP/1.1" 200 70
+2026-11-27 17:33:01 [INFO] [django.server] "OPTIONS /api/users/229/delete/ HTTP/1.1" 200 0
+2026-11-27 17:33:01 [INFO] [django.server] "DELETE /api/users/229/delete/ HTTP/1.1" 200 65
+2026-11-27 17:33:02 [INFO] [django.server] "OPTIONS /api/users/227/delete/ HTTP/1.1" 200 0
+2026-11-27 17:33:02 [INFO] [django.server] "DELETE /api/users/227/delete/ HTTP/1.1" 200 65
+2026-11-27 17:33:05 [INFO] [django.server] "OPTIONS /api/users/226/delete/ HTTP/1.1" 200 0
+2026-11-27 17:33:05 [INFO] [django.server] "DELETE /api/users/226/delete/ HTTP/1.1" 200 69
+2026-11-27 17:33:07 [INFO] [django.server] "OPTIONS /api/users/225/delete/ HTTP/1.1" 200 0
+2026-11-27 17:33:07 [INFO] [django.server] "DELETE /api/users/225/delete/ HTTP/1.1" 200 70
+2026-11-27 17:33:28 [INFO] [django.server] "OPTIONS /api/notifications/unread-count/ HTTP/1.1" 200 0
+2026-11-27 17:33:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:33:39 [INFO] [django.server] "OPTIONS /api/users/224/delete/ HTTP/1.1" 200 0
+2026-11-27 17:33:39 [INFO] [django.server] "DELETE /api/users/224/delete/ HTTP/1.1" 200 64
+2026-11-27 17:33:41 [INFO] [django.server] "OPTIONS /api/users/223/delete/ HTTP/1.1" 200 0
+2026-11-27 17:33:41 [INFO] [django.server] "DELETE /api/users/223/delete/ HTTP/1.1" 200 70
+2026-11-27 17:33:52 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 17:34:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:34:55 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:34:55 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 17:35:00 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\models.py changed, reloading.
+2026-11-27 17:35:02 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 17:35:28 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\models.py changed, reloading.
+2026-11-27 17:35:29 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 17:35:29 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:36:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:37:19 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\hotels\views.py changed, reloading.
+2026-11-27 17:37:20 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 17:37:25 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\rooms\views.py changed, reloading.
+2026-11-27 17:37:26 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 17:37:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:38:17 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py changed, reloading.
+2026-11-27 17:38:18 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 17:38:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:39:03 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:39:18 [WARNING] [django.request] Bad Request: /api/hotels/owner/hotels/
+2026-11-27 17:39:29 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:40:51 [WARNING] [django.request] Forbidden: /api/hotels/owner/hotels/
+2026-11-27 17:40:54 [WARNING] [django.request] Forbidden: /api/rooms/
+2026-11-27 17:41:10 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:42:10 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py changed, reloading.
+2026-11-27 17:42:11 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 17:42:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:42:54 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:42:58 [WARNING] [django.request] Not Found: /api/tasks/
+2026-11-27 17:42:58 [WARNING] [django.server] "GET /api/tasks/ HTTP/1.1" 404 7199
+2026-11-27 17:43:02 [INFO] [django.server] "GET /api/rooms/by-hotel/47/ HTTP/1.1" 200 1068
+2026-11-27 17:43:19 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:43:29 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:44:04 [INFO] [django.server] "OPTIONS /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 0
+2026-11-27 17:44:04 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 25351
+2026-11-27 17:44:05 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 17:44:06 [INFO] [django.server] "OPTIONS /api/payments/support-tickets/ HTTP/1.1" 200 0
+2026-11-27 17:44:06 [INFO] [django.server] "GET /api/payments/support-tickets/ HTTP/1.1" 200 3677
+2026-11-27 17:44:06 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:44:14 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:44:18 [INFO] [django.server] "POST /api/payments/create-host-subscription-order/ HTTP/1.1" 200 123
+2026-11-27 17:44:29 [INFO] [django.server] "OPTIONS /api/notifications/unread-count/ HTTP/1.1" 200 0
+2026-11-27 17:44:29 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:44:43 [INFO] [django.server] "POST /api/payments/verify-host-subscription/ HTTP/1.1" 200 442
+2026-11-27 17:45:17 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:45:18 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:45:33 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:46:00 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:46:10 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:46:33 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:46:53 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:46:57 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:47:00 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:47:00 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 914
+2026-11-27 17:47:00 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 9962
+2026-11-27 17:47:00 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:47:00 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 17:47:01 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1499
+2026-11-27 17:47:10 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:47:17 [INFO] [django.server] "OPTIONS /api/hotels/94/ HTTP/1.1" 200 0
+2026-11-27 17:47:17 [INFO] [django.server] "DELETE /api/hotels/94/ HTTP/1.1" 200 189
+2026-11-27 17:47:19 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:47:27 [INFO] [django.server] "OPTIONS /api/payments/support-tickets/4/ HTTP/1.1" 200 0
+2026-11-27 17:47:27 [INFO] [django.server] "GET /api/payments/support-tickets/4/ HTTP/1.1" 200 1865
+2026-11-27 17:47:27 [INFO] [django.server] "OPTIONS /api/bookings/310/ HTTP/1.1" 200 0
+2026-11-27 17:47:27 [INFO] [django.server] "GET /api/bookings/310/ HTTP/1.1" 200 4235
+2026-11-27 17:47:31 [INFO] [django.server] "OPTIONS /api/payments/support-tickets/3/ HTTP/1.1" 200 0
+2026-11-27 17:47:31 [INFO] [django.server] "GET /api/payments/support-tickets/3/ HTTP/1.1" 200 870
+2026-11-27 17:47:36 [INFO] [django.server] "OPTIONS /api/users/all/ HTTP/1.1" 200 0
+2026-11-27 17:47:36 [INFO] [django.server] "OPTIONS /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 0
+2026-11-27 17:47:36 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 17:47:36 [INFO] [django.server] "OPTIONS /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 0
+2026-11-27 17:47:36 [INFO] [django.server] "OPTIONS /api/payments/settlements/ HTTP/1.1" 200 0
+2026-11-27 17:47:36 [INFO] [django.server] "OPTIONS /api/payments/settings/ HTTP/1.1" 200 0
+2026-11-27 17:47:36 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 17:47:36 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 17:47:36 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 17:47:36 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 17:47:36 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 17:47:36 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 17:47:37 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 17:47:37 [INFO] [django.server] "OPTIONS /api/payments/admin/refunds/? HTTP/1.1" 200 0
+2026-11-27 17:47:37 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 17:48:29 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:49:05 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:50:10 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:51:10 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:51:22 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py changed, reloading.
+2026-11-27 17:51:23 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 17:52:10 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:52:11 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py changed, reloading.
+2026-11-27 17:52:13 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 17:52:57 [INFO] [django.server] "OPTIONS /api/notifications/unread-count/ HTTP/1.1" 200 0
+2026-11-27 17:52:57 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:52:59 [INFO] [django.server] "OPTIONS /api/reviews/?hotel_id=2 HTTP/1.1" 200 0
+2026-11-27 17:52:59 [INFO] [django.server] "OPTIONS /api/hotels/2/ HTTP/1.1" 200 0
+2026-11-27 17:52:59 [INFO] [django.server] "OPTIONS /api/rooms/by-hotel/2/?check_in=2026-11-27&check_out=2026-11-28&rooms=1 HTTP/1.1" 200 0
+2026-11-27 17:52:59 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-27 17:52:59 [INFO] [django.server] "GET /api/reviews/?hotel_id=2 HTTP/1.1" 200 508
+2026-11-27 17:52:59 [INFO] [django.server] "GET /api/hotels/2/ HTTP/1.1" 200 2611
+2026-11-27 17:52:59 [INFO] [django.server] "GET /api/rooms/by-hotel/2/?check_in=2026-11-27&check_out=2026-11-28&rooms=1 HTTP/1.1" 200 3683
+2026-11-27 17:53:05 [ERROR] [payments.views] Razorpay Host Subscription Order creation error: HTTPSConnectionPool(host='api.razorpay.com', port=443): Max retries exceeded with url: /v1/orders (Caused by NameResolutionError("HTTPSConnection(host='api.razorpay.com', port=443): Failed to resolve 'api.razorpay.com' ([Errno 11001] getaddrinfo failed)"))
+2026-11-27 17:53:05 [ERROR] [django.request] Internal Server Error: /api/payments/create-host-subscription-order/
+2026-11-27 17:53:10 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:53:21 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:53:24 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py changed, reloading.
+2026-11-27 17:53:25 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 17:53:29 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py changed, reloading.
+2026-11-27 17:53:30 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 17:53:42 [ERROR] [payments.views] Razorpay Host Subscription Order creation error: HTTPSConnectionPool(host='api.razorpay.com', port=443): Max retries exceeded with url: /v1/orders (Caused by NameResolutionError("HTTPSConnection(host='api.razorpay.com', port=443): Failed to resolve 'api.razorpay.com' ([Errno 11001] getaddrinfo failed)"))
+2026-11-27 17:54:10 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:55:10 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:55:42 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:55:45 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:55:45 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 914
+2026-11-27 17:55:45 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:55:45 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 17:55:45 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 16826
+2026-11-27 17:55:45 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1499
+2026-11-27 17:55:55 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py changed, reloading.
+2026-11-27 17:55:56 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 17:56:10 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:56:26 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:56:27 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:56:34 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:56:38 [INFO] [django.server] "OPTIONS /api/hotels/cities/ HTTP/1.1" 200 0
+2026-11-27 17:56:38 [INFO] [django.server] "OPTIONS /api/hotels/ HTTP/1.1" 200 0
+2026-11-27 17:56:38 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-27 17:56:38 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 17:56:38 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 17:56:56 [INFO] [django.server] "OPTIONS /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 0
+2026-11-27 17:56:56 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 17:56:57 [INFO] [django.server] "OPTIONS /api/users/all/ HTTP/1.1" 200 0
+2026-11-27 17:56:57 [INFO] [django.server] "OPTIONS /api/bookings/?page_size=1000 HTTP/1.1" 200 0
+2026-11-27 17:56:57 [INFO] [django.server] "OPTIONS /api/coupons/ HTTP/1.1" 200 0
+2026-11-27 17:56:57 [INFO] [django.server] "OPTIONS /api/payments/settlements/ HTTP/1.1" 200 0
+2026-11-27 17:56:57 [INFO] [django.server] "OPTIONS /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 0
+2026-11-27 17:56:57 [INFO] [django.server] "OPTIONS /api/payments/settings/ HTTP/1.1" 200 0
+2026-11-27 17:56:57 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 17:56:57 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 17:56:57 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 17:56:57 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 17:56:57 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 17:56:57 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 17:56:58 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 17:56:58 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 17:56:58 [INFO] [django.server] "OPTIONS /api/payments/admin/refunds/? HTTP/1.1" 200 0
+2026-11-27 17:56:58 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 17:57:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:57:45 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\models.py changed, reloading.
+2026-11-27 17:57:46 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 17:57:56 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:58:01 [ERROR] [core.exceptions] Unhandled server error: no such column: payments_hostsubscription.cancelled_at
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\sqlite3\base.py", line 359, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: payments_hostsubscription.cancelled_at
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\views.py", line 523, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py", line 3961, in post
+    next_start = future_subs.first().end_date
+                 ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\query.py", line 1228, in first
+    for obj in queryset[:1]:
+               ~~~~~~~~^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\query.py", line 473, in __iter__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\query.py", line 2287, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\query.py", line 131, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\sql\compiler.py", line 1643, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\sqlite3\base.py", line 359, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such column: payments_hostsubscription.cancelled_at
+2026-11-27 17:58:02 [ERROR] [django.request] Internal Server Error: /api/payments/create-host-subscription-order/
+2026-11-27 17:58:02 [ERROR] [django.server] "POST /api/payments/create-host-subscription-order/ HTTP/1.1" 500 216
+2026-11-27 17:58:08 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\models.py changed, reloading.
+2026-11-27 17:58:10 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 17:58:13 [INFO] [django.server] "POST /api/payments/create-host-subscription-order/ HTTP/1.1" 200 647
+2026-11-27 17:58:29 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:58:34 [INFO] [django.server] "POST /api/payments/verify-host-subscription/ HTTP/1.1" 200 831
+2026-11-27 17:58:45 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:59:07 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 17:59:16 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:59:29 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 17:59:48 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 19566
+2026-11-27 18:00:08 [WARNING] [django.request] Bad Request: /api/payments/verify-host-subscription/
+2026-11-27 18:00:08 [WARNING] [django.server] "POST /api/payments/verify-host-subscription/ HTTP/1.1" 400 68
+2026-11-27 18:00:14 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:00:20 [INFO] [django.server] "POST /api/payments/host-subscriptions/ HTTP/1.1" 200 1189
+2026-11-27 18:00:22 [INFO] [django.server] "OPTIONS /api/payments/support-tickets/ HTTP/1.1" 200 0
+2026-11-27 18:00:23 [INFO] [django.server] "GET /api/payments/support-tickets/ HTTP/1.1" 200 3677
+2026-11-27 18:00:24 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:00:25 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:00:26 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1596
+2026-11-27 18:00:26 [INFO] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 200 1644
+2026-11-27 18:00:26 [INFO] [django.server] "GET /api/staff/?page=1 HTTP/1.1" 200 13134
+2026-11-27 18:00:27 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 18:00:28 [INFO] [django.server] "GET /api/staff/?page=1 HTTP/1.1" 200 13134
+2026-11-27 18:00:28 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1596
+2026-11-27 18:00:28 [INFO] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 200 1644
+2026-11-27 18:00:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:00:38 [INFO] [django.server] "OPTIONS /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 0
+2026-11-27 18:00:38 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 18:00:39 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:00:39 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:00:40 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 18:00:41 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 18:00:42 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:00:42 [INFO] [django.server] "POST /api/payments/create-host-subscription-order/ HTTP/1.1" 200 642
+2026-11-27 18:00:44 [WARNING] [django.request] Not Found: /api/tasks/
+2026-11-27 18:00:44 [WARNING] [django.server] "GET /api/tasks/ HTTP/1.1" 404 7199
+2026-11-27 18:01:29 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:01:37 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:02:12 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:02:19 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:02:41 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:02:43 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:02:59 [WARNING] [django.request] Not Found: /api/tasks/
+2026-11-27 18:02:59 [WARNING] [django.server] "GET /api/tasks/ HTTP/1.1" 404 7199
+2026-11-27 18:02:59 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:02:59 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 18:02:59 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 914
+2026-11-27 18:03:00 [INFO] [django.server] "OPTIONS /api/wishlist/ HTTP/1.1" 200 0
+2026-11-27 18:03:00 [INFO] [django.server] "OPTIONS /api/hotels/ HTTP/1.1" 200 0
+2026-11-27 18:03:00 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-27 18:03:00 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 18:03:02 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:03:08 [INFO] [django.server] "OPTIONS /api/users/login/ HTTP/1.1" 200 0
+2026-11-27 18:03:10 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1728
+2026-11-27 18:03:10 [INFO] [django.server] "OPTIONS /api/users/profile/ HTTP/1.1" 200 0
+2026-11-27 18:03:10 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 912
+2026-11-27 18:03:10 [INFO] [django.server] "OPTIONS /api/notifications/unread-count/ HTTP/1.1" 200 0
+2026-11-27 18:03:10 [INFO] [django.server] "OPTIONS /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 0
+2026-11-27 18:03:10 [INFO] [django.server] "OPTIONS /api/users/all/ HTTP/1.1" 200 0
+2026-11-27 18:03:10 [INFO] [django.server] "OPTIONS /api/bookings/?page_size=1000 HTTP/1.1" 200 0
+2026-11-27 18:03:10 [INFO] [django.server] "OPTIONS /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 0
+2026-11-27 18:03:10 [INFO] [django.server] "OPTIONS /api/coupons/ HTTP/1.1" 200 0
+2026-11-27 18:03:10 [INFO] [django.server] "OPTIONS /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 0
+2026-11-27 18:03:10 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:03:10 [INFO] [django.server] "OPTIONS /api/payments/settlements/ HTTP/1.1" 200 0
+2026-11-27 18:03:10 [INFO] [django.server] "OPTIONS /api/payments/settings/ HTTP/1.1" 200 0
+2026-11-27 18:03:10 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:03:10 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 18:03:10 [INFO] [django.server] "OPTIONS /api/payments/settings/ HTTP/1.1" 200 0
+2026-11-27 18:03:10 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 18:03:10 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 18:03:10 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 18:03:10 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:03:10 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 18:03:10 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:03:10 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 18:03:10 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:03:11 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:03:11 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:03:12 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 18:03:13 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:03:13 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:03:13 [INFO] [django.server] "OPTIONS /api/payments/admin/refunds/? HTTP/1.1" 200 0
+2026-11-27 18:03:14 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 18:03:14 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 18:03:15 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:03:16 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 18:03:28 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:03:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:03:30 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:03:30 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 18:03:30 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 18:03:30 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 18:03:30 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:03:31 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:03:31 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:03:32 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 18:03:32 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:03:32 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 18:03:40 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:03:40 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:03:47 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:03:49 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:03:49 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 18:03:50 [INFO] [django.server] - Broken pipe from ('192.168.1.114', 61636)
+2026-11-27 18:03:50 [INFO] [django.server] - Broken pipe from ('192.168.1.114', 64491)
+2026-11-27 18:03:50 [INFO] [django.server] - Broken pipe from ('192.168.1.114', 60625)
+2026-11-27 18:03:50 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:03:50 [INFO] [django.server] - Broken pipe from ('192.168.1.104', 62415)
+2026-11-27 18:03:50 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 18:03:50 [INFO] [django.server] - Broken pipe from ('192.168.1.104', 49744)
+2026-11-27 18:03:51 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 912
+2026-11-27 18:03:51 [INFO] [django.server] "OPTIONS /api/users/profile/ HTTP/1.1" 200 0
+2026-11-27 18:03:51 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:03:51 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 912
+2026-11-27 18:03:51 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:03:51 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 18:03:51 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:03:51 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:03:51 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 18:03:51 [INFO] [django.server] - Broken pipe from ('192.168.1.104', 60565)
+2026-11-27 18:03:51 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:03:51 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 18:03:52 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 18:03:52 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 18:03:52 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 18:03:52 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:03:53 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:03:53 [INFO] [django.server] - Broken pipe from ('192.168.1.114', 55832)
+2026-11-27 18:03:55 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:03:57 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:03:57 [INFO] [django.server] - Broken pipe from ('192.168.1.104', 58427)
+2026-11-27 18:03:57 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:03:57 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 18:03:58 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 18:03:58 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 18:03:58 [INFO] [django.server] - Broken pipe from ('192.168.1.104', 53235)
+2026-11-27 18:03:58 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:03:58 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:03:58 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 18:03:59 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 18:03:59 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 18:03:59 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:04:00 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:04:00 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:04:01 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 18:04:01 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 18:04:03 [INFO] [django.server] - Broken pipe from ('192.168.1.114', 65499)
+2026-11-27 18:04:04 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:04:05 [INFO] [django.server] - Broken pipe from ('192.168.1.104', 50401)
+2026-11-27 18:04:05 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:04:06 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:04:07 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:04:08 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:04:09 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 18:04:10 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 18:04:10 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 18:04:11 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 18:04:13 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:04:14 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 18:04:14 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:04:14 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 18:04:17 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:04:22 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:04:22 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 18:04:22 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 18:04:22 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 18:04:22 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:04:22 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 18:04:22 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 18:04:22 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:04:22 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 18:04:23 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:04:26 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:04:27 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 18:04:27 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:04:27 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:04:27 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 18:04:29 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:04:29 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:04:29 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:04:29 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 18:04:29 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 18:04:30 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:04:30 [INFO] [django.server] "GET /api/payments/support-tickets/ HTTP/1.1" 200 3677
+2026-11-27 18:04:31 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:04:42 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:04:51 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:04:51 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:04:56 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py changed, reloading.
+2026-11-27 18:04:57 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 18:05:08 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py changed, reloading.
+2026-11-27 18:05:09 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 18:05:51 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:05:51 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:05:58 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:06:03 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:06:05 [INFO] [django.server] "OPTIONS /api/reviews/?owner=true HTTP/1.1" 200 0
+2026-11-27 18:06:05 [INFO] [django.server] "GET /api/reviews/?owner=true HTTP/1.1" 200 52
+2026-11-27 18:06:05 [INFO] [django.server] "OPTIONS /api/payments/support-tickets/ HTTP/1.1" 200 0
+2026-11-27 18:06:05 [INFO] [django.server] "GET /api/payments/support-tickets/ HTTP/1.1" 200 52
+2026-11-27 18:06:51 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:06:51 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:07:51 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:07:51 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:08:24 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:08:51 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:08:51 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:09:21 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:09:23 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:09:25 [INFO] [django.server] "OPTIONS /api/notifications/unread-count/ HTTP/1.1" 200 0
+2026-11-27 18:09:25 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:09:26 [INFO] [django.server] "OPTIONS /api/wishlist/ HTTP/1.1" 200 0
+2026-11-27 18:09:26 [INFO] [django.server] "OPTIONS /api/hotels/1/ HTTP/1.1" 200 0
+2026-11-27 18:09:26 [INFO] [django.server] "OPTIONS /api/rooms/by-hotel/1/?check_in=2026-11-27&check_out=2026-11-28&rooms=1 HTTP/1.1" 200 0
+2026-11-27 18:09:26 [INFO] [django.server] "OPTIONS /api/reviews/?hotel_id=1 HTTP/1.1" 200 0
+2026-11-27 18:09:26 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-27 18:09:26 [INFO] [django.server] "GET /api/reviews/?hotel_id=1 HTTP/1.1" 200 52
+2026-11-27 18:09:27 [INFO] [django.server] "GET /api/hotels/1/ HTTP/1.1" 200 2978
+2026-11-27 18:09:27 [INFO] [django.server] "GET /api/rooms/by-hotel/1/?check_in=2026-11-27&check_out=2026-11-28&rooms=1 HTTP/1.1" 200 5805
+2026-11-27 18:09:30 [INFO] [django.server] "OPTIONS /api/coupons/available/ HTTP/1.1" 200 0
+2026-11-27 18:09:30 [INFO] [django.server] "OPTIONS /api/rooms/1/ HTTP/1.1" 200 0
+2026-11-27 18:09:30 [INFO] [django.server] "OPTIONS /api/rooms/check-availability/?room_id=1&check_in=2026-11-27&check_out=2026-11-28&rooms=1 HTTP/1.1" 200 0
+2026-11-27 18:09:30 [INFO] [django.server] "GET /api/hotels/1/ HTTP/1.1" 200 2978
+2026-11-27 18:09:30 [INFO] [django.server] "GET /api/coupons/available/ HTTP/1.1" 200 19258
+2026-11-27 18:09:30 [INFO] [django.server] "GET /api/rooms/1/ HTTP/1.1" 200 1637
+2026-11-27 18:09:30 [INFO] [django.server] "GET /api/rooms/check-availability/?room_id=1&check_in=2026-11-27&check_out=2026-11-28&rooms=1 HTTP/1.1" 200 1064
+2026-11-27 18:09:51 [INFO] [django.server] "OPTIONS /api/notifications/unread-count/ HTTP/1.1" 200 0
+2026-11-27 18:09:51 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:09:51 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:09:55 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 18:09:55 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1768
+2026-11-27 18:09:55 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 22786
+2026-11-27 18:09:55 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1768
+2026-11-27 18:09:55 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 22786
+2026-11-27 18:09:55 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 18:09:55 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1499
+2026-11-27 18:09:55 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 18:09:55 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 55696
+2026-11-27 18:09:55 [INFO] [django.server] "GET /api/reviews/?owner=true HTTP/1.1" 200 52
+2026-11-27 18:09:56 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:09:57 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:10:17 [INFO] [django.server] "OPTIONS /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 0
+2026-11-27 18:10:17 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:10:17 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:10:17 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:10:19 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:10:20 [INFO] [django.server] "OPTIONS /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 0
+2026-11-27 18:10:20 [INFO] [django.server] "OPTIONS /api/coupons/ HTTP/1.1" 200 0
+2026-11-27 18:10:20 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 18:10:20 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 18:10:20 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:10:20 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 18:10:20 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:10:21 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:10:21 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 18:10:22 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:10:22 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 18:10:24 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:10:29 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:10:30 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:10:44 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 912
+2026-11-27 18:10:44 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:10:44 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:10:44 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 18:10:44 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:10:44 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 18:10:44 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 18:10:44 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 18:10:45 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:10:45 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:10:45 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 18:10:58 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 912
+2026-11-27 18:10:59 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:10:59 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 18:10:59 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:10:59 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 18:10:59 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:10:59 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 18:10:59 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 18:11:00 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:11:00 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:11:00 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 18:11:08 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 912
+2026-11-27 18:11:08 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:11:08 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:11:08 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 18:11:08 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 18:11:08 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 18:11:08 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:11:08 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 18:11:09 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:11:09 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:11:09 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 18:11:16 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:11:16 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:11:16 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 18:11:16 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 18:11:16 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 18:11:17 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 18:11:17 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:11:18 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:11:18 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 18:11:20 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:11:25 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:12:08 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:12:11 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:12:15 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 912
+2026-11-27 18:12:15 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:12:15 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 18:12:15 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:12:15 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 18:12:15 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:12:15 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 18:12:16 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 18:12:16 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:12:16 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:12:17 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 18:12:24 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:12:26 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:12:33 [INFO] [django.server] "OPTIONS /api/rooms/by-hotel/95/ HTTP/1.1" 200 0
+2026-11-27 18:12:33 [INFO] [django.server] "GET /api/rooms/by-hotel/95/ HTTP/1.1" 200 52
+2026-11-27 18:12:48 [ERROR] [payments.views] Razorpay Host Subscription Order creation error: HTTPSConnectionPool(host='api.razorpay.com', port=443): Max retries exceeded with url: /v1/orders (Caused by NameResolutionError("HTTPSConnection(host='api.razorpay.com', port=443): Failed to resolve 'api.razorpay.com' ([Errno 11001] getaddrinfo failed)"))
+2026-11-27 18:13:07 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:13:16 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:13:27 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:13:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:14:15 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\subscription_service.py changed, reloading.
+2026-11-27 18:14:16 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 18:14:17 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:14:28 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:14:34 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:14:37 [WARNING] [django.request] Not Found: /api/tasks/
+2026-11-27 18:14:37 [WARNING] [django.server] "GET /api/tasks/ HTTP/1.1" 404 7199
+2026-11-27 18:14:47 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:15:11 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 18:15:11 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 914
+2026-11-27 18:15:12 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:15:12 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 18:15:12 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1499
+2026-11-27 18:15:12 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 55696
+2026-11-27 18:15:16 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:15:29 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:15:33 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\subscription_service.py changed, reloading.
+2026-11-27 18:15:34 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 18:15:36 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:15:40 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 1923
+2026-11-27 18:15:45 [WARNING] [django.request] Not Found: /api/tasks/
+2026-11-27 18:15:45 [WARNING] [django.server] "GET /api/tasks/ HTTP/1.1" 404 7199
+2026-11-27 18:15:53 [INFO] [django.server] "GET /api/payments/support-tickets/ HTTP/1.1" 200 52
+2026-11-27 18:15:55 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 22786
+2026-11-27 18:16:04 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py changed, reloading.
+2026-11-27 18:16:04 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 18:16:07 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 911
+2026-11-27 18:16:09 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py changed, reloading.
+2026-11-27 18:16:10 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 18:16:14 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:16:16 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py changed, reloading.
+2026-11-27 18:16:17 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 18:16:19 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:16:19 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:16:19 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:16:30 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:16:34 [INFO] [django.server] "POST /api/users/login/ HTTP/1.1" 200 1625
+2026-11-27 18:16:34 [INFO] [django.server] "GET /api/users/profile/ HTTP/1.1" 200 813
+2026-11-27 18:16:34 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1547
+2026-11-27 18:16:34 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 22817
+2026-11-27 18:16:34 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 214401
+2026-11-27 18:16:40 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py changed, reloading.
+2026-11-27 18:16:41 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 18:16:44 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:17:03 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\urls.py changed, reloading.
+2026-11-27 18:17:04 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 18:17:05 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:17:10 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\urls.py changed, reloading.
+2026-11-27 18:17:11 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 18:17:12 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:17:12 [WARNING] [django.request] Not Found: /api/tasks/
+2026-11-27 18:17:12 [WARNING] [django.server] "GET /api/tasks/ HTTP/1.1" 404 7199
+2026-11-27 18:17:16 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:17:26 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\config\urls.py changed, reloading.
+2026-11-27 18:17:27 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 18:17:31 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:17:34 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\config\urls.py changed, reloading.
+2026-11-27 18:17:35 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 18:17:45 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:17:49 [INFO] [django.server] "GET /api/rooms/by-hotel/47/ HTTP/1.1" 200 1068
+2026-11-27 18:17:57 [INFO] [django.server] "GET /api/notifications/ HTTP/1.1" 200 6800
+2026-11-27 18:18:14 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:18:15 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:18:20 [ERROR] [payments.views] Razorpay Host Subscription Order creation error: HTTPSConnectionPool(host='api.razorpay.com', port=443): Max retries exceeded with url: /v1/orders (Caused by NameResolutionError("HTTPSConnection(host='api.razorpay.com', port=443): Failed to resolve 'api.razorpay.com' ([Errno 11001] getaddrinfo failed)"))
+2026-11-27 18:18:30 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:18:32 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:19:00 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:19:02 [INFO] [django.server] "OPTIONS /api/hotels/cities/ HTTP/1.1" 200 0
+2026-11-27 18:19:02 [INFO] [django.server] "GET /api/wishlist/ HTTP/1.1" 200 52
+2026-11-27 18:19:02 [INFO] [django.server] "GET /api/hotels/ HTTP/1.1" 200 18685
+2026-11-27 18:19:02 [INFO] [django.server] "GET /api/hotels/cities/ HTTP/1.1" 200 47
+2026-11-27 18:19:02 [ERROR] [payments.views] Razorpay Host Subscription Order creation error: HTTPSConnectionPool(host='api.razorpay.com', port=443): Max retries exceeded with url: /v1/orders (Caused by NameResolutionError("HTTPSConnection(host='api.razorpay.com', port=443): Failed to resolve 'api.razorpay.com' ([Errno 11001] getaddrinfo failed)"))
+2026-11-27 18:19:10 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:19:17 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:19:21 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 53131
+2026-11-27 18:19:33 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:19:34 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:20:03 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:20:33 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:20:34 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:20:35 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:20:35 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:20:44 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:20:44 [INFO] [django.server] "OPTIONS /api/payments/support-tickets/ HTTP/1.1" 200 0
+2026-11-27 18:20:44 [INFO] [django.server] "GET /api/payments/support-tickets/ HTTP/1.1" 200 3677
+2026-11-27 18:20:45 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:20:55 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:20:58 [INFO] [django.server] "GET /api/notifications/ HTTP/1.1" 200 6800
+2026-11-27 18:21:16 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:21:34 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:21:35 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:21:48 [WARNING] [django.request] Bad Request: /api/payments/admin/payouts/initiate/
+2026-11-27 18:21:57 [ERROR] [core.exceptions] Unhandled server error: NOT NULL constraint failed: payments_hostsubscription.refund_amount
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\sqlite3\base.py", line 359, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: NOT NULL constraint failed: payments_hostsubscription.refund_amount
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\views.py", line 523, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py", line 4110, in get
+    active_sub = get_or_sync_active_subscription(user) if user else None
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\payments\subscription_service.py", line 156, in get_or_sync_active_subscription
+    current_active = HostSubscription.objects.create(
+        user=user,
+    ...<6 lines>...
+        billing_cycle='ANNUAL'
+    )
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\query.py", line 752, in create
+    obj.save(force_insert=True, using=self.db)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 904, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 996, in save_base
+    updated = self._save_table(
+        raw,
+    ...<4 lines>...
+        update_fields,
+    )
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 1201, in _save_table
+    results = self._do_insert(
+        cls._base_manager, using, insert_fields, returning_fields, raw
+    )
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 1253, in _do_insert
+    return manager._insert(
+           ~~~~~~~~~~~~~~~^
+        [self],
+        ^^^^^^^
+    ...<3 lines>...
+        raw=raw,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\query.py", line 2166, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\sql\compiler.py", line 1954, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\sqlite3\base.py", line 359, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: NOT NULL constraint failed: payments_hostsubscription.refund_amount
+2026-11-27 18:21:57 [ERROR] [django.request] Internal Server Error: /api/payments/host-subscriptions/
+2026-11-27 18:22:01 [ERROR] [core.exceptions] Unhandled server error: NOT NULL constraint failed: payments_hostsubscription.refund_amount
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\sqlite3\base.py", line 359, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: NOT NULL constraint failed: payments_hostsubscription.refund_amount
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\views.py", line 523, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py", line 4110, in get
+    active_sub = get_or_sync_active_subscription(user) if user else None
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\payments\subscription_service.py", line 156, in get_or_sync_active_subscription
+    current_active = HostSubscription.objects.create(
+        user=user,
+    ...<6 lines>...
+        billing_cycle='ANNUAL'
+    )
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\query.py", line 752, in create
+    obj.save(force_insert=True, using=self.db)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 904, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 996, in save_base
+    updated = self._save_table(
+        raw,
+    ...<4 lines>...
+        update_fields,
+    )
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 1201, in _save_table
+    results = self._do_insert(
+        cls._base_manager, using, insert_fields, returning_fields, raw
+    )
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 1253, in _do_insert
+    return manager._insert(
+           ~~~~~~~~~~~~~~~^
+        [self],
+        ^^^^^^^
+    ...<3 lines>...
+        raw=raw,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\query.py", line 2166, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\sql\compiler.py", line 1954, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\sqlite3\base.py", line 359, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: NOT NULL constraint failed: payments_hostsubscription.refund_amount
+2026-11-27 18:22:01 [ERROR] [django.request] Internal Server Error: /api/payments/host-subscriptions/
+2026-11-27 18:22:05 [ERROR] [core.exceptions] Unhandled server error: NOT NULL constraint failed: payments_hostsubscription.refund_amount
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\sqlite3\base.py", line 359, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: NOT NULL constraint failed: payments_hostsubscription.refund_amount
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\views.py", line 523, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py", line 4346, in post
+    sub, is_scheduled, message = queue_or_activate_subscription(
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        user=user,
+        ^^^^^^^^^^
+        plan_id=plan_id
+        ^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\payments\subscription_service.py", line 189, in queue_or_activate_subscription
+    active_sub = get_or_sync_active_subscription(user)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\payments\subscription_service.py", line 156, in get_or_sync_active_subscription
+    current_active = HostSubscription.objects.create(
+        user=user,
+    ...<6 lines>...
+        billing_cycle='ANNUAL'
+    )
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\query.py", line 752, in create
+    obj.save(force_insert=True, using=self.db)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 904, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 996, in save_base
+    updated = self._save_table(
+        raw,
+    ...<4 lines>...
+        update_fields,
+    )
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 1201, in _save_table
+    results = self._do_insert(
+        cls._base_manager, using, insert_fields, returning_fields, raw
+    )
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 1253, in _do_insert
+    return manager._insert(
+           ~~~~~~~~~~~~~~~^
+        [self],
+        ^^^^^^^
+    ...<3 lines>...
+        raw=raw,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\query.py", line 2166, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\sql\compiler.py", line 1954, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\sqlite3\base.py", line 359, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: NOT NULL constraint failed: payments_hostsubscription.refund_amount
+2026-11-27 18:22:05 [ERROR] [django.request] Internal Server Error: /api/payments/host-subscriptions/
+2026-11-27 18:22:09 [WARNING] [django.request] Bad Request: /api/payments/host-subscriptions/
+2026-11-27 18:22:09 [INFO] [django.server] "OPTIONS /api/payments/settlements/ HTTP/1.1" 200 0
+2026-11-27 18:22:09 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:22:09 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 18:22:09 [INFO] [django.server] "OPTIONS /api/payments/settings/ HTTP/1.1" 200 0
+2026-11-27 18:22:09 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 18:22:09 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:22:09 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 18:22:09 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:22:09 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 18:22:09 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 18:22:09 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 18:22:10 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:22:13 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 18:22:13 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 18:22:14 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:22:15 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:22:15 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:22:15 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 18:22:15 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:22:16 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:22:16 [ERROR] [core.exceptions] Unhandled server error: NOT NULL constraint failed: payments_hostsubscription.refund_amount
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\sqlite3\base.py", line 359, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: NOT NULL constraint failed: payments_hostsubscription.refund_amount
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\views.py", line 523, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py", line 4346, in post
+    sub, is_scheduled, message = queue_or_activate_subscription(
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        user=user,
+        ^^^^^^^^^^
+        plan_id=plan_id
+        ^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\payments\subscription_service.py", line 189, in queue_or_activate_subscription
+    active_sub = get_or_sync_active_subscription(user)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\payments\subscription_service.py", line 156, in get_or_sync_active_subscription
+    current_active = HostSubscription.objects.create(
+        user=user,
+    ...<6 lines>...
+        billing_cycle='ANNUAL'
+    )
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\query.py", line 752, in create
+    obj.save(force_insert=True, using=self.db)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 904, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 996, in save_base
+    updated = self._save_table(
+        raw,
+    ...<4 lines>...
+        update_fields,
+    )
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 1201, in _save_table
+    results = self._do_insert(
+        cls._base_manager, using, insert_fields, returning_fields, raw
+    )
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\base.py", line 1253, in _do_insert
+    return manager._insert(
+           ~~~~~~~~~~~~~~~^
+        [self],
+        ^^^^^^^
+    ...<3 lines>...
+        raw=raw,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\query.py", line 2166, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\models\sql\compiler.py", line 1954, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\django\db\backends\sqlite3\base.py", line 359, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: NOT NULL constraint failed: payments_hostsubscription.refund_amount
+2026-11-27 18:22:16 [ERROR] [django.request] Internal Server Error: /api/payments/host-subscriptions/
+2026-11-27 18:22:16 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 18:22:25 [WARNING] [django.request] Bad Request: /api/payments/payout-account/
+2026-11-27 18:22:32 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:22:32 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 18:22:32 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 18:22:32 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 18:22:32 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:22:32 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:22:32 [INFO] [django.server] "GET /api/payments/admin/provider-setup-status/ HTTP/1.1" 200 1120
+2026-11-27 18:22:33 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 18:22:33 [INFO] [django.server] "GET /api/payments/settings/ HTTP/1.1" 200 398
+2026-11-27 18:22:33 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:22:35 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 18:22:36 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:22:36 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:22:38 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:22:38 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 18:22:39 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:22:40 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 18:22:40 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:22:40 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 18:22:42 [WARNING] [django.request] Bad Request: /api/payments/admin/payouts/initiate/
+2026-11-27 18:23:09 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py changed, reloading.
+2026-11-27 18:23:10 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 18:23:16 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:23:36 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:23:51 [WARNING] [django.request] Bad Request: /api/payments/admin/payouts/initiate/
+2026-11-27 18:24:11 [WARNING] [django.request] Bad Request: /api/payments/host-subscriptions/
+2026-11-27 18:24:15 [WARNING] [django.request] Unauthorized: /api/payments/host-subscriptions/
+2026-11-27 18:24:16 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:24:20 [WARNING] [django.request] Forbidden: /api/hotels/owner/hotels/
+2026-11-27 18:24:23 [WARNING] [django.request] Bad Request: /api/payments/payout-account/
+2026-11-27 18:24:31 [WARNING] [django.request] Forbidden: /api/rooms/
+2026-11-27 18:24:35 [WARNING] [django.request] Bad Request: /api/payments/admin/payouts/initiate/
+2026-11-27 18:24:36 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:25:03 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:25:11 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py changed, reloading.
+2026-11-27 18:25:13 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 18:25:16 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:25:21 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:25:21 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 24749
+2026-11-27 18:25:21 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1547
+2026-11-27 18:25:21 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 214401
+2026-11-27 18:25:21 [INFO] [django.server] "GET /api/payments/host-subscriptions/ HTTP/1.1" 200 63320
+2026-11-27 18:25:21 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 52
+2026-11-27 18:25:21 [INFO] [django.server] "GET /api/hotels/owner-hotels/ HTTP/1.1" 200 1499
+2026-11-27 18:25:36 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:26:10 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py changed, reloading.
+2026-11-27 18:26:11 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 18:26:32 [ERROR] [core.exceptions] Unhandled server error: name 'HostSubscription' is not defined
+Traceback (most recent call last):
+  File "C:\Users\Raj\AppData\Roaming\Python\Python314\site-packages\rest_framework\views.py", line 523, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py", line 4346, in post
+    if active_sub and active_sub.plan_id == 'SILVER' and not HostSubscription.objects.filter(user=request.user, status=HostSubscription.STATUS_SCHEDULED).exists():
+                                                             ^^^^^^^^^^^^^^^^
+NameError: name 'HostSubscription' is not defined. Did you mean: 'HostSubscriptionView'?
+2026-11-27 18:26:32 [ERROR] [django.request] Internal Server Error: /api/payments/host-subscriptions/
+2026-11-27 18:26:33 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:26:36 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:26:40 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\payments\views.py changed, reloading.
+2026-11-27 18:26:41 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader
+2026-11-27 18:27:10 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:27:15 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:27:19 [INFO] [django.server] "GET /api/reviews/?owner=true HTTP/1.1" 200 1316
+2026-11-27 18:27:34 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:27:36 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:27:37 [INFO] [django.server] "GET /api/hotels/?page_size=1000&sort_by=newest HTTP/1.1" 200 23633
+2026-11-27 18:27:43 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 18:27:44 [INFO] [django.server] "GET /api/coupons/ HTTP/1.1" 200 4313
+2026-11-27 18:27:44 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:27:44 [INFO] [django.server] "GET /api/payments/admin/refunds/? HTTP/1.1" 200 56015
+2026-11-27 18:27:45 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 18:27:45 [INFO] [django.server] "OPTIONS /api/staff/?page=1 HTTP/1.1" 200 0
+2026-11-27 18:27:45 [INFO] [django.server] "OPTIONS /api/staff/departments/ HTTP/1.1" 200 0
+2026-11-27 18:27:45 [INFO] [django.server] "OPTIONS /api/staff/dashboard/ HTTP/1.1" 200 0
+2026-11-27 18:27:45 [INFO] [django.server] "GET /api/staff/departments/ HTTP/1.1" 200 1596
+2026-11-27 18:27:45 [INFO] [django.server] "GET /api/staff/dashboard/ HTTP/1.1" 200 1644
+2026-11-27 18:27:45 [INFO] [django.server] "GET /api/staff/?page=1 HTTP/1.1" 200 13134
+2026-11-27 18:27:46 [INFO] [django.server] "GET /api/payments/admin/all/?page_size=1000 HTTP/1.1" 200 67236
+2026-11-27 18:27:46 [INFO] [django.server] "GET /api/users/all/ HTTP/1.1" 200 6377
+2026-11-27 18:27:47 [INFO] [django.server] "GET /api/payments/settlements/ HTTP/1.1" 200 115944
+2026-11-27 18:28:03 [WARNING] [django.request] Unauthorized: /api/payments/host-subscriptions/
+2026-11-27 18:28:15 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:28:19 [INFO] [django.server] "GET /api/payments/support-tickets/ HTTP/1.1" 200 3677
+2026-11-27 18:28:20 [INFO] [django.server] "GET /api/bookings/?page_size=1000 HTTP/1.1" 200 683994
+2026-11-27 18:28:35 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:28:36 [INFO] [django.server] "GET /api/notifications/unread-count/ HTTP/1.1" 200 18
+2026-11-27 18:28:52 [INFO] [django.utils.autoreload] D:\BookMyRoomBackend\BookMyRoomBackend\config\urls.py changed, reloading.
+2026-11-27 18:28:55 [INFO] [django.utils.autoreload] Watching for file changes with StatReloader

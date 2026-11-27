@@ -1,4 +1,5 @@
 import uuid
+from decimal import Decimal
 from django.db import models
 from django.conf import settings
 from bookings.models import Booking
@@ -609,3 +610,53 @@ class AuditLog(models.Model):
 
     def __str__(self):
         return f"AuditLog {self.action} on {self.entity_type} by {self.user}"
+
+
+class HostSubscription(models.Model):
+    STATUS_ACTIVE = 'ACTIVE'
+    STATUS_SCHEDULED = 'SCHEDULED'
+    STATUS_EXPIRED = 'EXPIRED'
+    STATUS_CANCELLED = 'CANCELLED'
+
+    STATUS_CHOICES = (
+        (STATUS_ACTIVE, 'Active'),
+        (STATUS_SCHEDULED, 'Scheduled (Queued)'),
+        (STATUS_EXPIRED, 'Expired'),
+        (STATUS_CANCELLED, 'Cancelled'),
+    )
+
+    PLAN_SILVER = 'SILVER'
+    PLAN_GOLD = 'GOLD'
+    PLAN_PLATINUM = 'PLATINUM'
+
+    PLAN_CHOICES = (
+        (PLAN_SILVER, 'Silver Plan'),
+        (PLAN_GOLD, 'Gold Plan'),
+        (PLAN_PLATINUM, 'Platinum Plan'),
+    )
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='host_subscriptions')
+    plan_id = models.CharField(max_length=20, choices=PLAN_CHOICES, default=PLAN_SILVER, db_index=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_ACTIVE, db_index=True)
+    start_date = models.DateTimeField(db_index=True)
+    end_date = models.DateTimeField(db_index=True)
+    amount_paid = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
+    currency = models.CharField(max_length=10, default='INR')
+    billing_cycle = models.CharField(max_length=20, default='ANNUAL')
+    razorpay_order_id = models.CharField(max_length=100, blank=True, null=True, db_index=True)
+    razorpay_payment_id = models.CharField(max_length=100, blank=True, null=True, db_index=True)
+    auto_renew = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-start_date']
+        indexes = [
+            models.Index(fields=['user', 'status']),
+            models.Index(fields=['status', 'end_date']),
+            models.Index(fields=['user', 'start_date', 'end_date']),
+        ]
+
+    def __str__(self):
+        return f"{self.user.username} - {self.plan_id} ({self.status}) [{self.start_date.strftime('%Y-%m-%d')} to {self.end_date.strftime('%Y-%m-%d')}]"
+

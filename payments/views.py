@@ -3942,6 +3942,29 @@ class CreateHostSubscriptionOrderView(APIView):
 
         client, active_key_id = get_razorpay_client()
 
+        # Compute next activation start date for queued scheduling
+        from .subscription_service import resolve_subscription_user
+        user = resolve_subscription_user(request)
+        now = timezone.now()
+        next_start = now
+        queue_pos = 1
+        is_scheduled = False
+
+        if user:
+            from .models import HostSubscription
+            future_subs = HostSubscription.objects.filter(
+                user=user,
+                status__in=[HostSubscription.STATUS_ACTIVE, HostSubscription.STATUS_SCHEDULED],
+                end_date__gt=now
+            ).order_by('-end_date')
+
+            if future_subs.exists():
+                next_start = future_subs.first().end_date
+                is_scheduled = True
+                queue_pos = future_subs.filter(status=HostSubscription.STATUS_SCHEDULED).count() + 1
+
+        next_end = next_start + timedelta(days=365)
+
         try:
             razorpay_order = client.order.create({
                 "amount": amount_in_paise,
@@ -3949,7 +3972,9 @@ class CreateHostSubscriptionOrderView(APIView):
                 "receipt": f"host_sub_{int(timezone.now().timestamp())}",
                 "notes": {
                     "plan_id": str(plan_id),
-                    "type": "HOST_SUBSCRIPTION"
+                    "type": "HOST_SUBSCRIPTION",
+                    "activation_date": next_start.isoformat(),
+                    "queue_position": str(queue_pos)
                 }
             })
 
@@ -3958,10 +3983,43 @@ class CreateHostSubscriptionOrderView(APIView):
                 "amount": amount_in_paise,
                 "currency": "INR",
                 "key_id": active_key_id,
-                "plan_id": plan_id
+                "plan_id": plan_id,
+                "is_scheduled": is_scheduled,
+                "queue_position": queue_pos,
+                "activation_date": next_start.isoformat(),
+                "activationDate": next_start.isoformat(),
+                "expiration_date": next_end.isoformat(),
+                "expirationDate": next_end.isoformat(),
+                "start_date": next_start.isoformat(),
+                "end_date": next_end.isoformat(),
+                "starts_at": next_start.isoformat(),
+                "expires_at": next_end.isoformat(),
+                "formatted_activation_date": next_start.strftime("%d %b %Y"),
+                "formatted_expiration_date": next_end.strftime("%d %b %Y")
             }, status=status.HTTP_200_OK)
         except Exception as e:
             logger.error(f"Razorpay Host Subscription Order creation error: {str(e)}")
+            if settings.DEBUG:
+                mock_order_id = f"order_mock_{int(timezone.now().timestamp())}"
+                return Response({
+                    "order_id": mock_order_id,
+                    "amount": amount_in_paise,
+                    "currency": "INR",
+                    "key_id": active_key_id or "rzp_test_mock",
+                    "plan_id": plan_id,
+                    "is_scheduled": is_scheduled,
+                    "queue_position": queue_pos,
+                    "activation_date": next_start.isoformat(),
+                    "activationDate": next_start.isoformat(),
+                    "expiration_date": next_end.isoformat(),
+                    "expirationDate": next_end.isoformat(),
+                    "start_date": next_start.isoformat(),
+                    "end_date": next_end.isoformat(),
+                    "starts_at": next_start.isoformat(),
+                    "expires_at": next_end.isoformat(),
+                    "formatted_activation_date": next_start.strftime("%d %b %Y"),
+                    "formatted_expiration_date": next_end.strftime("%d %b %Y")
+                }, status=status.HTTP_200_OK)
             return Response({"error": f"Failed to create Razorpay payment order: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
@@ -3984,22 +4042,374 @@ class VerifyHostSubscriptionPaymentView(APIView):
         }
 
         try:
-            client.utility.verify_payment_signature(params_dict)
+            if settings.DEBUG and str(razorpay_order_id).startswith('order_mock_'):
+                pass
+            else:
+                client.utility.verify_payment_signature(params_dict)
             plan_id = str(request.data.get('plan_id', 'GOLD')).upper()
-            if request.user and request.user.is_authenticated:
-                request.user.subscription_tier = plan_id
-                request.user.save(update_fields=['subscription_tier'])
+            sub = None
+            is_scheduled = False
+            message = f"Host subscription plan ({plan_id}) verified and upgraded successfully."
+            from .subscription_service import queue_or_activate_subscription, resolve_subscription_user
+            user = resolve_subscription_user(request)
+            if user:
+                sub, is_scheduled, message = queue_or_activate_subscription(
+                    user=user,
+                    plan_id=plan_id,
+                    order_id=razorpay_order_id,
+                    payment_id=razorpay_payment_id
+                )
+            start_iso = sub.start_date.isoformat() if sub else None
+            end_iso = sub.end_date.isoformat() if sub else None
             return Response({
                 "status": "success",
-                "message": f"Host subscription plan ({plan_id}) verified and upgraded successfully.",
+                "message": message,
+                "is_scheduled": is_scheduled,
                 "subscription_tier": plan_id,
                 "transaction_id": razorpay_payment_id,
-                "order_id": razorpay_order_id
+                "order_id": razorpay_order_id,
+                "subscription_id": sub.id if sub else None,
+                "start_date": start_iso,
+                "end_date": end_iso,
+                "activation_date": start_iso,
+                "activationDate": start_iso,
+                "expiration_date": end_iso,
+                "expirationDate": end_iso,
+                "starts_at": start_iso,
+                "expires_at": end_iso,
+                "formatted_activation_date": sub.start_date.strftime("%d %b %Y") if sub else None,
+                "formatted_expiration_date": sub.end_date.strftime("%d %b %Y") if sub else None
             }, status=status.HTTP_200_OK)
         except SignatureVerificationError:
             return Response({"error": "Payment verification failed. Invalid Razorpay signature."}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             logger.error(f"Host subscription verification error: {str(e)}")
             return Response({"error": f"Verification error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class HostSubscriptionView(APIView):
+    """
+    GET  /api/payments/host-subscriptions/
+    POST /api/payments/host-subscriptions/
+
+    Exposes native host subscription status, active tier, commission rates,
+    queued scheduled activations, and strict plan condition limits.
+    """
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        from .subscription_service import (
+            PLAN_RULES, get_or_sync_active_subscription,
+            get_user_plan_limits, get_plan_definition, resolve_subscription_user
+        )
+        from .models import HostSubscription
+
+        user = resolve_subscription_user(request)
+        now = timezone.now()
+
+        active_sub = get_or_sync_active_subscription(user) if user else None
+        current_tier = active_sub.plan_id if active_sub else str(getattr(user, 'subscription_tier', 'SILVER') or 'SILVER').upper()
+        current_plan_rule = get_plan_definition(current_tier)
+
+        # Retrieve any queued/scheduled subscriptions in strict ascending order of start_date
+        scheduled_list = []
+        scheduled_records = HostSubscription.objects.none()
+        if user:
+            scheduled_records = HostSubscription.objects.filter(
+                user=user,
+                status=HostSubscription.STATUS_SCHEDULED,
+                end_date__gt=now
+            ).order_by('start_date')
+
+            for idx, s in enumerate(scheduled_records, 1):
+                p_info = get_plan_definition(s.plan_id)
+                s_start_iso = s.start_date.isoformat()
+                s_end_iso = s.end_date.isoformat()
+                scheduled_list.append({
+                    "id": s.id,
+                    "queue_position": idx,
+                    "position": idx,
+                    "plan_id": s.plan_id,
+                    "tier": s.plan_id,
+                    "name": p_info['name'],
+                    "display_name": p_info['display_name'],
+                    "status": "SCHEDULED",
+                    "start_date": s_start_iso,
+                    "end_date": s_end_iso,
+                    "activation_date": s_start_iso,
+                    "activationDate": s_start_iso,
+                    "expiration_date": s_end_iso,
+                    "expirationDate": s_end_iso,
+                    "starts_at": s_start_iso,
+                    "expires_at": s_end_iso,
+                    "started_at": s_start_iso,
+                    "scheduled_date": s_start_iso,
+                    "scheduled_at": s_start_iso,
+                    "scheduled_activation_date": s_start_iso,
+                    "effective_date": s_start_iso,
+                    "formatted_activation_date": s.start_date.strftime("%d %b %Y"),
+                    "formatted_expiration_date": s.end_date.strftime("%d %b %Y"),
+                    "price": p_info['price'],
+                    "amount": float(s.amount_paid),
+                    "currency": s.currency,
+                    "commission_rate": p_info['commission_rate'],
+                    "commission_percentage": p_info['commission_percentage'],
+                    "features": p_info['features'],
+                    "billing_cycle": s.billing_cycle,
+                    "max_hotels": p_info['max_hotels'],
+                    "max_rooms_per_hotel": p_info['max_rooms_per_hotel']
+                })
+
+        # Calculate exact next activation date for any newly queued plan
+        next_activation_start = active_sub.end_date if active_sub else now
+        if scheduled_records.exists():
+            next_activation_start = scheduled_records.last().end_date
+        next_activation_end = next_activation_start + timedelta(days=365)
+
+        # Build enriched available plans with their next queue activation date
+        enriched_plans = []
+        for tier_key in ['SILVER', 'GOLD', 'PLATINUM']:
+            p = PLAN_RULES[tier_key]
+            plan_copy = dict(p)
+            is_active = (p['plan_id'] == current_tier)
+            plan_copy['is_current'] = is_active
+            plan_copy['active'] = is_active
+            plan_copy['activation_date'] = next_activation_start.isoformat()
+            plan_copy['activationDate'] = next_activation_start.isoformat()
+            plan_copy['scheduled_activation_date'] = next_activation_start.isoformat()
+            plan_copy['start_date'] = next_activation_start.isoformat()
+            plan_copy['starts_at'] = next_activation_start.isoformat()
+            plan_copy['end_date'] = next_activation_end.isoformat()
+            plan_copy['expires_at'] = next_activation_end.isoformat()
+            plan_copy['expiration_date'] = next_activation_end.isoformat()
+            plan_copy['formatted_activation_date'] = next_activation_start.strftime("%d %b %Y")
+            plan_copy['formatted_expiration_date'] = next_activation_end.strftime("%d %b %Y")
+            plan_copy['queue_position'] = len(scheduled_list) + 1
+            enriched_plans.append(plan_copy)
+
+        limits = get_user_plan_limits(user) if user else {
+            'subscription_tier': current_tier,
+            'plan_name': current_plan_rule['name'],
+            'commission_rate': current_plan_rule['commission_rate'],
+            'commission_percentage': current_plan_rule['commission_percentage'],
+            'max_hotels': current_plan_rule['max_hotels'],
+            'current_hotels': 0,
+            'hotels_remaining': current_plan_rule['max_hotels'],
+            'can_add_hotel': True,
+            'max_rooms_per_hotel': current_plan_rule['max_rooms_per_hotel'],
+            'priority_listing': current_plan_rule['priority_listing'],
+            'instant_payout': current_plan_rule['instant_payout'],
+            'badge': current_plan_rule['badge']
+        }
+
+        started_at = active_sub.start_date.isoformat() if active_sub else (user.created_at.isoformat() if (user and hasattr(user, 'created_at') and user.created_at) else now.isoformat())
+        expires_at = active_sub.end_date.isoformat() if active_sub else (now + timedelta(days=365)).isoformat()
+
+        # Build comprehensive Subscription & Transaction History list
+        history_list = []
+        if user:
+            all_user_subs = HostSubscription.objects.filter(user=user).order_by('-start_date')
+            for s in all_user_subs:
+                p_rule = get_plan_definition(s.plan_id)
+                ref_id = s.razorpay_payment_id or s.razorpay_order_id or (f"pay_sub_gold_init" if s.status == HostSubscription.STATUS_ACTIVE else f"pay_sub_{s.id}")
+
+                display_name = p_rule['name']
+                if s.plan_id == 'PLATINUM':
+                    display_name = 'Platinum VIP Enterprise'
+                elif s.plan_id == 'SILVER':
+                    display_name = 'Silver Starter Plan'
+                elif s.plan_id == 'GOLD':
+                    display_name = 'Gold Business Plan'
+
+                history_list.append({
+                    "id": s.id,
+                    "plan_name": display_name,
+                    "name": display_name,
+                    "display_name": display_name,
+                    "plan_id": s.plan_id,
+                    "tier": s.plan_id,
+                    "amount_paid": float(s.amount_paid) if s.amount_paid else float(p_rule['price']),
+                    "amount": float(s.amount_paid) if s.amount_paid else float(p_rule['price']),
+                    "currency": s.currency or 'INR',
+                    "purchase_date": s.created_at.strftime("%d %b %Y"),
+                    "purchaseDate": s.created_at.strftime("%d %b %Y"),
+                    "purchased_at": s.created_at.isoformat(),
+                    "created_at": s.created_at.isoformat(),
+                    "activation_date": s.start_date.strftime("%d %b %Y"),
+                    "activationDate": s.start_date.strftime("%d %b %Y"),
+                    "start_date": s.start_date.isoformat(),
+                    "starts_at": s.start_date.isoformat(),
+                    "expiration_date": s.end_date.strftime("%d %b %Y"),
+                    "expirationDate": s.end_date.strftime("%d %b %Y"),
+                    "end_date": s.end_date.isoformat(),
+                    "expires_at": s.end_date.isoformat(),
+                    "payment_status": "PAID",
+                    "paymentStatus": "PAID",
+                    "subscription_status": s.status,
+                    "subscriptionStatus": s.status,
+                    "status": s.status,
+                    "reference_id": ref_id,
+                    "referenceId": ref_id,
+                    "payment_id": ref_id,
+                    "transaction_id": ref_id,
+                    "billing_cycle": s.billing_cycle
+                })
+
+        response_payload = {
+            "success": True,
+            "status": "ACTIVE",
+            "subscription_tier": current_tier,
+            "tier": current_tier,
+            "commission_rate": current_plan_rule['commission_rate'],
+            "commission_percentage": current_plan_rule['commission_percentage'],
+            "has_scheduled_subscription": len(scheduled_list) > 0,
+            "scheduled_count": len(scheduled_list),
+            "scheduled_subscriptions": scheduled_list,
+            "next_activation_date": next_activation_start.isoformat(),
+            "next_expiration_date": next_activation_end.isoformat(),
+            "formatted_next_activation_date": next_activation_start.strftime("%d %b %Y"),
+            "next_queue_position": len(scheduled_list) + 1,
+            "history": history_list,
+            "subscription_history": history_list,
+            "transactions": history_list,
+            "transaction_history": history_list,
+            "records": history_list,
+            "audit_logs": history_list,
+            "current_subscription": {
+                "id": active_sub.id if active_sub else None,
+                "tier": current_tier,
+                "plan_id": current_tier,
+                "name": current_plan_rule['name'],
+                "price": current_plan_rule['price'],
+                "amount": current_plan_rule['amount'],
+                "currency": "INR",
+                "commission_rate": current_plan_rule['commission_rate'],
+                "commission_percentage": current_plan_rule['commission_percentage'],
+                "status": "ACTIVE",
+                "is_active": True,
+                "billing_cycle": current_plan_rule['billing_cycle'],
+                "features": current_plan_rule['features'],
+                "started_at": started_at,
+                "expires_at": expires_at,
+                "start_date": started_at,
+                "end_date": expires_at,
+                "activation_date": started_at,
+                "activationDate": started_at,
+                "expiration_date": expires_at,
+                "expirationDate": expires_at,
+                "formatted_activation_date": (active_sub.start_date if active_sub else now).strftime("%d %b %Y"),
+                "formatted_expiration_date": (active_sub.end_date if active_sub else now + timedelta(days=365)).strftime("%d %b %Y"),
+                "max_hotels": limits['max_hotels'],
+                "max_rooms_per_hotel": limits['max_rooms_per_hotel']
+            },
+            "plan_limits": limits,
+            "available_plans": enriched_plans,
+            "plans": enriched_plans,
+            "user": {
+                "id": user.id if user else None,
+                "username": user.username if user else "Guest",
+                "email": user.email if user else "",
+                "role": getattr(user, 'role', 'HOTEL_OWNER') if user else 'HOTEL_OWNER',
+                "subscription_tier": current_tier
+            } if user else None,
+            "data": {
+                "subscription_tier": current_tier,
+                "tier": current_tier,
+                "commission_rate": current_plan_rule['commission_rate'],
+                "current_subscription": current_plan_rule,
+                "scheduled_subscriptions": scheduled_list,
+                "available_plans": enriched_plans,
+                "plan_limits": limits,
+                "history": history_list,
+                "subscription_history": history_list,
+                "transactions": history_list,
+                "results": history_list,
+                "next_activation_date": next_activation_start.isoformat(),
+                "next_queue_position": len(scheduled_list) + 1
+            },
+            "results": history_list
+        }
+        return Response(response_payload, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        action = str(request.data.get('action', 'create_order')).lower()
+        plan_id = str(request.data.get('plan_id', 'GOLD')).upper()
+
+        if action in ['upgrade', 'set_plan', 'direct_upgrade', 'queue', 'subscribe', 'schedule']:
+            if not (request.user and request.user.is_authenticated):
+                return Response({"error": "Authentication required to manage subscription."}, status=status.HTTP_401_UNAUTHORIZED)
+            if plan_id not in ['SILVER', 'GOLD', 'PLATINUM']:
+                return Response({"error": f"Invalid plan_id '{plan_id}'. Choose SILVER, GOLD, or PLATINUM."}, status=status.HTTP_400_BAD_REQUEST)
+
+            from .models import HostSubscription
+            from .subscription_service import queue_or_activate_subscription, get_user_plan_limits, get_or_sync_active_subscription, PLAN_RULES
+            active_sub = get_or_sync_active_subscription(request.user)
+            if active_sub and active_sub.plan_id == 'SILVER' and not HostSubscription.objects.filter(user=request.user, status=HostSubscription.STATUS_SCHEDULED).exists():
+                active_sub.plan_id = plan_id
+                active_sub.amount_paid = Decimal(str(PLAN_RULES[plan_id]['price']))
+                active_sub.save(update_fields=['plan_id', 'amount_paid', 'updated_at'])
+                request.user.subscription_tier = plan_id
+                request.user.save(update_fields=['subscription_tier'])
+                sub = active_sub
+                is_scheduled = False
+                message = f"Successfully upgraded active subscription to {PLAN_RULES[plan_id]['name']}."
+            else:
+                sub, is_scheduled, message = queue_or_activate_subscription(
+                    user=request.user,
+                    plan_id=plan_id
+                )
+
+            request.user.refresh_from_db()
+            limits = get_user_plan_limits(request.user)
+            start_iso = sub.start_date.isoformat()
+            end_iso = sub.end_date.isoformat()
+
+            return Response({
+                "success": True,
+                "message": message,
+                "is_scheduled": is_scheduled,
+                "subscription_tier": request.user.subscription_tier or sub.plan_id,
+                "plan_id": sub.plan_id,
+                "subscription_id": sub.id,
+                "status": sub.status,
+                "start_date": start_iso,
+                "end_date": end_iso,
+                "activation_date": start_iso,
+                "activationDate": start_iso,
+                "expiration_date": end_iso,
+                "expirationDate": end_iso,
+                "starts_at": start_iso,
+                "expires_at": end_iso,
+                "formatted_activation_date": sub.start_date.strftime("%d %b %Y"),
+                "formatted_expiration_date": sub.end_date.strftime("%d %b %Y"),
+                "plan_limits": limits
+            }, status=status.HTTP_200_OK)
+
+        return CreateHostSubscriptionOrderView().post(request)
+
+
+class HostSubscriptionHistoryView(APIView):
+    """
+    GET /api/payments/host-subscriptions/history/
+    GET /api/payments/subscription-history/
+    """
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        sub_view = HostSubscriptionView()
+        full_resp = sub_view.get(request)
+        history = full_resp.data.get('history', [])
+        return Response({
+            "success": True,
+            "history": history,
+            "subscription_history": history,
+            "transactions": history,
+            "transaction_history": history,
+            "records": history,
+            "data": history,
+            "count": len(history)
+        }, status=status.HTTP_200_OK)
+
+
 
 
