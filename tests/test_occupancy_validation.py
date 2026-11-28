@@ -31,13 +31,17 @@ class OccupancyValidationUnitTests(TestCase):
         self.assertEqual(res['rooms'], 1)
         self.assertEqual(res['total_guests'], 1)
 
-    def test_part1_one_person_two_rooms_rejected(self):
-        """1 adult cannot book 2 rooms (1 person 1 room rule)."""
-        with self.assertRaises(serializers.ValidationError) as ctx:
-            validate_occupancy(adults=1, rooms=2)
-        err = ctx.exception.detail
-        self.assertIn('rooms', err)
-        self.assertIn('cannot book 2 room(s)', str(err['rooms']))
+    def test_part1_one_person_multiple_rooms_accepted(self):
+        """1 adult can book multiple rooms (1 person can book as many rooms as needed)."""
+        res = validate_occupancy(adults=1, rooms=2)
+        self.assertEqual(res['adults'], 1)
+        self.assertEqual(res['rooms'], 2)
+        self.assertEqual(res['total_guests'], 1)
+
+        res3 = validate_occupancy(adults=1, rooms=5)
+        self.assertEqual(res3['adults'], 1)
+        self.assertEqual(res3['rooms'], 5)
+        self.assertEqual(res3['total_guests'], 1)
 
     def test_part1_zero_adults_rejected(self):
         """0 adults must be rejected because minors cannot stay alone."""
@@ -85,11 +89,12 @@ class OccupancyValidationUnitTests(TestCase):
             validate_occupancy(adults=1, rooms=-2)
         self.assertIn('rooms', ctx2.exception.detail)
 
-    def test_part3_rooms_exceeding_total_guests_rejected(self):
-        """Cannot book more rooms than total guests (e.g. 2 guests for 3 rooms)."""
-        with self.assertRaises(serializers.ValidationError) as ctx:
-            validate_occupancy(adults=2, children=0, rooms=3)
-        self.assertIn('rooms', ctx.exception.detail)
+    def test_part3_rooms_exceeding_total_guests_accepted(self):
+        """Guests count can be less than rooms count (e.g. 2 guests for 3 rooms)."""
+        res = validate_occupancy(adults=2, children=0, rooms=3)
+        self.assertEqual(res['adults'], 2)
+        self.assertEqual(res['rooms'], 3)
+        self.assertEqual(res['total_guests'], 2)
 
     def test_part3_two_adults_two_rooms_accepted(self):
         """2 adults in 2 rooms (1 adult per room) is valid."""
@@ -185,18 +190,15 @@ class OccupancyAPIIntegrationTests(TestCase):
         self.check_out = (timezone.now().date() + timedelta(days=7)).strftime('%Y-%m-%d')
 
     # --- 1. HOTEL SEARCH API OCCUPANCY VALIDATION ---
-    def test_search_api_one_person_two_rooms_rejected(self):
-        """Search API returns 400 INVALID_OCCUPANCY when 1 adult tries to search 2 rooms."""
+    def test_search_api_one_person_two_rooms_accepted(self):
+        """Search API returns 200 OK when 1 adult searches 2 rooms (1 person can book multiple rooms)."""
         response = self.client.get(f'/api/hotels/search/?adults=1&rooms=2')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data.get('error', {}).get('code'), 'INVALID_OCCUPANCY')
-        self.assertIn('cannot book 2 room(s)', response.data['error']['message'])
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_search_api_legacy_guests_param_one_person_two_rooms_rejected(self):
-        """Search API returns 400 INVALID_OCCUPANCY when guests=1&rooms=2."""
+    def test_search_api_legacy_guests_param_one_person_two_rooms_accepted(self):
+        """Search API returns 200 OK when guests=1&rooms=2."""
         response = self.client.get(f'/api/hotels/search/?guests=1&rooms=2')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data.get('error', {}).get('code'), 'INVALID_OCCUPANCY')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_search_api_zero_adults_rejected(self):
         """Search API returns 400 when adults=0."""
@@ -215,13 +217,12 @@ class OccupancyAPIIntegrationTests(TestCase):
         self.assertEqual(response.data['search_criteria']['rooms'], 1)
 
     # --- 2. ROOM CHECK-AVAILABILITY API OCCUPANCY VALIDATION ---
-    def test_room_availability_one_person_two_rooms_rejected(self):
-        """Check-availability API rejects 1 adult for 2 rooms."""
+    def test_room_availability_one_person_two_rooms_accepted(self):
+        """Check-availability API accepts 1 adult for 2 rooms."""
         response = self.client.get(
             f'/api/rooms/check-availability/?room_id={self.room.id}&check_in={self.check_in}&check_out={self.check_out}&adults=1&rooms=2'
         )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('cannot book 2 room(s)', str(response.data.get('error', '')))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_room_availability_exceeds_physical_capacity_rejected(self):
         """Check-availability API rejects guests exceeding room capacity (e.g. 6 guests in 1 room)."""
@@ -242,8 +243,8 @@ class OccupancyAPIIntegrationTests(TestCase):
         self.assertEqual(response.data.get('requested_adults'), 2)
 
     # --- 3. BOOKING CREATION API OCCUPANCY VALIDATION ---
-    def test_booking_creation_one_person_two_rooms_rejected(self):
-        """Booking creation API returns 400 when 1 person tries to book 2 rooms."""
+    def test_booking_creation_one_person_two_rooms_succeeds(self):
+        """Booking creation API allows 1 person to book 2 rooms."""
         self.client.force_authenticate(user=self.customer)
         payload = {
             'hotel': self.hotel.id,
@@ -259,11 +260,12 @@ class OccupancyAPIIntegrationTests(TestCase):
             'meal_plan': 'ROOM_ONLY'
         }
         response = self.client.post('/api/bookings/', data=payload)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('cannot book 2 room(s)', str(response.data))
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['number_of_rooms'], 2)
+        self.assertEqual(response.data['number_of_guests'], 1)
 
-    def test_booking_creation_number_of_guests_less_than_rooms_rejected(self):
-        """Booking creation API returns 400 when number_of_guests=1 and number_of_rooms=2."""
+    def test_booking_creation_number_of_guests_less_than_rooms_succeeds(self):
+        """Booking creation API succeeds when number_of_guests=1 and number_of_rooms=2."""
         self.client.force_authenticate(user=self.customer)
         payload = {
             'hotel': self.hotel.id,
@@ -278,8 +280,9 @@ class OccupancyAPIIntegrationTests(TestCase):
             'meal_plan': 'ROOM_ONLY'
         }
         response = self.client.post('/api/bookings/', data=payload)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('cannot book 2 room(s)', str(response.data))
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['number_of_rooms'], 2)
+        self.assertEqual(response.data['number_of_guests'], 1)
 
     def test_booking_creation_valid_occupancy_succeeds(self):
         """Booking creation succeeds with valid occupancy (2 adults, 2 rooms)."""

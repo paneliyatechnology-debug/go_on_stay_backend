@@ -216,7 +216,7 @@ export async function handleNotificationClick(options: NotificationClickOptions)
     navigate,
     showToast,
     onMarkReadOptimistic,
-    apiBaseUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000',
+    apiBaseUrl = process.env.REACT_APP_API_URL || process.env.VITE_API_URL || '',
     token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token') || ''
   } = options;
 

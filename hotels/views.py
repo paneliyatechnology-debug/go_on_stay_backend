@@ -39,12 +39,12 @@ class IsOwnerOrAdminOrReadOnly(permissions.BasePermission):
                 return True
         return False
 
-from rest_framework.pagination import PageNumberPagination
+from core.pagination import StandardPageNumberPagination
 
-class StandardResultsSetPagination(PageNumberPagination):
-    page_size = 20
+class StandardResultsSetPagination(StandardPageNumberPagination):
+    page_size = 10
     page_size_query_param = 'page_size'
-    max_page_size = 1000
+    max_page_size = 100
 
 import re
 
@@ -104,64 +104,87 @@ def filter_hotels_queryset(queryset, params):
     if country_id and str(country_id).isdigit():
         queryset = queryset.filter(country_rel_id=int(country_id))
 
-    # 2. Location / Text Search with Multi-word Tokenization & Phonetic/Synonym Expansion
-    search = params.get('search') or params.get('query') or params.get('q')
+    # 2. Location / Text Search with Multi-word Tokenization
+    search_raw = params.get('search') or params.get('query') or params.get('q')
     city = params.get('city')
     area = params.get('area')
     destination = params.get('destination')
     landmark = params.get('landmark')
 
-    text_query = search or city
-    if text_query:
-        clean_query = text_query.split(',')[0].strip()
-        tokens = extract_search_tokens(clean_query)
-
-        search_q = Q()
-        # Direct exact or partial phrase match
-        search_q |= Q(name__icontains=clean_query)
-        search_q |= Q(city__icontains=clean_query)
-        search_q |= Q(state__icontains=clean_query)
-        search_q |= Q(address__icontains=clean_query)
-        search_q |= Q(area__icontains=clean_query)
-        search_q |= Q(landmark__icontains=clean_query)
-        search_q |= Q(destination__icontains=clean_query)
-        search_q |= Q(description__icontains=clean_query)
-
-        # Word-by-word (token) matching & phonetic/synonym expansions
-        for token in tokens:
-            token_q = (
-                Q(name__icontains=token) |
-                Q(city__icontains=token) |
-                Q(state__icontains=token) |
-                Q(address__icontains=token) |
-                Q(area__icontains=token) |
-                Q(landmark__icontains=token) |
-                Q(destination__icontains=token) |
-                Q(description__icontains=token) |
-                Q(property_type__icontains=token) |
-                Q(amenities__name__icontains=token)
+    if search_raw is not None:
+        search_val = str(search_raw).strip()
+        if search_val:
+            search_clean = search_val.split(',')[0].strip() if ',' in search_val else search_val
+            search_q = (
+                Q(name__icontains=search_val) |
+                Q(city__icontains=search_val) |
+                Q(city_rel__name__icontains=search_val) |
+                Q(state__icontains=search_val) |
+                Q(state_rel__name__icontains=search_val) |
+                Q(address__icontains=search_val) |
+                Q(area__icontains=search_val) |
+                Q(area_rel__name__icontains=search_val) |
+                Q(landmark__icontains=search_val) |
+                Q(destination__icontains=search_val) |
+                Q(property_type__icontains=search_val) |
+                Q(description__icontains=search_val)
             )
-            synonyms = COMMON_PHONETICS_AND_SYNONYMS.get(token, [])
-            for syn in synonyms:
-                token_q |= (
-                    Q(name__icontains=syn) |
-                    Q(city__icontains=syn) |
-                    Q(state__icontains=syn) |
-                    Q(landmark__icontains=syn) |
-                    Q(description__icontains=syn) |
-                    Q(property_type__icontains=syn) |
-                    Q(amenities__name__icontains=syn)
-                )
-            search_q |= token_q
 
-        queryset = queryset.filter(search_q).distinct()
+            if search_clean and search_clean != search_val:
+                search_q |= (
+                    Q(name__icontains=search_clean) |
+                    Q(city__icontains=search_clean) |
+                    Q(city_rel__name__icontains=search_clean) |
+                    Q(state__icontains=search_clean) |
+                    Q(address__icontains=search_clean) |
+                    Q(area__icontains=search_clean)
+                )
+
+            words = [w for w in re.findall(r'[a-zA-Z0-9]+', search_val) if len(w) > 0]
+            if len(words) > 1:
+                tokens_and_q = Q()
+                for token in words:
+                    token_q = (
+                        Q(name__icontains=token) |
+                        Q(city__icontains=token) |
+                        Q(city_rel__name__icontains=token) |
+                        Q(state__icontains=token) |
+                        Q(state_rel__name__icontains=token) |
+                        Q(address__icontains=token) |
+                        Q(area__icontains=token) |
+                        Q(area_rel__name__icontains=token) |
+                        Q(landmark__icontains=token) |
+                        Q(destination__icontains=token) |
+                        Q(property_type__icontains=token)
+                    )
+                    tokens_and_q &= token_q
+                queryset = queryset.filter(search_q | tokens_and_q).distinct()
+            else:
+                queryset = queryset.filter(search_q).distinct()
+
+    if city and not city_id:
+        city_clean = str(city).strip()
+        if city_clean:
+            queryset = queryset.filter(
+                Q(city__icontains=city_clean) | Q(city_rel__name__icontains=city_clean)
+            ).distinct()
 
     if area and not area_id:
-        queryset = queryset.filter(Q(area__icontains=area) | Q(area_rel__name__icontains=area))
+        area_clean = str(area).strip()
+        if area_clean:
+            queryset = queryset.filter(
+                Q(area__icontains=area_clean) | Q(area_rel__name__icontains=area_clean)
+            ).distinct()
+
     if destination:
-        queryset = queryset.filter(destination__icontains=destination)
+        dest_clean = str(destination).strip()
+        if dest_clean:
+            queryset = queryset.filter(destination__icontains=dest_clean).distinct()
+
     if landmark:
-        queryset = queryset.filter(landmark__icontains=landmark)
+        lm_clean = str(landmark).strip()
+        if lm_clean:
+            queryset = queryset.filter(landmark__icontains=lm_clean).distinct()
 
     # 3. Property Type Filter
     property_type = params.get('property_type')
@@ -754,13 +777,41 @@ def execute_hotel_search(params, request=None, is_near_me=False, default_radius_
         if destination_name:
             base_qs = base_qs.filter(destination__icontains=destination_name)
         if raw_search_query:
-            clean_q = raw_search_query.split(',')[0].strip()
-            tokens = extract_search_tokens(clean_q)
-            sq = Q()
-            sq |= Q(name__icontains=clean_q) | Q(city__icontains=clean_q) | Q(address__icontains=clean_q) | Q(area__icontains=clean_q)
-            for t in tokens:
-                sq |= Q(name__icontains=t) | Q(city__icontains=t) | Q(address__icontains=t) | Q(area__icontains=t)
-            base_qs = base_qs.filter(sq)
+            clean_q = raw_search_query.strip()
+            if clean_q:
+                sq = (
+                    Q(name__icontains=clean_q) |
+                    Q(city__icontains=clean_q) |
+                    Q(city_rel__name__icontains=clean_q) |
+                    Q(address__icontains=clean_q) |
+                    Q(area__icontains=clean_q) |
+                    Q(area_rel__name__icontains=clean_q) |
+                    Q(state__icontains=clean_q) |
+                    Q(state_rel__name__icontains=clean_q) |
+                    Q(landmark__icontains=clean_q) |
+                    Q(destination__icontains=clean_q) |
+                    Q(property_type__icontains=clean_q)
+                )
+                words = [w for w in re.findall(r'[a-zA-Z0-9]+', clean_q) if len(w) > 0]
+                if len(words) > 1:
+                    tokens_and_sq = Q()
+                    for t in words:
+                        tokens_and_sq &= (
+                            Q(name__icontains=t) |
+                            Q(city__icontains=t) |
+                            Q(city_rel__name__icontains=t) |
+                            Q(address__icontains=t) |
+                            Q(area__icontains=t) |
+                            Q(area_rel__name__icontains=t) |
+                            Q(state__icontains=t) |
+                            Q(state_rel__name__icontains=t) |
+                            Q(landmark__icontains=t) |
+                            Q(destination__icontains=t) |
+                            Q(property_type__icontains=t)
+                        )
+                    base_qs = base_qs.filter(sq | tokens_and_sq)
+                else:
+                    base_qs = base_qs.filter(sq)
 
     # Property Type
     property_type = params.get('property_type')
@@ -1130,7 +1181,7 @@ class HotelDetailView(generics.RetrieveUpdateDestroyAPIView):
                     "id": doc.id,
                     "document_type": doc.document_type,
                     "status": doc.status,
-                    "document_url": doc.document_url or (doc.document_file.url if doc.document_file else ''),
+                    "document_url": doc.document_url or (f"/api/hotels/{doc.hotel_id}/documents/{doc.id}/download/" if doc.document_file else ''),
                 }
                 for doc in hotel.verification_documents.all()
             ],
@@ -1198,6 +1249,7 @@ class HotelDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 class OwnerHotelListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = StandardResultsSetPagination
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -1205,7 +1257,8 @@ class OwnerHotelListCreateView(generics.ListCreateAPIView):
         return HotelSerializer
 
     def get_queryset(self):
-        return Hotel.objects.filter(owner=self.request.user, is_deleted=False).order_by('-created_at')
+        qs = Hotel.objects.filter(owner=self.request.user, is_deleted=False).order_by('-created_at')
+        return filter_hotels_queryset(qs, self.request.query_params)
 
     def perform_create(self, serializer):
         user = self.request.user
@@ -1470,6 +1523,9 @@ class HotelDocumentUploadView(APIView):
             doc_type = request.data.get('document_type', HotelVerificationDocument.DOC_BUSINESS_REG)
             doc_url = request.data.get('document_url')
             doc_file = request.FILES.get('document_file')
+            if doc_file:
+                from util.validators import validate_upload_document
+                validate_upload_document(doc_file)
 
             doc = HotelVerificationDocument.objects.create(
                 hotel=hotel,

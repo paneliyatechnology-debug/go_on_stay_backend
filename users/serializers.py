@@ -6,6 +6,7 @@ from util.validators import (
     validate_indian_bank_account, validate_indian_ifsc,
     validate_indian_upi, validate_minimum_age
 )
+from core.url_helpers import to_browser_safe_url
 
 User = get_user_model()
 
@@ -28,21 +29,17 @@ class HybridAvatarField(serializers.Field):
             raise serializers.ValidationError("Invalid image URL or path format.")
         from django.core.files.uploadedfile import UploadedFile
         if isinstance(data, UploadedFile):
-            return data
+            from util.validators import validate_upload_image
+            return validate_upload_image(data)
         raise serializers.ValidationError("Expected an image file or a valid Cloudinary image URL.")
 
     def to_representation(self, value):
         if not value:
             return None
         val_str = str(value)
-        if val_str.startswith(('http://', 'https://')):
-            return val_str
         if hasattr(value, 'url'):
-            request = self.context.get('request', None)
-            if request:
-                return request.build_absolute_uri(value.url)
-            return value.url
-        return val_str
+            val_str = value.url
+        return to_browser_safe_url(val_str, self.context.get('request'))
 
 class UserSerializer(serializers.ModelSerializer):
     payout_account = serializers.SerializerMethodField()
@@ -80,14 +77,9 @@ class UserSerializer(serializers.ModelSerializer):
         if not obj.avatar:
             return None
         val_str = str(obj.avatar)
-        if val_str.startswith(('http://', 'https://')):
-            return val_str
         if hasattr(obj.avatar, 'url'):
-            request = self.context.get('request', None)
-            if request:
-                return request.build_absolute_uri(obj.avatar.url)
-            return obj.avatar.url
-        return val_str
+            val_str = obj.avatar.url
+        return to_browser_safe_url(val_str, self.context.get('request'))
 
     def get_hotels_count(self, obj):
         if hasattr(obj, 'hotels'):

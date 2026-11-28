@@ -8,8 +8,34 @@ from django.core.exceptions import PermissionDenied as DjangoPermissionDenied
 from rest_framework.response import Response
 from rest_framework import status
 import logging
+import re
 
 logger = logging.getLogger(__name__)
+
+SENSITIVE_TEXT_PATTERNS = [
+    # Windows filesystem paths
+    (re.compile(r'[a-zA-Z]:\\[^\s,\'\"\)\]]+', re.IGNORECASE), '[internal_path]'),
+    # Unix filesystem paths
+    (re.compile(r'/(?:app|home|var|tmp|etc|usr)/[^\s,\'\"\)\]]+', re.IGNORECASE), '[internal_path]'),
+    # Database internal error traces
+    (re.compile(r'(?:OperationalError|IntegrityError|ProgrammingError|DatabaseError|psycopg2|sqlite3)[^\n]*', re.IGNORECASE), 'A database operation error occurred.'),
+    # Internal private IP addresses and ports
+    (re.compile(r'\b(?:127\.0\.0\.1|localhost|192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+)(?::\d+)?\b', re.IGNORECASE), '[internal_host]'),
+]
+
+
+def sanitize_error_content(obj):
+    """Recursively redacts disk paths, database details, and internal IPs from error payloads."""
+    if isinstance(obj, str):
+        cleaned = obj
+        for pattern, replacement in SENSITIVE_TEXT_PATTERNS:
+            cleaned = pattern.sub(replacement, cleaned)
+        return cleaned
+    elif isinstance(obj, dict):
+        return {k: sanitize_error_content(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [sanitize_error_content(i) for i in obj]
+    return obj
 
 
 def custom_exception_handler(exc, context):
@@ -103,22 +129,26 @@ def custom_exception_handler(exc, context):
     else:
         details = {"error": str(raw_data)}
 
+    # Sanitize message and details to prevent data and infrastructure leakage
+    clean_message = sanitize_error_content(message)
+    clean_details = sanitize_error_content(details)
+
     # Construct standardized RFC 7807 error payload
     standardized = {
         "success": False,
-        "message": message,
+        "message": clean_message,
         "error": {
             "code": code,
-            "message": message,
-            "details": details
+            "message": clean_message,
+            "details": clean_details
         },
         # Backwards compatibility fields
-        "detail": message
+        "detail": clean_message
     }
 
     # Merge flat keys so legacy tests and frontend checking response.data['field'] continue working
-    if isinstance(details, dict):
-        for k, v in details.items():
+    if isinstance(clean_details, dict):
+        for k, v in clean_details.items():
             if k not in standardized:
                 standardized[k] = v
 

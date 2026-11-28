@@ -312,12 +312,16 @@ def validate_upload_image(file):
         )
     
     import os
+    import uuid
     ext = os.path.splitext(getattr(file, 'name', ''))[1].lower()
     allowed = ['.jpg', '.jpeg', '.png', '.webp']
     if ext not in allowed:
         raise serializers.ValidationError(
             f"Invalid image format '{ext}'. Allowed image formats: {', '.join(allowed)}."
         )
+    # Defense-in-depth: Randomize filename with UUID to prevent exposure of client private filenames or paths
+    if hasattr(file, 'name'):
+        file.name = f"{uuid.uuid4().hex}{ext}"
     return file
 
 
@@ -326,6 +330,7 @@ def validate_upload_document(file):
     Validates uploaded verification/KYC documents:
     - Maximum file size: 10 MB
     - Allowed extensions: .pdf, .jpg, .jpeg, .png, .webp
+    - Sanitizes filename to secure UUID
     """
     if not file:
         return file
@@ -338,12 +343,16 @@ def validate_upload_document(file):
         )
     
     import os
+    import uuid
     ext = os.path.splitext(getattr(file, 'name', ''))[1].lower()
     allowed = ['.pdf', '.jpg', '.jpeg', '.png', '.webp']
     if ext not in allowed:
         raise serializers.ValidationError(
             f"Invalid document format '{ext}'. Allowed document formats: {', '.join(allowed)}."
         )
+    # Defense-in-depth: Randomize filename with UUID to prevent exposure of client private filenames or paths
+    if hasattr(file, 'name'):
+        file.name = f"{uuid.uuid4().hex}{ext}"
     return file
 
 
@@ -358,14 +367,12 @@ def validate_occupancy(adults=None, children=None, rooms=None, total_guests=None
     Validation Rules:
       1. Adults:
          - Must be an integer >= 1 (At least 1 adult is mandatory; minors cannot stay alone).
-         - Each room requires at least 1 adult: adults >= rooms (e.g. 1 adult cannot book 2 rooms).
+         - 1 person / adult can book as many rooms as needed (no 1 room = 1 adult restriction).
       2. Children:
          - Must be an integer >= 0.
          - Children cannot stay without an adult (if children > 0, adults must be >= 1).
       3. Rooms Required:
          - Must be an integer >= 1.
-         - Cannot exceed adults (rooms <= adults).
-         - Cannot exceed total guests (rooms <= adults + children).
          - Maximum 30 rooms per single reservation.
       4. Room Capacity Limits:
          - If a specific Room instance is provided:
@@ -466,23 +473,10 @@ def validate_occupancy(adults=None, children=None, rooms=None, total_guests=None
             "adults": "At least 1 adult (age 13+) is required. Minors cannot book or stay in a hotel room without an adult."
         })
 
-    # Rule: 1 person 1 room, not 1 person 2 rooms!
-    # Each room requires at least 1 adult.
-    if rooms_val > adults_val:
-        raise serializers.ValidationError({
-            "rooms": f"Each room requires at least 1 adult. {adults_val} adult(s) cannot book {rooms_val} room(s). (1 person cannot book multiple rooms)."
-        })
-
     # --- PART 2 VALIDATION: Children ---
     if children_val > 0 and adults_val < 1:
         raise serializers.ValidationError({
             "children": "Children (ages 2-12) must be accompanied by at least one adult."
-        })
-
-    # --- PART 3 VALIDATION: Rooms Required ---
-    if rooms_val > total_guests_val:
-        raise serializers.ValidationError({
-            "rooms": f"Number of rooms ({rooms_val}) cannot exceed total guests ({total_guests_val})."
         })
 
     # --- CAPACITY CHECKS (Combined 3 parts) ---

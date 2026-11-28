@@ -51,6 +51,11 @@ def validate_support_attachment(file_obj):
     elif ext == '.pdf' and not is_pdf:
         raise serializers.ValidationError("File content does not match genuine PDF document format.")
 
+    # Defense-in-depth: Randomize filename with UUID to prevent exposure of client private filenames or paths
+    import uuid
+    if hasattr(file_obj, 'name'):
+        file_obj.name = f"{uuid.uuid4().hex}{ext}"
+
     return file_obj
 
 

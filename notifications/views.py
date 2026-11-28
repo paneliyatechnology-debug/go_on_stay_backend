@@ -22,26 +22,51 @@ class MarkNotificationReadView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
-        try:
-            notification = Notification.objects.get(pk=pk, recipient=request.user)
-            if not notification.is_read:
-                notification.is_read = True
-                notification.save(update_fields=['is_read'])
-            
-            nav = resolve_notification_navigation(notification, request.user)
-            return Response({
-                "message": "Notification marked as read.",
-                "is_read": True,
-                "target_url": nav.get('target_url', ''),
-                "target_entity_type": nav.get('target_entity_type', ''),
-                "target_entity_id": nav.get('target_entity_id', ''),
-                "fallback_url": nav.get('fallback_url', ''),
-                "action": nav.get('action', ''),
-                "record_exists": nav.get('record_exists', True),
-                "navigation": nav
-            }, status=status.HTTP_200_OK)
-        except Notification.DoesNotExist:
-            return Response({"error": "Notification not found."}, status=status.HTTP_404_NOT_FOUND)
+        is_admin = request.user.is_superuser or request.user.is_staff or str(getattr(request.user, 'role', '')).upper() in ['ADMIN', 'SUPER_ADMIN']
+        if is_admin:
+            notification = Notification.objects.filter(pk=pk).first()
+        else:
+            notification = Notification.objects.filter(pk=pk, recipient=request.user).first()
+
+        if not notification:
+            user_role = str(getattr(request.user, 'role', 'CUSTOMER')).upper()
+            if is_admin:
+                fb = '/admin/dashboard'
+            elif user_role == 'HOTEL_OWNER':
+                fb = '/owner/dashboard'
+            elif user_role == 'STAFF':
+                fb = '/staff/reservation'
+            else:
+                fb = '/customer/dashboard'
+            return Response({"error": "Notification not found.", "fallback_url": fb}, status=status.HTTP_404_NOT_FOUND)
+
+        if not notification.is_read:
+            notification.is_read = True
+            notification.save(update_fields=['is_read'])
+
+        nav = resolve_notification_navigation(notification, request.user)
+        return Response({
+            "success": True,
+            "message": "Notification marked as read.",
+            "is_read": True,
+            "notification_id": notification.id,
+            "target_url": nav.get('target_url', ''),
+            "url": nav.get('target_url', ''),
+            "link": nav.get('target_url', ''),
+            "path": nav.get('target_url', ''),
+            "route": nav.get('target_url', ''),
+            "target_entity_type": nav.get('target_entity_type', ''),
+            "target_entity_id": nav.get('target_entity_id', ''),
+            "entity_type": nav.get('target_entity_type', ''),
+            "entity_id": nav.get('target_entity_id', ''),
+            "fallback_url": nav.get('fallback_url', ''),
+            "action": nav.get('action', ''),
+            "record_exists": nav.get('record_exists', True),
+            "navigation": nav
+        }, status=status.HTTP_200_OK)
+
+    def get(self, request, pk):
+        return self.post(request, pk)
 
     def patch(self, request, pk):
         return self.post(request, pk)
@@ -49,6 +74,8 @@ class MarkNotificationReadView(APIView):
 class NotificationClickView(APIView):
     """
     POST /api/notifications/<id>/click/
+    GET  /api/notifications/<id>/click/
+    PATCH /api/notifications/<id>/click/
     Handles smart notification click-through:
     - Marks the notification as read.
     - Resolves role-aware destination, exact entity identifier, and record verification.
@@ -56,30 +83,59 @@ class NotificationClickView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
-        try:
-            notification = Notification.objects.get(pk=pk, recipient=request.user)
-            if not notification.is_read:
-                notification.is_read = True
-                notification.save(update_fields=['is_read'])
-            
-            nav = resolve_notification_navigation(notification, request.user)
+        is_admin = request.user.is_superuser or request.user.is_staff or str(getattr(request.user, 'role', '')).upper() in ['ADMIN', 'SUPER_ADMIN']
+        if is_admin:
+            notification = Notification.objects.filter(pk=pk).first()
+        else:
+            notification = Notification.objects.filter(pk=pk, recipient=request.user).first()
+
+        if not notification:
+            user_role = str(getattr(request.user, 'role', 'CUSTOMER')).upper()
+            if is_admin:
+                fb = '/admin/dashboard'
+            elif user_role == 'HOTEL_OWNER':
+                fb = '/owner/dashboard'
+            elif user_role == 'STAFF':
+                fb = '/staff/reservation'
+            else:
+                fb = '/customer/dashboard'
             return Response({
-                "success": True,
-                "notification_id": notification.id,
-                "is_read": True,
-                "target_url": nav.get('target_url', ''),
-                "target_entity_type": nav.get('target_entity_type', ''),
-                "target_entity_id": nav.get('target_entity_id', ''),
-                "fallback_url": nav.get('fallback_url', ''),
-                "action": nav.get('action', ''),
-                "record_exists": nav.get('record_exists', True),
-                "navigation": nav
-            }, status=status.HTTP_200_OK)
-        except Notification.DoesNotExist:
-            return Response({
+                "success": False,
                 "error": "Notification not found.",
-                "fallback_url": "/customer/dashboard"
+                "fallback_url": fb,
+                "target_url": fb,
+                "url": fb
             }, status=status.HTTP_404_NOT_FOUND)
+
+        if not notification.is_read:
+            notification.is_read = True
+            notification.save(update_fields=['is_read'])
+
+        nav = resolve_notification_navigation(notification, request.user)
+        return Response({
+            "success": True,
+            "notification_id": notification.id,
+            "is_read": True,
+            "target_url": nav.get('target_url', ''),
+            "url": nav.get('target_url', ''),
+            "link": nav.get('target_url', ''),
+            "path": nav.get('target_url', ''),
+            "route": nav.get('target_url', ''),
+            "target_entity_type": nav.get('target_entity_type', ''),
+            "target_entity_id": nav.get('target_entity_id', ''),
+            "entity_type": nav.get('target_entity_type', ''),
+            "entity_id": nav.get('target_entity_id', ''),
+            "fallback_url": nav.get('fallback_url', ''),
+            "action": nav.get('action', ''),
+            "record_exists": nav.get('record_exists', True),
+            "navigation": nav
+        }, status=status.HTTP_200_OK)
+
+    def get(self, request, pk):
+        return self.post(request, pk)
+
+    def patch(self, request, pk):
+        return self.post(request, pk)
 
 class MarkAllNotificationsReadView(APIView):
     permission_classes = [permissions.IsAuthenticated]

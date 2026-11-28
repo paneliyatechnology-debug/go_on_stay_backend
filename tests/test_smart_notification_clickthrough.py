@@ -83,19 +83,19 @@ class SmartNotificationClickthroughTests(TestCase):
 
         # 5. Staff Users for each department
         self.staff_res_user = User.objects.create_user(username='res_staff', email='res@goonstay.com', password='Password123!', role='STAFF', is_staff=True)
-        self.staff_res_profile = StaffProfile.objects.create(user=self.staff_res_user, employee_id='EMP-RES-01', login_id='res_staff', department=self.dept_reservation)
+        self.staff_res_profile = StaffProfile.objects.create(user=self.staff_res_user, employee_id='EMP-RES-01', login_id='res_staff', department=self.dept_reservation, must_change_password=False)
 
         self.staff_cs_user = User.objects.create_user(username='cs_staff', email='cs@goonstay.com', password='Password123!', role='STAFF', is_staff=True)
-        self.staff_cs_profile = StaffProfile.objects.create(user=self.staff_cs_user, employee_id='EMP-CS-01', login_id='cs_staff', department=self.dept_support)
+        self.staff_cs_profile = StaffProfile.objects.create(user=self.staff_cs_user, employee_id='EMP-CS-01', login_id='cs_staff', department=self.dept_support, must_change_password=False)
 
         self.staff_ref_user = User.objects.create_user(username='ref_staff', email='ref@goonstay.com', password='Password123!', role='STAFF', is_staff=True)
-        self.staff_ref_profile = StaffProfile.objects.create(user=self.staff_ref_user, employee_id='EMP-REF-01', login_id='ref_staff', department=self.dept_refunds)
+        self.staff_ref_profile = StaffProfile.objects.create(user=self.staff_ref_user, employee_id='EMP-REF-01', login_id='ref_staff', department=self.dept_refunds, must_change_password=False)
 
         self.staff_pay_user = User.objects.create_user(username='pay_staff', email='pay@goonstay.com', password='Password123!', role='STAFF', is_staff=True)
-        self.staff_pay_profile = StaffProfile.objects.create(user=self.staff_pay_user, employee_id='EMP-PAY-01', login_id='pay_staff', department=self.dept_payouts)
+        self.staff_pay_profile = StaffProfile.objects.create(user=self.staff_pay_user, employee_id='EMP-PAY-01', login_id='pay_staff', department=self.dept_payouts, must_change_password=False)
 
         self.staff_ver_user = User.objects.create_user(username='ver_staff', email='ver@goonstay.com', password='Password123!', role='STAFF', is_staff=True)
-        self.staff_ver_profile = StaffProfile.objects.create(user=self.staff_ver_user, employee_id='EMP-VER-01', login_id='ver_staff', department=self.dept_verification)
+        self.staff_ver_profile = StaffProfile.objects.create(user=self.staff_ver_user, employee_id='EMP-VER-01', login_id='ver_staff', department=self.dept_verification, must_change_password=False)
 
         # 6. Sample Hotel & Room
         self.hotel = Hotel.objects.create(
@@ -335,7 +335,8 @@ class SmartNotificationClickthroughTests(TestCase):
         earning = HostEarning.objects.create(
             booking=self.booking,
             host=self.owner_user,
-            total_amount=Decimal('18000.00'),
+            gross_amount=Decimal('18000.00'),
+            platform_fee=Decimal('1800.00'),
             net_amount=Decimal('16200.00'),
             status=HostEarning.STATUS_ELIGIBLE
         )

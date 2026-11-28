@@ -2448,9 +2448,9 @@ class RefundRetryView(APIView):
 
 
 class AdminPaymentPagination(PageNumberPagination):
-    page_size = 500
+    page_size = 10
     page_size_query_param = 'page_size'
-    max_page_size = 2000
+    max_page_size = 100
 
 
 class AdminPaymentListView(generics.ListAPIView):
@@ -2954,7 +2954,18 @@ class SettlementLedgerListView(APIView):
                 "on_hold_earning_ids": h_data["on_hold_earning_ids"],
             })
 
-        serialized = HostEarningSerializer(earnings_list, many=True).data
+        total_records = len(earnings_list)
+        from core.pagination import StandardPageNumberPagination
+        paginator = StandardPageNumberPagination()
+        page_records = paginator.paginate_queryset(earnings_list, request, view=self)
+        if page_records is not None:
+            serialized_page = HostEarningSerializer(page_records, many=True).data
+            next_url = paginator.get_next_link()
+            prev_url = paginator.get_previous_link()
+        else:
+            serialized_page = HostEarningSerializer(earnings_list, many=True).data
+            next_url = None
+            prev_url = None
 
         eligible_count = sum(1 for e in all_for_kpi if e.status == HostEarning.STATUS_ELIGIBLE)
         on_hold_count = sum(1 for e in all_for_kpi if e.status == HostEarning.STATUS_ON_HOLD)
@@ -2974,8 +2985,10 @@ class SettlementLedgerListView(APIView):
                 "payout_hold_days": hold_days
             },
             "hotels_summary": hotels_summary,
-            "count": len(serialized),
-            "results": serialized
+            "count": total_records,
+            "next": next_url,
+            "previous": prev_url,
+            "results": serialized_page
         }, status=status.HTTP_200_OK)
 
 

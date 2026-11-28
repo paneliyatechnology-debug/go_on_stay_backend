@@ -11,10 +11,12 @@ from .serializers import BookingSerializer, BookingCreateSerializer
 from staff.permissions import is_platform_admin, check_staff_permission
 from staff.models import Department
 
-class BookingPagination(PageNumberPagination):
-    page_size = 20
+from core.pagination import StandardPageNumberPagination
+
+class BookingPagination(StandardPageNumberPagination):
+    page_size = 10
     page_size_query_param = 'page_size'
-    max_page_size = 1000
+    max_page_size = 100
 
 class BookingListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]

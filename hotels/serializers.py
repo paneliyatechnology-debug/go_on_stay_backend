@@ -27,11 +27,18 @@ class HotelImageSerializer(serializers.ModelSerializer):
 class HotelVerificationDocumentSerializer(serializers.ModelSerializer):
     document_display_type = serializers.CharField(source='get_document_type_display', read_only=True)
     status_display = serializers.CharField(source='get_status_display', read_only=True)
+    document_file = serializers.SerializerMethodField()
 
     class Meta:
         model = HotelVerificationDocument
         fields = ('id', 'hotel', 'document_type', 'document_display_type', 'document_url', 'document_file', 'status', 'status_display', 'rejection_reason', 'created_at')
         read_only_fields = ('id', 'created_at')
+
+    def get_document_file(self, obj):
+        if not obj.document_file:
+            return None
+        # Return secure authenticated download endpoint rather than internal disk path
+        return f"/api/hotels/{obj.hotel_id}/documents/{obj.id}/download/"
 
 class HotelStaffSerializer(serializers.ModelSerializer):
     user_details = UserSerializer(source='user', read_only=True)
@@ -190,6 +197,33 @@ class HotelSerializer(serializers.ModelSerializer):
         if value:
             return validate_hotel_address(value)
         return value
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        request = self.context.get('request')
+        user = getattr(request, 'user', None) if request else None
+
+        # Determine authorization: owner, platform admin, or assigned staff
+        is_owner = bool(user and user.is_authenticated and instance.owner_id == user.id)
+        role = str(getattr(user, 'role', '')).upper() if user else ''
+        is_admin_or_staff = bool(
+            user and user.is_authenticated and (
+                getattr(user, 'is_superuser', False) or
+                getattr(user, 'is_staff', False) or
+                role in ['ADMIN', 'SUPER_ADMIN', 'STAFF']
+            )
+        )
+
+        # Least-privilege PII redaction: Anonymous visitors and other customers
+        # must never receive the owner's private email, phone, or internal verification documents
+        if not (is_owner or is_admin_or_staff):
+            ret['owner_email'] = ''
+            ret['owner_phone'] = ''
+            ret['verification_documents'] = []
+            ret['rejection_reason'] = None
+            ret['owner_is_blocked'] = False
+
+        return ret
 
 class HotelCreateUpdateSerializer(serializers.ModelSerializer):
     amenity_ids = serializers.ListField(

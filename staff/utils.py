@@ -162,8 +162,9 @@ def send_staff_password_reset_email(staff_profile, reset_token):
         return False
 
     from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'GoOnStay Staff Portal <noreply@goonstay.com>')
+    frontend_base = getattr(settings, 'FRONTEND_URL', 'https://goonstay.com').rstrip('/')
     subject = "GoOnStay Staff Portal – Password Reset Request"
-    reset_url = f"https://goonstay.com/staff/reset-password?token={reset_token}&emp_id={staff_profile.employee_id}"
+    reset_url = f"{frontend_base}/staff/reset-password?token={reset_token}&emp_id={staff_profile.employee_id}"
 
     plain_content = f"""Hello {user.first_name or staff_profile.login_id},
 

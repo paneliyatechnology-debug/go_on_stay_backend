@@ -5,12 +5,13 @@ from django.db.models import Q
 logger = logging.getLogger(__name__)
 
 # Regular expressions for entity discovery in free-text titles and messages
-RE_BOOKING_CODE = re.compile(r'\b(BMR[A-Za-z0-9_-]+)\b', re.IGNORECASE)
-RE_BOOKING_LABEL = re.compile(r'(?:booking|reservation)\s*(?:#|id:?\s*|code:?\s*)?([A-Za-z0-9_-]+)', re.IGNORECASE)
-RE_TICKET_LABEL = re.compile(r'(?:ticket|complaint)\s*(?:#|id:?\s*)?([A-Za-z0-9_-]+)', re.IGNORECASE)
-RE_REFUND_LABEL = re.compile(r'(?:refund|claim)\s*(?:#|id:?\s*)?(\d+)', re.IGNORECASE)
-RE_PAYOUT_LABEL = re.compile(r'(?:payout|settlement|escrow)\s*(?:#|id:?\s*)?(\d+)', re.IGNORECASE)
-RE_HOTEL_LABEL = re.compile(r'(?:hotel|property)\s*(?:#|id:?\s*)?(\d+)', re.IGNORECASE)
+RE_BOOKING_CODE = re.compile(r'\b((?:BMR|KH|GOON|BK)[-_]?\d+[A-Za-z0-9_-]*)\b', re.IGNORECASE)
+RE_BOOKING_LABEL = re.compile(r'(?:booking|reservation)\s*(?:#|id:?\s*|code:?\s*)\s*([A-Za-z0-9_-]+)', re.IGNORECASE)
+RE_TICKET_CODE = re.compile(r'\b(TCK-[A-Za-z0-9_-]+)\b', re.IGNORECASE)
+RE_TICKET_LABEL = re.compile(r'(?:ticket|complaint)\s*(?:#|id:?\s*|no:?\s*)\s*([A-Za-z0-9_-]+)', re.IGNORECASE)
+RE_REFUND_LABEL = re.compile(r'(?:refund|claim)\s*(?:#|id:?\s*|no:?\s*)\s*(\d+)', re.IGNORECASE)
+RE_PAYOUT_LABEL = re.compile(r'(?:payout|settlement|escrow)\s*(?:#|id:?\s*|no:?\s*)\s*(\d+)', re.IGNORECASE)
+RE_HOTEL_LABEL = re.compile(r'(?:hotel|property)\s*(?:#|id:?\s*|no:?\s*)\s*(\d+)', re.IGNORECASE)
 
 
 def extract_entity_details(notification=None, notification_type=None, booking=None, metadata=None, title='', message=''):
@@ -59,9 +60,13 @@ def extract_entity_details(notification=None, notification_type=None, booking=No
     if 'ticket_id' in meta or 'ticket_number' in meta:
         ticket_id = str(meta.get('ticket_id') or meta.get('ticket_number'))
     if not ticket_id:
-        m = RE_TICKET_LABEL.search(text_content)
-        if m and m.group(1).lower() not in ['system', 'alert', 'message']:
-            ticket_id = m.group(1)
+        m_tck = RE_TICKET_CODE.search(text_content)
+        if m_tck:
+            ticket_id = m_tck.group(1)
+        else:
+            m = RE_TICKET_LABEL.search(text_content)
+            if m and m.group(1).lower() not in ['system', 'alert', 'message', 'updated', 'created']:
+                ticket_id = m.group(1)
 
     # 4. Refund Resolution
     refund_id = None
@@ -119,6 +124,9 @@ def extract_entity_details(notification=None, notification_type=None, booking=No
 
     if n_type in ['COUPON_OFFER', 'PROMO_CODE', 'OFFER']:
         return 'offer', '', booking_obj
+
+    if n_type in ['SUBSCRIPTION', 'HOST_SUBSCRIPTION', 'PLAN_UPGRADE', 'PLAN_SCHEDULED', 'SUBSCRIPTION_RENEWAL']:
+        return 'subscription', '', booking_obj
 
     if n_type in ['ACCOUNT_SECURITY', 'PROFILE_UPDATE', 'PASSWORD_RESET']:
         return 'profile', '', booking_obj
@@ -270,8 +278,14 @@ def resolve_notification_navigation(
 
         return {
             "target_url": target,
+            "url": target,
+            "link": target,
+            "path": target,
+            "route": target,
             "target_entity_type": entity_type,
             "target_entity_id": entity_id,
+            "entity_type": entity_type,
+            "entity_id": entity_id,
             "fallback_url": fallback,
             "action": action,
             "record_exists": record_exists
@@ -344,8 +358,14 @@ def resolve_notification_navigation(
 
         return {
             "target_url": target,
+            "url": target,
+            "link": target,
+            "path": target,
+            "route": target,
             "target_entity_type": entity_type,
             "target_entity_id": entity_id,
+            "entity_type": entity_type,
+            "entity_id": entity_id,
             "fallback_url": fallback,
             "action": action,
             "record_exists": record_exists
@@ -358,36 +378,55 @@ def resolve_notification_navigation(
         if entity_type == 'booking':
             fallback = '/host/bookings'
             target = f"/host/bookings/{entity_id}" if (record_exists and entity_id) else fallback
+            owner_target = f"/owner/dashboard/guest-reservations?booking_id={entity_id}" if (record_exists and entity_id) else '/owner/dashboard/guest-reservations'
             action = 'open_record' if entity_id else 'view_list'
         elif entity_type == 'hotel':
             fallback = '/host/hotels'
             target = f"/host/hotels/{entity_id}" if (record_exists and entity_id) else fallback
+            owner_target = f"/owner/dashboard/hotel-properties?hotel_id={entity_id}" if (record_exists and entity_id) else '/owner/dashboard/hotel-properties'
             action = 'open_record' if entity_id else 'view_list'
         elif entity_type in ['payout', 'settlement', 'escrow']:
             fallback = '/host/settlements'
             target = f"/host/settlements?payout_id={entity_id}" if entity_id else fallback
+            owner_target = f"/owner/dashboard/settlement-escrow?payout_id={entity_id}" if entity_id else '/owner/dashboard/settlement-escrow'
             action = 'highlight_record' if entity_id else 'view_list'
+        elif entity_type == 'subscription':
+            fallback = '/owner/dashboard/manage-plan'
+            target = '/owner/dashboard/manage-plan'
+            owner_target = '/owner/dashboard/manage-plan'
+            action = 'view_subscription'
         elif entity_type == 'account':
-            fallback = '/host/payout-account'
-            target = '/host/payout-account'
+            fallback = '/host/settlements'
+            target = '/host/settlements'
+            owner_target = '/owner/dashboard/settlement-escrow'
             action = 'view_account'
         elif entity_type == 'review':
-            fallback = '/host/reviews'
-            target = '/host/reviews'
+            fallback = '/owner/dashboard/reviews'
+            target = '/owner/dashboard/reviews'
+            owner_target = '/owner/dashboard/reviews'
             action = 'view_reviews'
         elif entity_type == 'refund':
             fallback = '/host/bookings'
             target = f"/host/bookings/{entity_id}" if (record_exists and entity_id) else fallback
+            owner_target = f"/owner/dashboard/guest-reservations?booking_id={entity_id}" if (record_exists and entity_id) else '/owner/dashboard/guest-reservations'
             action = 'open_record' if entity_id else 'view_list'
         else:
             fallback = '/host/dashboard'
             target = '/host/dashboard'
+            owner_target = '/owner/dashboard'
             action = 'view_dashboard'
 
         return {
             "target_url": target,
+            "url": target,
+            "link": target,
+            "path": target,
+            "route": target,
+            "owner_dashboard_url": owner_target,
             "target_entity_type": entity_type,
             "target_entity_id": entity_id,
+            "entity_type": entity_type,
+            "entity_id": entity_id,
             "fallback_url": fallback,
             "action": action,
             "record_exists": record_exists

@@ -54,7 +54,7 @@ User = get_user_model()
 
 
 class StandardStaffPagination(PageNumberPagination):
-    page_size = 20
+    page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 100
 
@@ -1317,9 +1317,12 @@ class StaffRefundHistoryView(APIView):
         if not check_staff_permission(request.user, 'VIEW_REFUNDS'):
             return Response({"error": "Permission 'VIEW_REFUNDS' is required."}, status=status.HTTP_403_FORBIDDEN)
 
-        qs = Refund.objects.filter(status=Refund.STATUS_REFUNDED).select_related('booking', 'booking__hotel')
+        qs = Refund.objects.filter(status=Refund.STATUS_REFUNDED).select_related('booking', 'booking__hotel').order_by('-processed_at')
+        paginator = StandardStaffPagination()
+        page_qs = paginator.paginate_queryset(qs, request, view=self)
         data = []
-        for r in qs.order_by('-processed_at')[:100]:
+        target_list = page_qs if page_qs is not None else qs
+        for r in target_list:
             data.append({
                 "id": r.id,
                 "booking_id": r.booking.booking_id if r.booking else None,
@@ -1329,7 +1332,16 @@ class StaffRefundHistoryView(APIView):
                 "razorpay_refund_id": r.razorpay_refund_id,
                 "refunded_at": (r.processed_at or r.created_at).isoformat() if (r.processed_at or r.created_at) else None
             })
-        return Response({"success": True, "history": data}, status=status.HTTP_200_OK)
+        if page_qs is not None:
+            return Response({
+                "success": True,
+                "count": paginator.page.paginator.count,
+                "next": paginator.get_next_link(),
+                "previous": paginator.get_previous_link(),
+                "history": data,
+                "results": data
+            }, status=status.HTTP_200_OK)
+        return Response({"success": True, "count": len(data), "history": data, "results": data}, status=status.HTTP_200_OK)
 
 
 # =============================================================================
@@ -1512,9 +1524,12 @@ class StaffPayoutHistoryView(APIView):
         if not check_staff_permission(request.user, 'VIEW_PAYOUTS'):
             return Response({"error": "Permission 'VIEW_PAYOUTS' is required."}, status=status.HTTP_403_FORBIDDEN)
 
-        qs = HostPayout.objects.filter(status=HostPayout.STATUS_COMPLETED).select_related('host', 'payout_account')
+        qs = HostPayout.objects.filter(status=HostPayout.STATUS_COMPLETED).select_related('host', 'payout_account').order_by('-processed_at')
+        paginator = StandardStaffPagination()
+        page_qs = paginator.paginate_queryset(qs, request, view=self)
         data = []
-        for p in qs.order_by('-processed_at')[:100]:
+        target_list = page_qs if page_qs is not None else qs
+        for p in target_list:
             data.append({
                 "id": p.id,
                 "payout_id": p.payout_id,
@@ -1523,7 +1538,16 @@ class StaffPayoutHistoryView(APIView):
                 "transaction_reference": getattr(p, 'bank_reference', None) or getattr(p, 'provider_payout_id', None) or "",
                 "processed_at": p.processed_at.isoformat() if p.processed_at else None
             })
-        return Response({"success": True, "history": data}, status=status.HTTP_200_OK)
+        if page_qs is not None:
+            return Response({
+                "success": True,
+                "count": paginator.page.paginator.count,
+                "next": paginator.get_next_link(),
+                "previous": paginator.get_previous_link(),
+                "history": data,
+                "results": data
+            }, status=status.HTTP_200_OK)
+        return Response({"success": True, "count": len(data), "history": data, "results": data}, status=status.HTTP_200_OK)
 
 
 class StaffEscrowListView(APIView):
@@ -1900,7 +1924,7 @@ class StaffHotelVerificationDetailView(APIView):
                 "document_type": d.document_type,
                 "document_type_label": d.get_document_type_display(),
                 "status": d.status,
-                "document_url": d.document_url or (d.document_file.url if d.document_file else ""),
+                "document_url": d.document_url or (f"/api/hotels/{d.hotel_id}/documents/{d.id}/download/" if d.document_file else ""),
                 "created_at": d.created_at.isoformat()
             })
 
@@ -1997,7 +2021,7 @@ class StaffHotelVerificationDetailView(APIView):
                     "id": doc.id,
                     "document_type": doc.document_type,
                     "status": doc.status,
-                    "document_url": doc.document_url or (doc.document_file.url if doc.document_file else ''),
+                    "document_url": doc.document_url or (f"/api/hotels/{doc.hotel_id}/documents/{doc.id}/download/" if doc.document_file else ''),
                 }
                 for doc in hotel.verification_documents.all()
             ],
@@ -2181,9 +2205,12 @@ class StaffHotelVerificationHistoryView(APIView):
         if not check_staff_permission(request.user, 'VIEW_HOTELS'):
             return Response({"error": "Permission 'VIEW_HOTELS' is required."}, status=status.HTTP_403_FORBIDDEN)
 
-        qs = Hotel.objects.filter(status__in=[Hotel.STATUS_APPROVED, Hotel.STATUS_REJECTED]).select_related('owner')
+        qs = Hotel.objects.filter(status__in=[Hotel.STATUS_APPROVED, Hotel.STATUS_REJECTED]).select_related('owner').order_by('-updated_at')
+        paginator = StandardStaffPagination()
+        page_qs = paginator.paginate_queryset(qs, request, view=self)
         data = []
-        for h in qs.order_by('-updated_at')[:100]:
+        target_list = page_qs if page_qs is not None else qs
+        for h in target_list:
             data.append({
                 "id": h.id,
                 "name": h.name,
@@ -2196,7 +2223,16 @@ class StaffHotelVerificationHistoryView(APIView):
                 "rejection_reason": h.rejection_reason,
                 "decided_at": (h.rejected_at or h.updated_at).isoformat() if (h.rejected_at or h.updated_at) else None
             })
-        return Response({"success": True, "history": data}, status=status.HTTP_200_OK)
+        if page_qs is not None:
+            return Response({
+                "success": True,
+                "count": paginator.page.paginator.count,
+                "next": paginator.get_next_link(),
+                "previous": paginator.get_previous_link(),
+                "history": data,
+                "results": data
+            }, status=status.HTTP_200_OK)
+        return Response({"success": True, "count": len(data), "history": data, "results": data}, status=status.HTTP_200_OK)
 
 
 class StaffHotelDocumentsListView(APIView):
@@ -2226,7 +2262,7 @@ class StaffHotelDocumentsListView(APIView):
                 "document_type": d.document_type,
                 "document_type_label": d.get_document_type_display(),
                 "status": d.status,
-                "document_url": d.document_url or (d.document_file.url if d.document_file else ""),
+                "document_url": d.document_url or (f"/api/hotels/{d.hotel_id}/documents/{d.id}/download/" if d.document_file else ""),
                 "created_at": d.created_at.isoformat()
             })
         return Response({"success": True, "documents": docs}, status=status.HTTP_200_OK)

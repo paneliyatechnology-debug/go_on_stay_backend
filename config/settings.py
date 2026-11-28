@@ -193,7 +193,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'core.authentication.FlexibleJWTAuthentication',
     ),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS': 'core.pagination.StandardPageNumberPagination',
     'PAGE_SIZE': 10,
     # Standardized API Error Responses (TASK-18 / RFC 7807)
     'EXCEPTION_HANDLER': 'core.exceptions.custom_exception_handler',
@@ -364,10 +364,13 @@ except Exception:
 
 class SensitiveDataLogFilter(logging.Filter):
     """
-    Sanitizes sensitive keywords (passwords, tokens, secrets) from log messages
-    to prevent accidental credential leakage in log streams.
+    Sanitizes sensitive keywords (passwords, tokens, secrets, OTPs, keys) from log messages
+    to prevent accidental credential or PII leakage in log streams.
     """
-    SENSITIVE_PATTERNS = ('password', 'secret', 'token', 'authorization', 'bearer', 'cvv', 'card')
+    SENSITIVE_PATTERNS = (
+        'password', 'secret', 'token', 'authorization', 'bearer',
+        'cvv', 'card', 'otp', 'access_token', 'refresh_token', 'api_key', 'pin'
+    )
 
     def filter(self, record):
         if isinstance(record.msg, str):
@@ -375,7 +378,7 @@ class SensitiveDataLogFilter(logging.Filter):
             if any(p in msg_lower for p in self.SENSITIVE_PATTERNS):
                 import re
                 record.msg = re.sub(
-                    r'(?i)(password|secret|token|key|authorization|bearer)\s*[:=]\s*[\'\"]?([^\s,\'\"]+)',
+                    r'(?i)(password|secret|token|key|authorization|bearer|otp|access_token|refresh_token|api_key|pin)\s*[:=]\s*[\'\"]?([^\s,\'\"]+)',
                     r'\1=********',
                     record.msg
                 )

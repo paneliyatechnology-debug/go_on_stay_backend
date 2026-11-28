@@ -6,6 +6,7 @@ from .models import (
 )
 from bookings.models import Booking
 from users.serializers import UserSerializer
+from core.url_helpers import to_browser_safe_url
 
 class PaymentSerializer(serializers.ModelSerializer):
     booking_id = serializers.CharField(source='booking.booking_id', read_only=True)
@@ -682,13 +683,10 @@ class SupportTicketSerializer(serializers.ModelSerializer):
         else:
             ret['assigned_agent_details'] = None
 
-        # Build absolute URL for attachment if present
+        # Build safe relative URL for attachment if present
         request = self.context.get('request')
         if instance.attachment and hasattr(instance.attachment, 'url'):
-            if request:
-                ret['attachment_url'] = request.build_absolute_uri(instance.attachment.url)
-            else:
-                ret['attachment_url'] = instance.attachment.url
+            ret['attachment_url'] = to_browser_safe_url(instance.attachment.url, request)
 
         return ret
 

@@ -6,8 +6,14 @@ class NotificationSerializer(serializers.ModelSerializer):
     booking_id = serializers.CharField(source='booking.booking_id', read_only=True)
     hotel_name = serializers.CharField(source='booking.hotel.name', read_only=True)
     target_url = serializers.SerializerMethodField()
+    url = serializers.SerializerMethodField()
+    link = serializers.SerializerMethodField()
+    path = serializers.SerializerMethodField()
+    route = serializers.SerializerMethodField()
     target_entity_type = serializers.SerializerMethodField()
     target_entity_id = serializers.SerializerMethodField()
+    entity_type = serializers.SerializerMethodField()
+    entity_id = serializers.SerializerMethodField()
     fallback_url = serializers.SerializerMethodField()
     navigation_metadata = serializers.SerializerMethodField()
 
@@ -16,7 +22,9 @@ class NotificationSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'recipient', 'booking', 'booking_id', 'hotel_name',
             'title', 'message', 'notification_type', 'is_read', 'created_at',
-            'target_url', 'target_entity_type', 'target_entity_id', 'fallback_url', 'navigation_metadata'
+            'target_url', 'url', 'link', 'path', 'route',
+            'target_entity_type', 'target_entity_id', 'entity_type', 'entity_id',
+            'fallback_url', 'navigation_metadata'
         ]
         read_only_fields = ['id', 'recipient', 'created_at']
 
@@ -30,11 +38,29 @@ class NotificationSerializer(serializers.ModelSerializer):
     def get_target_url(self, obj):
         return self._get_nav(obj).get('target_url', '')
 
+    def get_url(self, obj):
+        return self.get_target_url(obj)
+
+    def get_link(self, obj):
+        return self.get_target_url(obj)
+
+    def get_path(self, obj):
+        return self.get_target_url(obj)
+
+    def get_route(self, obj):
+        return self.get_target_url(obj)
+
     def get_target_entity_type(self, obj):
         return self._get_nav(obj).get('target_entity_type', '')
 
+    def get_entity_type(self, obj):
+        return self.get_target_entity_type(obj)
+
     def get_target_entity_id(self, obj):
         return self._get_nav(obj).get('target_entity_id', '')
+
+    def get_entity_id(self, obj):
+        return self.get_target_entity_id(obj)
 
     def get_fallback_url(self, obj):
         return self._get_nav(obj).get('fallback_url', '')

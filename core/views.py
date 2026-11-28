@@ -87,3 +87,51 @@ class ReadinessCheckView(APIView):
                 "status": "not_ready",
                 "error": "Database not accessible or migrations pending"
             }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+
+from django.http import JsonResponse
+
+
+def bad_request_400(request, exception=None):
+    return JsonResponse({
+        "success": False,
+        "error": {
+            "code": "BAD_REQUEST",
+            "message": "The request could not be processed due to invalid syntax or parameters."
+        },
+        "detail": "Invalid request."
+    }, status=400)
+
+
+def permission_denied_403(request, exception=None):
+    return JsonResponse({
+        "success": False,
+        "error": {
+            "code": "PERMISSION_DENIED",
+            "message": "You do not have permission to access the requested resource."
+        },
+        "detail": "Permission denied."
+    }, status=403)
+
+
+def not_found_404(request, exception=None):
+    return JsonResponse({
+        "success": False,
+        "error": {
+            "code": "NOT_FOUND",
+            "message": "The requested endpoint or resource was not found."
+        },
+        "detail": "Resource not found."
+    }, status=404)
+
+
+def server_error_500(request):
+    return JsonResponse({
+        "success": False,
+        "error": {
+            "code": "INTERNAL_SERVER_ERROR",
+            "message": "An unexpected server error occurred. Please try again later."
+        },
+        "detail": "Internal server error."
+    }, status=500)
+
